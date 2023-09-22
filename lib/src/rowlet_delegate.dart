@@ -5,10 +5,17 @@
 
 part of owlet_router;
 
+/// Create [RouterDelegate] of [RouteBase], only one [Navigator] in this delegate.
+/// If the route path is not found, a [ROwletNavigationService.routeNotFound] will be returned.
+/// If the route is located and can not be built, an exception with the thrown.
 class ROwletDelegate extends RouterDelegate<RouteBuilder> with ChangeNotifier, PopNavigatorRouterDelegateMixin {
+
+  /// Required [ROwletNavigationService] to router
   ROwletDelegate({required this.service});
 
-  final NavigationService service;
+  /// Required [ROwletNavigationService] to router. This provided for router owlet information.
+  final ROwletNavigationService service;
+
   RouteBuilder<Object>? _currentConfiguration;
 
   @override

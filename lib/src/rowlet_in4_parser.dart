@@ -11,7 +11,7 @@ class ROwletInformationParser extends RouteInformationParser<RouteBase> {
   ROwletInformationParser({required this.service});
 
   /// Provide the finder to find [RouteBase] from [RouteInformation]
-  final NavigationService service;
+  final ROwletNavigationService service;
 
   @override
   Future<RouteBase> parseRouteInformation(RouteInformation routeInformation) async =>

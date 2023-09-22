@@ -5,9 +5,9 @@
 part of owlet_router;
 
 /// A navigation service is provided for router owlet information.
-class NavigationService<R extends RouteBase> {
+class ROwletNavigationService<R extends RouteBase> {
   /// Create a service, which is provided for router owlet information.
-  NavigationService({
+  ROwletNavigationService({
     required this.navigationKey,
     required this.routeObservers,
     RouteBuilder? initialRoute,

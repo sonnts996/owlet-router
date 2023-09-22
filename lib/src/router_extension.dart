@@ -4,8 +4,17 @@
 */
 part of owlet_router;
 
+/// Extension for [RouteBuilder] to faster method push new page route. The [E] is define the parameter Class type for this route.
+///
+/// Example:
+/// ```
+/// Navigator.of(context).pushNamed(AppRoutes.home.fullRoute); // Classic method
+/// AppRoutes.home.pushNamed(context); // New method
+/// ```
 extension RouterExtension<E extends Object> on RouteBuilder<E> {
 
+  /// New [Navigator.pushNamed] with [T] result and [E] argument.
+  /// Note that the argument may not be null required
   Future<T?> pushNamed<T extends Object?>(
     BuildContext context, {
     bool forRoot = false,
@@ -17,6 +26,8 @@ extension RouterExtension<E extends Object> on RouteBuilder<E> {
         arguments: args,
       );
 
+  /// New [Navigator.pushReplacementNamed] with [T] result and [E] argument.
+  /// Note that the argument may not be null required
   Future<T?> pushReplacementNamed<T extends Object?, T0 extends Object?>(
     BuildContext context, {
     bool forRoot = false,
@@ -30,6 +41,8 @@ extension RouterExtension<E extends Object> on RouteBuilder<E> {
         result: result,
       );
 
+  /// New [Navigator.pushNamedAndRemoveUntil] with [T] result and [E] argument.
+  /// Note that the argument may not be null required
   Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
     BuildContext context,
     bool Function(Route<dynamic>) predicate, {
@@ -43,6 +56,8 @@ extension RouterExtension<E extends Object> on RouteBuilder<E> {
         arguments: args,
       );
 
+  /// New [Navigator.popAndPushNamed] with [T] result and [E] argument.
+  /// Note that the argument may not be null required
   Future<T?> popAndPushNamed<T extends Object?, T0 extends Object?>(
     BuildContext context, {
     bool forRoot = false,

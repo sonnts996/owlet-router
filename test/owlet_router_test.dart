@@ -39,7 +39,7 @@ void main() {
   });
   group('Navigation', () {
     final mainRoute = MainRoute('/');
-    final navigationService = NavigationService(
+    final navigationService = ROwletNavigationService(
         navigationKey: GlobalKey(),
         routeObservers: [],
         initialRoute: mainRoute.splash,
@@ -67,7 +67,7 @@ void main() {
 
   group('Navigation without trailing splash', () {
     final mainRoute = MainRoute('/');
-    final navigationService = NavigationService(
+    final navigationService = ROwletNavigationService(
         navigationKey: GlobalKey(),
         routeObservers: [],
         initialRoute: mainRoute.splash,
@@ -88,7 +88,7 @@ void main() {
     final mockObserver = MockNavigatorObserver();
     final navigator = GlobalKey<NavigatorState>();
     final mainRoute = MainRoute('/');
-    final navigationService = NavigationService(
+    final navigationService = ROwletNavigationService(
         navigationKey: navigator,
         routeObservers: [mockObserver],
         initialRoute: mainRoute.splash,

@@ -36,7 +36,7 @@ class RouterException<T extends Object?> implements Exception {
   String toString() => _consoleString;
 }
 
-/// A [PathNotFoundException] throws when can not find any [RouteBase] in [NavigationService] matches the path and no routeNotFound in this [NavigationService].
+/// A [PathNotFoundException] throws when can not find any [RouteBase] in [ROwletNavigationService] matches the path and no routeNotFound in this [ROwletNavigationService].
 class PathNotFoundException extends RouterException<String> {
   /// Create [PathNotFoundException]
   const PathNotFoundException({
@@ -46,11 +46,11 @@ class PathNotFoundException extends RouterException<String> {
   });
 }
 
-/// A [DuplicatePathException] throws when has 2 [RouteBuilder] with the same fullRoute in [NavigationService.routeBase].
+/// A [DuplicatePathException] throws when has 2 [RouteBuilder] with the same fullRoute in [ROwletNavigationService.routeBase].
 /// - What is this:
-/// Only one [RouteBuilder] with a determined path in [NavigationService.routeBase]. But the [RouteBase] can have
+/// Only one [RouteBuilder] with a determined path in [ROwletNavigationService.routeBase]. But the [RouteBase] can have
 /// the same path (an instance of [RouteBase] but not an instance of [RouteBuilder]).
-/// [NavigationService.findRoute] will prioritize to find a [RouteBuilder] matched, if can not, a [RouteBase] will be considered.
+/// [ROwletNavigationService.findRoute] will prioritize to find a [RouteBuilder] matched, if can not, a [RouteBase] will be considered.
 /// If there are multiple [RouteBase] with the same path, the first result will be returned.
 class DuplicatePathException extends RouterException<String> {
   /// Create [PathNotFoundException]
