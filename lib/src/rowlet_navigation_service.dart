@@ -5,16 +5,16 @@
 part of owlet_router;
 
 /// A navigation service is provided for router owlet information.
-class ROwletNavigationService<R extends RouteBase> {
+class ROwletNavigationService<R extends OriginRoute> {
   /// Create a service, which is provided for router owlet information.
   ROwletNavigationService({
     required this.navigationKey,
-    required this.routeObservers,
-    RouteBuilder? initialRoute,
+    this.routeObservers = const [],
+    this.initialRoute = Navigator.defaultRouteName,
     this.routeNotFound,
-    this.routeBase,
+    required this.routeBase,
     this.trailingSlash = true,
-  }) : initialRoute = initialRoute ?? RouteBuilder('/');
+  });
 
   /// Global Navigation Key for this module
   final GlobalKey<NavigatorState> navigationKey;
@@ -23,7 +23,7 @@ class ROwletNavigationService<R extends RouteBase> {
   final List<NavigatorObserver> routeObservers;
 
   ///The first route is generated when the app starts.
-  final RouteBuilder initialRoute;
+  final String initialRoute;
 
   /// If the route is not defined or any error when generated, [routeNotFound] with be returned.
   /// and [PathNotFoundException] if routeNotFound is null when called.
@@ -39,7 +39,7 @@ class ROwletNavigationService<R extends RouteBase> {
 
   /// return the top route parent, a route tree must be defined when used owlet_router.
   /// if [routeBase] is null, [initialRoute] will be used to replace it.
-  final R? routeBase;
+  final R routeBase;
 
   /// return RouterConfig<RouteBase> for this app.
   ///
@@ -51,11 +51,11 @@ class ROwletNavigationService<R extends RouteBase> {
   RouterConfig<RouteBase> get routerConfig => RouterConfig(
         routerDelegate: ROwletDelegate(service: this),
         routeInformationParser: ROwletInformationParser(service: this),
-        routeInformationProvider:
-            PlatformRouteInformationProvider(initialRouteInformation: RouteInformation(uri: initialRoute.uri)),
+        routeInformationProvider: PlatformRouteInformationProvider(
+            initialRouteInformation: RouteInformation(uri: Uri.tryParse(initialRoute))),
       );
 
-  RouteBase get _routeBase => routeBase ?? initialRoute;
+  RouteBase get _routeBase => routeBase;
 
   /// For Testing, this method returns a list of accepted routes in this [routeBase]
   @visibleForTesting

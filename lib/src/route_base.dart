@@ -1,8 +1,20 @@
+// ignore_for_file: missing_override_of_must_be_overridden
+
 /*
  Created by Thanh Son on 16/08/2023.
  Copyright (c) 2023 . All rights reserved.
 */
 part of owlet_router;
+
+/// The top-level parent of routes. Using the Origin Route to apply the router to all of the route members.
+class OriginRoute extends RouteBase {
+  /// The Origin route's path should be '/'.
+  OriginRoute([String path = '/']) : super(path) {
+    _init();
+  }
+
+  void _init() => _routes;
+}
 
 /// Create a route wrapper with it's route path.
 /// The [parent] field is a lazy update after running. The parent is the object, which defines this in [RouteBase.routes].
@@ -94,8 +106,7 @@ class RouteBuilder<T extends Object> extends RouteBase {
   /// Route [builder] return a [Route] for [Navigator] build this page.
   /// If don't want to define it, can override the [builder] function.
   /// If the [_builder] is null. Nothing happens if do not open this route until you open this route.
-  RouteBuilder(
-    super.path, {
+  RouteBuilder(super.path, {
     RouterBuilder? builder,
   }) : _builder = builder;
 
@@ -105,20 +116,15 @@ class RouteBuilder<T extends Object> extends RouteBase {
   /// If the [_builder] is null. Nothing happens if do not open this route until you open this route.
   Route builder(BuildContext context, RouteSettings settings) => _builder.letOrNull(
         (it) => it(context, settings),
-        onNull: () => _unimplementedBuilder(toString()),
-      );
-
-  @override
-  @mustBeOverridden
-  List<RouteBase> get routes => [];
+    onNull: () => _unimplementedBuilder(toString()),
+  );
 }
 
 /// The [RouteBuilder] with [MaterialPageRoute].
 /// The argument of this route has type is [T]
 class MaterialBuilder<T extends Object> extends RouteBuilder<T> {
   /// Create the [RouteBuilder] with [MaterialPageRoute] options.
-  MaterialBuilder(
-    super.path, {
+  MaterialBuilder(super.path, {
     this.materialBuilder,
     this.maintainState = true,
     this.allowSnapshotting = true,
@@ -140,26 +146,21 @@ class MaterialBuilder<T extends Object> extends RouteBuilder<T> {
   @override
   Route builder(BuildContext context, RouteSettings settings) => materialBuilder.letOrNull(
         (it) => MaterialPageRoute(
-          builder: (context) => it(context, settings),
-          allowSnapshotting: allowSnapshotting,
-          maintainState: maintainState,
-          fullscreenDialog: fullscreenDialog,
-          settings: settings,
-        ),
-        onNull: () => _unimplementedBuilder(toString()),
-      );
-
-  @override
-  @mustBeOverridden
-  List<RouteBase> get routes => [];
+      builder: (context) => it(context, settings),
+      allowSnapshotting: allowSnapshotting,
+      maintainState: maintainState,
+      fullscreenDialog: fullscreenDialog,
+      settings: settings,
+    ),
+    onNull: () => _unimplementedBuilder(toString()),
+  );
 }
 
 /// The [RouteBuilder] with [CupertinoPageRoute].
 /// The argument of this route has type is [T]
 class CupertinoBuilder<T extends Object> extends RouteBuilder<T> {
   /// Create the [RouteBuilder] with [MaterialPageRoute] options.
-  CupertinoBuilder(
-    super.path, {
+  CupertinoBuilder(super.path, {
     this.cupertinoBuilder,
     this.maintainState = true,
     this.allowSnapshotting = true,
@@ -185,17 +186,13 @@ class CupertinoBuilder<T extends Object> extends RouteBuilder<T> {
   @override
   Route builder(BuildContext context, RouteSettings settings) => cupertinoBuilder.letOrNull(
         (it) => CupertinoPageRoute(
-          builder: (context) => it(context, settings),
-          allowSnapshotting: allowSnapshotting,
-          maintainState: maintainState,
-          fullscreenDialog: fullscreenDialog,
-          settings: settings,
-          title: title,
-        ),
-        onNull: () => _unimplementedBuilder(toString()),
-      );
-
-  @override
-  @mustBeOverridden
-  List<RouteBase> get routes => [];
+      builder: (context) => it(context, settings),
+      allowSnapshotting: allowSnapshotting,
+      maintainState: maintainState,
+      fullscreenDialog: fullscreenDialog,
+      settings: settings,
+      title: title,
+    ),
+    onNull: () => _unimplementedBuilder(toString()),
+  );
 }

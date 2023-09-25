@@ -24,7 +24,7 @@ class ROwletDelegate extends RouterDelegate<RouteBuilder> with ChangeNotifier, P
   @override
   Widget build(BuildContext context) => Navigator(
         key: service.navigationKey,
-        initialRoute: service.initialRoute.path,
+        initialRoute: service.initialRoute,
         observers: service.routeObservers,
         onGenerateRoute: (settings) {
           final route = settings.name?.let(service.findRoute);

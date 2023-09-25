@@ -42,7 +42,7 @@ void main() {
     final navigationService = ROwletNavigationService(
         navigationKey: GlobalKey(),
         routeObservers: [],
-        initialRoute: mainRoute.splash,
+        initialRoute: '/',
         routeBase: mainRoute,
         routeNotFound: mainRoute.routeNotFound);
 
@@ -70,7 +70,7 @@ void main() {
     final navigationService = ROwletNavigationService(
         navigationKey: GlobalKey(),
         routeObservers: [],
-        initialRoute: mainRoute.splash,
+        initialRoute: '/',
         routeBase: mainRoute,
         trailingSlash: false,
         routeNotFound: mainRoute.routeNotFound);
@@ -91,7 +91,7 @@ void main() {
     final navigationService = ROwletNavigationService(
         navigationKey: navigator,
         routeObservers: [mockObserver],
-        initialRoute: mainRoute.splash,
+        initialRoute: '/',
         routeBase: mainRoute,
         routeNotFound: mainRoute.routeNotFound);
 
@@ -160,7 +160,7 @@ class TestApp extends StatelessWidget {
       );
 }
 
-class MainRoute extends RouteBase {
+class MainRoute extends OriginRoute {
   MainRoute(super.path);
 
   final routeNotFound = MaterialBuilder('/routeNotFound');

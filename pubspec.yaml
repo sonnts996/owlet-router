@@ -1,6 +1,6 @@
 name: rowlet
 description: A new Flutter package project.
-version: 0.0.1
+version: 0.0.1+1-dev
 repository: https://github.com/sonnts996/rowlet
 
 environment:
@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   meta: ^1.9.0
   objectx: ^1.0.0+1-dev
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

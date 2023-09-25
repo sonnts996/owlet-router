@@ -26,7 +26,7 @@ class RouterException<T extends Object?> implements Exception {
   String get _consoleString {
     final buffer = StringBuffer();
     buffer.write('$runtimeType:');
-    devDescription?.let(buffer.write);
+    devDescription?.let(buffer.writeln);
     error?.let(buffer.writeln);
     stackTrace?.let(buffer.writeln);
     return buffer.toString().trim();
