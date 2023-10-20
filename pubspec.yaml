@@ -11,18 +11,16 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.9.0
-  objectx: ^1.0.0+1-dev
-  shimmer: ^3.0.0
+  objectx: ^1.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   owlet_lints: ^3.0.0
   mockito: ^5.4.2
+  built_value_generator: ^8.6.3
+  build_runner: ^2.4.6
 
-dependency_overrides:
-  objectx:
-    path: ../objectx
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

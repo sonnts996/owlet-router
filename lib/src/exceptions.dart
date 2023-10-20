@@ -5,7 +5,7 @@
 
 part of owlet_router;
 
-/// Router exception's interface for owlet_flutter.
+/// Router exception's interface.
 class RouterException<T extends Object?> implements Exception {
   /// Create a [RouterException]
   const RouterException({
@@ -36,24 +36,16 @@ class RouterException<T extends Object?> implements Exception {
   String toString() => _consoleString;
 }
 
-/// A [PathNotFoundException] throws when can not find any [RouteBase] in [ROwletNavigationService] matches the path and no routeNotFound in this [ROwletNavigationService].
-class PathNotFoundException extends RouterException<String> {
-  /// Create [PathNotFoundException]
-  const PathNotFoundException({
-    super.devDescription,
-    super.error,
-    super.stackTrace,
-  });
-}
-
-/// A [DuplicatePathException] throws when has 2 [RouteBuilder] with the same fullRoute in [ROwletNavigationService.routeBase].
+/// A [DuplicatePathException] throws when has 2 [RouteBuilder] with the same [RouteBuilder.path] in [ROwletNavigationService.routeBase].
 /// - What is this:
-/// Only one [RouteBuilder] with a determined path in [ROwletNavigationService.routeBase]. But the [RouteBase] can have
-/// the same path (an instance of [RouteBase] but not an instance of [RouteBuilder]).
-/// [ROwletNavigationService.findRoute] will prioritize to find a [RouteBuilder] matched, if can not, a [RouteBase] will be considered.
-/// If there are multiple [RouteBase] with the same path, the first result will be returned.
+///   A [RouteBuilder] is a destination route.
+///   That means its path is mapped to a determination page. So, can not have a route's path mapped to 2 different pages.
+///
+/// [ROwletNavigationService.findRoute] will prioritize to find a [RouteBuilder] matched.
+/// If can not, a [RouteSegment] will be considered.
+/// If there are multiple [RouteSegment] with the same path, the first result will be returned.
 class DuplicatePathException extends RouterException<String> {
-  /// Create [PathNotFoundException]
+  /// Create [DuplicatePathException]
   const DuplicatePathException({
     super.devDescription,
     super.error,
@@ -61,35 +53,35 @@ class DuplicatePathException extends RouterException<String> {
   });
 }
 
-/// A [InvalidRouteException] throws when an instance [RouteBase] is defined in two difference parents.
+/// A [InvalidRouteException] throws when an instance [RouteSegment] is defined in two difference parents.
 ///
 /// Example:
 ///```
 /// // duplicate route in one parent
 ///
-/// class RouteBaseImpl extends RouteBase {
-///   RouteBaseImpl(super.path);
+/// class RouteBaseImpl extends RouteSegment {
+///   RouteBaseImpl(super.segmentPath);
 ///
-///   final route = RouteBase('/');
+///   final route = RouteSegment('/');
 ///
 ///   @override
-///   List<RouteBase> get routes => [route, route];
+///   List<RouteSegment> get routes => [route, route];
 /// }
 /// // or an instance route in two difference parent
-/// final route = RouteBase('/');
+/// final route = RouteSegment('/');
 ///
-/// class RouteBaseImpl2 extends RouteBase {
-///   RouteBaseImpl2(super.path);
+/// class RouteBaseImpl2 extends RouteSegment {
+///   RouteBaseImpl2(super.segmentPath);
 ///
 ///   @override
-///   List<RouteBase> get routes => [route];
+///   List<RouteSegment> get routes => [route];
 /// }
 ///
-/// class RouteBaseImpl3 extends RouteBase {
-///   RouteBaseImpl3(super.path);
+/// class RouteBaseImpl3 extends RouteSegment {
+///   RouteBaseImpl3(super.segmentPath);
 ///
 ///   @override
-///   List<RouteBase> get routes => [route];
+///   List<RouteSegment> get routes => [route];
 /// }
 ///
 ///```

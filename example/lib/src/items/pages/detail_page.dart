@@ -18,7 +18,12 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.item)),
-      body: Center(child: Text(widget.item)),
+      body: Center(
+          child: Column(
+        children: [
+          Text(widget.item),
+        ],
+      )),
     );
   }
 }

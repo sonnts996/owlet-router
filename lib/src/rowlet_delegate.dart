@@ -5,47 +5,36 @@
 
 part of owlet_router;
 
-/// Create [RouterDelegate] of [RouteBase], only one [Navigator] in this delegate.
-/// If the route path is not found, a [ROwletNavigationService.routeNotFound] will be returned.
+/// Create [RouterDelegate] with [RouteBuilder].
+/// If the route path is not found, a [ROwletNavigationService.unknownRoute] will be returned.
 /// If the route is located and can not be built, an exception with the thrown.
 class ROwletDelegate extends RouterDelegate<RouteBuilder> with ChangeNotifier, PopNavigatorRouterDelegateMixin {
-
-  /// Required [ROwletNavigationService] to router
+  /// The [ROwletDelegate]'s constructor.
   ROwletDelegate({required this.service});
 
-  /// Required [ROwletNavigationService] to router. This provided for router owlet information.
-  final ROwletNavigationService service;
+  /// This provides for router owlet information.
+  final NavigationServiceBase service;
 
-  RouteBuilder<Object>? _currentConfiguration;
+  RouteBuilder? _currentConfiguration;
 
   @override
   GlobalKey<NavigatorState>? get navigatorKey => service.navigationKey;
 
   @override
-  Widget build(BuildContext context) => Navigator(
+  Widget build(BuildContext context) => ROwletNavigator(
         key: service.navigationKey,
         initialRoute: service.initialRoute,
-        observers: service.routeObservers,
-        onGenerateRoute: (settings) {
-          final route = settings.name?.let(service.findRoute);
-          final routeBuilder = route?.let((it) => route is RouteBuilder ? route : null) ??
-              service._finalRouteNotFound(settings.name ?? 'null');
-
-          return routeBuilder.builder(context, settings);
-        },
-        onPopPage: (route, result) {
-          if (!route.didPop(result) || route.isFirst) {
-            return false;
-          }
-          return result;
-        },
+        observers: <NavigatorObserver>[service.history, ...service.routeObservers],
+        onGenerateRoute: service.onGenerateRoute,
+        onPopPage: service.onPopPage,
+        onUnknownRoute: service.onUnknownRoute,
       );
 
   @override
-  RouteBuilder<Object>? get currentConfiguration => _currentConfiguration;
+  RouteBuilder? get currentConfiguration => _currentConfiguration;
 
   @override
-  Future<void> setNewRoutePath(RouteBuilder<Object> configuration) async {
+  Future<void> setNewRoutePath(RouteBuilder configuration) async {
     _currentConfiguration = configuration;
     notifyListeners();
   }
