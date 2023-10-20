@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
       Future.delayed(
         const Duration(seconds: 1),
         () {
-          appNavigatorServices.routeBase.home.pushNamed(context);
+          navigatorServices.routeBase.home.pushReplacementNamed(context);
         },
       );
     });

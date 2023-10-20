@@ -26,7 +26,7 @@ class _ListItemPageState extends State<ListItemPage> {
             title: Text('Item $index'),
             leading: const Icon(CupertinoIcons.bookmark_fill),
             onTap: () {
-              appNavigatorServices.routeBase.item.detail.pushNamed(context, args: 'Item $index');
+              navigatorServices.routeBase.items.detail.pushNamed(context, args: 'Item $index');
             },
           );
         },

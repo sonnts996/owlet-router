@@ -15,14 +15,14 @@ void main() {
     });
 
     test('route path', () {
-      expect(() => RouteBase('home').fullRoute, throwsAssertionError);
-      expect(RouteBase('/home').fullRoute, '/home');
+      expect(() => RouteSegment('home').path, throwsAssertionError);
+      expect(RouteSegment('/home').path, '/home');
     });
 
     test('Duplicate Base Path', () {
       expect((() {
-        sets.add(RouteBase('/'));
-        sets.add(RouteBase('/'));
+        sets.add(RouteSegment('/'));
+        sets.add(RouteSegment('/'));
         sets.add(RouteBuilder('/'));
         return sets.length;
       })(), 3);
@@ -30,7 +30,7 @@ void main() {
 
     test('Duplicate Builder Path', () {
       expect(() {
-        sets.add(RouteBase('/'));
+        sets.add(RouteSegment('/'));
         sets.add(RouteBuilder('/'));
         sets.add(RouteBuilder('/'));
         return sets.length;
@@ -38,22 +38,22 @@ void main() {
     });
   });
   group('Navigation', () {
-    final mainRoute = MainRoute('/');
+    final mainRoute = MainRoute();
     final navigationService = ROwletNavigationService(
         navigationKey: GlobalKey(),
         routeObservers: [],
         initialRoute: '/',
         routeBase: mainRoute,
-        routeNotFound: mainRoute.routeNotFound);
+        unknownRoute: mainRoute.routeNotFound);
 
     /// Print all accepted routes
     navigationService.allRoute().print();
 
     test('route parser', () {
-      expect(mainRoute.splash.fullRoute, '/');
-      expect(mainRoute.home.fullRoute, '/home');
-      expect(mainRoute.home.page1.fullRoute, '/home/page1');
-      expect(mainRoute.home.page2.fullRoute, '/home/page2');
+      expect(mainRoute.splash.path, '/');
+      expect(mainRoute.home.path, '/home');
+      expect(mainRoute.home.page1.path, '/home/page1');
+      expect(mainRoute.home.page2.path, '/home/page2');
     });
 
     test('find route', () {
@@ -66,19 +66,19 @@ void main() {
   });
 
   group('Navigation without trailing splash', () {
-    final mainRoute = MainRoute('/');
+    final mainRoute = MainRoute();
     final navigationService = ROwletNavigationService(
         navigationKey: GlobalKey(),
         routeObservers: [],
         initialRoute: '/',
         routeBase: mainRoute,
         trailingSlash: false,
-        routeNotFound: mainRoute.routeNotFound);
+        unknownRoute: mainRoute.routeNotFound);
 
     test('find route', () {
       expect(navigationService.findRoute('/'), mainRoute.splash);
       expect(navigationService.findRoute('/home'), mainRoute.home);
-      expect(navigationService.findRoute('/home/'), mainRoute.routeNotFound);
+      expect(navigationService.findRoute('/home/'), null);
       expect(navigationService.findRoute('/home/page1'), mainRoute.home.page1);
       expect(navigationService.findRoute('/home/page2'), mainRoute.home.page2);
     });
@@ -87,13 +87,13 @@ void main() {
   group('Navigator Test', () {
     final mockObserver = MockNavigatorObserver();
     final navigator = GlobalKey<NavigatorState>();
-    final mainRoute = MainRoute('/');
+    final mainRoute = MainRoute();
     final navigationService = ROwletNavigationService(
         navigationKey: navigator,
-        routeObservers: [mockObserver],
+        routeObservers: <NavigatorObserver>[mockObserver],
         initialRoute: '/',
         routeBase: mainRoute,
-        routeNotFound: mainRoute.routeNotFound);
+        unknownRoute: mainRoute.routeNotFound);
 
     testWidgets('Test Navigator', (widgetTester) async {
       await widgetTester.pumpWidget(
@@ -112,9 +112,8 @@ void main() {
       mainRoute.home.page1.pushNamed(navigator.currentContext!);
       verifyNever(mockObserver.didPush(
           mainRoute.home.page1.builder(
-            navigator.currentContext!,
-            RouteSettings(name: mainRoute.home.page1.fullRoute),
-          ),
+            RouteSettings(name: mainRoute.home.page1.path),
+          )!,
           any));
       await widgetTester.pumpAndSettle();
 
@@ -127,9 +126,8 @@ void main() {
       await widgetTester.tap(button);
       verifyNever(mockObserver.didPush(
           mainRoute.home.page2.builder(
-            navigator.currentContext!,
-            RouteSettings(name: mainRoute.home.page2.fullRoute),
-          ),
+            RouteSettings(name: mainRoute.home.page2.path),
+          )!,
           any));
       await widgetTester.pumpAndSettle();
 
@@ -161,25 +159,25 @@ class TestApp extends StatelessWidget {
 }
 
 class MainRoute extends OriginRoute {
-  MainRoute(super.path);
+  MainRoute();
 
-  final routeNotFound = MaterialBuilder('/routeNotFound');
+  final routeNotFound = MaterialRouteBuilder('/routeNotFound');
   final home = HomeRoute('/home');
-  final splash = MaterialBuilder(
+  final splash = MaterialRouteBuilder(
     '/',
-    materialBuilder: (context, settings) => TestApp(content: 'Splash'),
+    pageBuilder: (context, settings) => TestApp(content: 'Splash'),
   );
 
   @override
-  List<RouteBase> get routes => [home, splash];
+  List<RouteSegment> get children => [home, splash];
 }
 
-class HomeRoute extends RouteBase {
-  HomeRoute(super.path);
+class HomeRoute extends RouteSegment {
+  HomeRoute(super.segmentPath);
 
   late final page1 = RouteBuilder(
     '/page1',
-    builder: (context, settings) => MaterialPageRoute(
+    builder: (settings) => MaterialPageRoute(
       builder: (context) => TestApp(
         content: 'Page 1',
         onTab: () {
@@ -189,9 +187,9 @@ class HomeRoute extends RouteBase {
     ),
   );
 
-  final page2 = RouteBuilder<String>(
+  final page2 = RouteBuilder<String, dynamic>(
     '/page2',
-    builder: (context, settings) {
+    builder: (settings) {
       final greeting = settings.arguments.castTo<String>() ?? 'Page 2';
       return MaterialPageRoute(
         builder: (context) => TestApp(content: greeting),
@@ -200,7 +198,7 @@ class HomeRoute extends RouteBase {
   );
 
   @override
-  List<RouteBase> get routes => [page1, page2];
+  List<RouteSegment> get children => [page1, page2];
 }
 
 R executor<R>(R Function() func) => func();
