@@ -1,151 +1,415 @@
+# Owlet Router
+
+Flutter router
+
 # Getting started
 
 Add this line to your dependencies:
 
 ```yaml
 dependencies:
-  rowlet: 'newest'
+  rowlet_router: 'newest'
 ```
 
 - import the package:
 
 ```dart
-import 'package:rowlet/router.dart';
+import 'package:rowlet_router/router.dart';
 ```
 
 # Usage
 
-* ``rowletNavigationService`` provides the methods to process the router definitions for
-  rowletDelegate.
+## 1. Navigation service
+
+The `NavigationService` provides the necessary method for a new `Navigator`:
 
 ```dart
-final navigationService = rowletNavigationService(
-        navigationKey: GlobalKey(),
-        routeObservers: [],
-        initialRoute: '/',
-        routeBase: mainRoute,
-        routeNotFound: mainRoute.routeNotFound);
-```
 
-In your app, such as MaterialApp, define router like:
+final appRoute = AppRoute(); // The root route
 
-```dart
-@override
+final service = NavigationService(
+    navigationKey: GlobalKey(),
+    routeObservers: [ /* your observers */
+    ],
+    initialRoute: '/',
+    root: appRoute,
+    unknownRoute: owletDefaultUnknownRoute);
+
+// ...
+
 Widget build(BuildContext context) {
   return MaterialApp.router(
-    title: 'Flutter Demo',
-    theme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      useMaterial3: true,
-    ),
-    routerConfig: navigationService.routerConfig,
+    routerConfig: service.routerConfig,
+
+    /// ...
   );
 }
- ```
+```
 
-* ``rowletNavigationService`` depends on a ``routeBase`` router.
+#### In the second `Navigator`:
+
+The `NavigationService` is also used in an independent `Navigator`.
 
 ```dart
-final mainRoute = MainRoute();
-
-/// ...
-
-class MainRoute extends OriginRoute {
-
-  final home = MaterialBuilder(
-      '/home', 
-      materialBuilder: (context, settings) => const HomePage());
-
-  final splash = MaterialBuilder(
-      '/',
-      materialBuilder: (context, settings) => const SplashPage());
-
-  final item = ItemRoute('/item');
-  
-  // Only route define in the getter ``List<RouteBase> get routes`` is accepted.
-  @override
-  List<RouteBase> get routes => [home, splash, item];
+Widget build(BuildContext context) {
+  return Navigator(
+    key: service.navigationKey,
+    initialRoute: service.initialRoute,
+    observers: <NavigatorObserver>[service.history, ...service.routeObservers],
+    onGenerateRoute: service.onGenerateRoute,
+    onPopPage: service.onPopPage,
+    onUnknownRoute: service.onUnknownRoute,
+  );
 }
 
+// or
 
-class ItemRoute extends RouteBase {
-  ItemRoute(super.path);
-
-  final detail = MaterialBuilder<String>(
-      '/detail',
-      materialBuilder: (context, settings) => DetailPage(item: settings.arguments as String));
-
-  final list = MaterialBuilder(
-      '/list', 
-      materialBuilder: (context, settings) => const ListItemPage());
-
-  // Only route define in the getter ``List<RouteBase> get routes`` is accepted.
-  @override
-  List<RouteBase> get routes => [detail, list];
+Widget build(BuildContext context) {
+  return OwletNavigator.from(service);
 }
 ```
 
-* ``MainRoute`` is an ``OriginRoute``. In the router's tree, there is only one ``OriginRoute`` at
-  the root of the tree.
-  All children of ``MainRoute`` must be returned in the getter ``List<RouteBase> get routes``. Any
-  route that is out of the route list will be ignored.
+### 1.1. Owlet Navigator
 
-![Alt text](https://g.gravizo.com/svg?digraph%20G%20%7Bsize%20%3D%224%2C4%22%3B%0AMainRoute%20%5Bshape%3Dbox%5D%3B%0AMainRoute%20-%3E%20%22splash%20%28%27%2F%27%29%22%3B%0AMainRoute%20-%3E%20%22home%20%28%27%2Fhome%27%29%22%3B%0AMainRoute%20-%3E%20%22item%20%28%27%2Fitem%27%29%22%3B%0A%22item%20%28%27%2Fitem%27%29%22%20-%3E%20%22list%20%28%27%2Flist%27%29%22%3B%0A%22item%20%28%27%2Fitem%27%29%22%20-%3E%20%22detail%20%28%27%2Fdetail%27%29%22%20%5Blabel%3D%22String%20arguments%22%5D%3B%0A%7D)
-
-* A ``RouteBase`` is a route folder, that mean it be able to group others route.
-  For example:
-  You have a item creator's route and category creator's route:
-
-```url
-\item_create
-\category_create
-```
-
-A better definition can be:
-
-```url
-\item\create
-\category\create
-```
-
-* A ``RouteBuilder`` is not only a ``RouteBase``, but it also returns a ``Route<dynamic>`` to build
-  a new page.
-  An error will be thrown if a ``RouteBuilder`` without a builder is called to build a new page. (
-  Otherwise, if it is not called to build, it is simply a ``RouteBase``)
+The `OwletNavigator` is a `Navigator`'s implementation for the advanced features such as route guard
+or named function. By default, `RouterDelegate` uses the `OwletNavigator`.
 
 ```dart
-RouteBuilder(super.path, {
-    RouterBuilder? builder,
+Widget build(BuildContext context) {
+  return NavigationServiceProvider(
+      service: service,
+      child: OwletNavigator(
+        key: service.navigationKey,
+        initialRoute: service.initialRoute,
+        observers: <NavigatorObserver>[service.history, ...service.routeObservers],
+        onGenerateRoute: service.onGenerateRoute,
+        onPopPage: service.onPopPage,
+        onUnknownRoute: service.onUnknownRoute,
+      ));
+}
+
+// or
+
+Widget build(BuildContext context) {
+  return OwletNavigator.from(service);
+}
+```
+
+### 1.2. Provider
+
+The `NavigationService` must be a singleton in the `Navigator`. You can create a singleton variable
+or use an injection (such as GetIt).
+
+The `NavigationServiceProvider` allows you to get the `NavigationService` in the context. By
+default, it use in `RouteDelegate` (`service.routerConfig`)
+or `OwletNavigator.from`.
+
+```dart
+// To get NavigationServiceProvider
+final provider = NavigationServiceProvider.of(context);
+
+// To get NavigationService
+final service = NavigationService.of(context);
+
+// To get your route in NavigationService
+final route = RouteBase.of<ROUTE_TYPE>(context);
+```
+
+> By default, the `RouteBase.of` will return your root route (`service.root`), you can
+> use `ROUTE_TYPE` to cast to the defined data type.
+>
+> If you want to get a special route branch,
+> the `RouteBase.of<ROUTE_TYPE>(context, depthSearch: true)` allows finding a route in the route
+> tree that matches `ROUTE_TYPE`.
+
+### 1.3. Route history
+
+```dart
+void listenHistory() {
+  final history = service.history;
+  history.addListener(() {
+    /// Listen when routes change.
+    if (kDebugMode) {
+      print(history.current);
+    }
   });
+  final currentRoute = history.current; // Get the current route which is displayed on the top.
+
+  bool isAppeared = history.contains(
+      '/home'); // check if the /home route is showing on display 
+
+  // find a route that matches the condition, if you need to do something with it such as the Navigator.replacement.
+  final route = history.nearest(/* condition */);
+}
 ```
 
-``MaterialBuilder`` will returns a ``RouteBuilder`` with a MaterialPageRoute
-and ``CupertinoBuilder`` will returns CupertinoPageRoute.
+The `NavigationService` provides a route history observer that logs the current routes.
+If you want to use it in your `Navigator`, let's put it into your route observers list.
 
-> [!NOTE]
-> A path must start with a slash '/'
+```dart
+Widget build(BuildContext context) {
+  return Navigator(
+    // ..
+    observers: <NavigatorObserver>[service.history, ...service.routeObservers],
+  );
+}
+```
 
----
-> [!WARNING]
-> Initial Route:
+### 1.4. If the route can not build
+
+If can not find your route or the route is thrown an error when built, the unknown route will be
+used as a replacement.
+
+```dart
+
+final service = NavigationService(
+  // ...
+    unknownRoute: yourRoute
+);
+```
+
+## 2. Route
+
+The `owlet_router` uses the module architecture for the router. To define a route, you create a
+class that extends a RouteBase. Inside it, you can define the children of this route. Repeat this to
+the child route to expand the route tree.
+
+```dart
+
+final appRoute = AppRoute();
+
+// ..
+
+class AppRoute extends RouteBase {
+  MainRoute() : super.root(); // if this route is the root route
+
+  final splash = MaterialRouteBuilder(
+      '/', pageBuilder: (context, settings) => const SplashPage());
+
+  final home = MaterialRouteBuilder(
+      '/home', pageBuilder: (context, settings) => const HomePage());
+
+  final items = ListItemRoute('/item');
+
+  @override
+  List<RouteBase> get children => [splash, home, items];
+}
+
+
+class ListItemRoute extends RouteBase {
+  ListItemRoute(super.segment);
+
+  final list = MaterialRouteBuilder(
+      '/list', pageBuilder: (context, settings) => const ListItemPage());
+
+  late final detail = RouteGuardBuilder(
+    routeBuilder: RouteBuilder<String, dynamic>(
+      '/detail',
+      builder: (settings) {
+        if (settings.arguments is String) {
+          return MaterialPageRoute(
+            settings: settings,
+            builder: (context) =>
+                DetailPage(item: settings.arguments as String),
+          );
+        }
+        return CancelledRoute(false);
+      },
+    ),
+    routeGuard: (pushContext, route) async {
+      if (!navigatorServices.history.contains(list.path)) {
+        Navigator.push(pushContext, list.noAnimationBuilder()!);
+      }
+      return route;
+    },
+  );
+
+  @override
+  List<RouteBase> get children => [detail, list];
+}
+```
+
+> [!Warning]
 >
-> ``rowletNavigatorSerivce``
-> use [``Navigator.defaultGenerateInitialRoutes``](https://api.flutter.dev/flutter/widgets/Navigator/defaultGenerateInitialRoutes.html)
-> as default.
-> That means if your initial route has many path segments, all path segments must be
-> a ``RouteBuilder`` with a non-null builder function:
->
-> For example, if the route /stocks/HOOLI was used as the initialRoute, then the Navigator would
-> push the following routes on startup: /, /stocks, /stocks/HOOLI.
-> So all of the routes (/, /stocks, /stocks/HOOLI) must be defined as a ``RouteBuilder``.
->
-> See more: https://api.flutter.dev/flutter/widgets/Navigator/defaultGenerateInitialRoutes.html
+> Do not forget add your route into the getter `List<RouteBase> get children`. The route
+> will be not found if not register in it.
 
-## Route path definition rules:
+### 2.1. Route builder
 
-## Not found route:
+The `RouteBase` is like a folder, it can not build anything, we call it a non-launchable route.
+To build a page route, we use `RouteBuilder` (launchable route).
+
+```dart
+
+final page1 = RouteBuilder(
+  '/page1',
+  builder: (settings) =>
+      MaterialPageRoute(
+        settings: settings,
+        builder: (context) =>
+            Page1(
+                arguments: settings.arguments
+            ),
+      ),
+);
+```
+
+The `RouteBuilder` allows customize your `PageRoute`, we have created some custom `RouteBuilder`
+below. You also custom your PageRoute by overriding the `RouteBuilder.builder` method.
+
+### 2.2. How does it work?
+
+1. The `appRoute` can not work if not defined in `NavigationService`. You must define it:
+
+    ```dart
+    
+    final appRoute = AppRoute(); // The root route
+    
+    final service = NavigationService(
+    
+      /// ...
+      root: appRoute,
+    );
+    ```
+
+2. What is the route path?
+
+   To get the `splash`'s path, you can call `splash.path` method. The `splash` path will be
+   generated by concat its parent path with its path. If the result appears duplicate slash (`//`),
+   it will merge it into one. So, if you want the segment to have the same route as its parent,
+   let's put a single slash (`/`) as its segment.
+
+3. Push it onto the Navigator
+
+   If you know this path, a simplified method is using Navigator.pushNamed to push it onto the
+   Navigator.
+
+    ```dart
+    Navigator.of(context).pushNamed('/home');
+ 
+    // or
+ 
+    Navigator.of(context).pushNamed(appRoute.home.path);
+    ```
+
+   The `RouteBuilder`'s extension provides an other method to push it
+
+   ```dart
+   appRoute.home.pushNamed(context);
+   ```
+
+4. Argument and result
+
+   The `RouteBuilder<ARGS, T>.pushNamed` will let you know the route arguments type and route result
+   type.
+
+    ```dart
+    final page2 = RouteBuilder<String, bool>(
+     '/page2',
+     builder: (settings) {
+       final greeting = settings.arguments as String?;
+       return MaterialPageRoute(
+         builder: (context) => TestApp(content: greeting),
+       );
+     },
+    );
+    
+    // ...
+    final bool result = await page2.pushName(context, args: /* String type is required*/);
+    ```
+
+5. In a module
+
+   If `ListItemRoute` is in a module package, you can not get the `appRoute` (cause it is defined in
+   the main package).
+   You can use `RouteBase.of<ListItemRoute>()` to get only your `items` route. This method allows
+   your code to be more independent between each package.
+
+6. What happens if have many routes with the same path?
+
+   That is allowed if your route is non-launchable. Otherwise, if your route is launchable, an
+   exception will be thrown because the NavigationService can not know which route will be pushed.
+
+### 2.1.1. Custom route builder
+
+- `MaterialRouteBuilder`: It will create a MaterialPageRoute.
+- `CupertinoRouteBuilder`:  It will create a CupertinoPageRoute.
+- `NoTransitionRouteBuilder`:  It will create a PageRoute without any transition when appears.
+
+    ```dart
+    final splash = MaterialRouteBuilder('/', pageBuilder: (context, settings) => const SplashPage());
+    ```
+
+- `RouteGuardBuilder`:
+
+    * It is only working with the `OwletNavigator`. The `RouteGuardBuilder` provides a `routeGuard`
+      method, that will be called before pushing the route. You also can modify your route before
+      pushing it.
+
+    * To cancel the pushing, let's return a `CancelledRoute`. To redirect it, return another route
+      or a
+      `RedirectRoute('newPath')` in the `routeGuard` method.
+
+      ```dart
+      final detail = RouteGuardBuilder(
+        routeBuilder: RouteBuilder<String, dynamic>(
+          '/detail',
+          builder: (settings) {
+            if (settings.arguments is String) {
+              return MaterialPageRoute(
+                  settings: settings,
+                  builder: (context) => DetailPage(item: settings.arguments as String));
+            }
+            return CancelledRoute(false);
+          },
+        ),
+        routeGuard: (pushContext, route) async {
+          if (!navigatorServices.history.contains(list.path)) {
+            Navigator.push(pushContext, list.noAnimationBuilder()!);
+          }
+          return route;
+        },
+      );
+      ```
+
+      > [!Note]
+      >
+      > The `RouteGuardBuilder` works only with these functions:
+      > - `Navigator.push`,
+      > - `Navigator.pushNamed`,
+      > - `Navigator.popAndPushNamed`,
+      > - `Navigator.pushReplacement`,
+      > - `Navigator.pushReplacementNamed`,
+      > - `Navigator.pushAndRemoveUntil`,
+      > - `Navigator.pushNamedAndRemoveUntil`
+
+- Named function route:
+
+  An ideal about named a function, and call it by `Navigator`. If pushing a `NamedFunctionRoute`, no
+  route is pushed, only the defined function is called and returns the result.
+
+  Like `RouteGuardBuilder`, it also work only with `OwletNavigator`.
+
+  ```dart
+  final action = NamedFunctionRouteBuilder(
+    '/action',
+    callback: (pushContext, route) => print('Hello World'),
+  );
+  ```
+
+  > [!Note]
+  >
+  > The `RouteGuardBuilder` works only with these functions:
+  > - `Navigator.pushNamed`,
+  > - `Navigator.popAndPushNamed`,
+
+# Intergration
+
+## Flutter router
+
+## Modular
 
 # Features and bugs
 
 Please file feature requests and bugs at
-the [issue tracker](https://github.com/sonnts996/rowlet/issues).
+the [issue tracker](https://github.com/sonnts996/owlet-router/issues).

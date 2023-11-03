@@ -5,7 +5,6 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../router.dart';
-import '../advance/navigation_service_provider.dart';
 import '../services/owlet_router.dart';
 
 /// Provides the necessary method for a new [Navigator]:
@@ -27,10 +26,10 @@ abstract class NavigationService<R extends RouteBase> {
   /// ===================================
   ///
   /// ### Find a route by path:
-  /// - Only one launch-able [Route] with a determined path in [root]. But the [root] can have multi [RouteMixin]
+  /// - Only one launchable [Route] with a determined path in [root]. But the [root] can have multi [RouteMixin]
   /// with the same path (an instance of [RouteMixin] with [RouteMixin.canLaunch] is false).
-  /// [findRoute] will prioritize to find a launch-able [Route] matched, if can not found, a non-launch-able [Route] will be considered.
-  /// - If there are multi non-launch-able [Route] with the same path, the first result will be returned.
+  /// [findRoute] will prioritize to find a launchable [Route] matched, if can not found, a non-launchable [Route] will be considered.
+  /// - If there are multi non-launchable [Route] with the same path, the first result will be returned.
   /// - If the route is not defined, [unknownRoute] with be returned.
   factory NavigationService({
     GlobalKey<NavigatorState>? navigationKey,

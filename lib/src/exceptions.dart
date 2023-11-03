@@ -38,15 +38,15 @@ class RouterException<T extends Object?> implements Exception {
   String toString() => _consoleString;
 }
 
-/// A [DuplicatePathException] throws when has 2 launch-able route with the same [RouteMixin.path] in [NavigationService.root].
+/// A [DuplicatePathException] throws when has 2 launchable route with the same [RouteMixin.path] in [NavigationService.root].
 ///
 /// **What is this:**
-/// - A launch-able route is a destination route.
+/// - A launchable route is a destination route.
 ///   That means its path is mapped to a determination page. So, can not have a route's path mapped to 2 different pages.
 ///
-/// [NavigationService.findRoute] will prioritize to find a launch-able route matched.
-/// If can not found, a non-launch-able route will be considered.
-/// If there are multiple non-launch-able routes with the same path, the first result will be returned.
+/// [NavigationService.findRoute] will prioritize to find a launchable route matched.
+/// If can not found, a non-launchable route will be considered.
+/// If there are multiple non-launchable routes with the same path, the first result will be returned.
 class DuplicatePathException extends RouterException<String> {
   /// Create [DuplicatePathException]
   const DuplicatePathException({

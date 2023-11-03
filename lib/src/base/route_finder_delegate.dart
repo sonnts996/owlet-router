@@ -34,10 +34,10 @@ abstract class RouteFinderDelegate {
   ///   next is the route with a trailing splash, and finally this null value.
   /// - Otherwise, ([trailingSlash] is false), an exact URL must be used.
   ///
-  /// - Only one launch-able [Route] with a determined path in [root]. But the [root] can have multi [RouteMixin]
+  /// - Only one launchable [Route] with a determined path in [root]. But the [root] can have multi [RouteMixin]
   /// with the same path (an instance of [RouteMixin] with [RouteMixin.canLaunch] is false).
-  /// [find] will prioritize to find a launch-able [Route] matched, if can not found, a non-launch-able [Route] will be considered.
-  /// - If there are multi non-launch-able [Route] with the same path, the first result will be returned.
+  /// [find] will prioritize to find a launchable [Route] matched, if can not found, a non-launchable [Route] will be considered.
+  /// - If there are multi non-launchable [Route] with the same path, the first result will be returned.
   RouteMixin? find(covariant RouteMixin root, String path);
 
   /// Call to scan and build router in the route tree
