@@ -2,8 +2,9 @@
  Created by Thanh Son on 28/09/2023.
  Copyright (c) 2023 . All rights reserved.
 */
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:rowlet/rowlet.dart';
+import 'package:owlet_router/router.dart';
 
 import '../../../main.dart';
 
@@ -40,7 +41,7 @@ class _ReplacementPagesState extends State<ReplacementPages> {
             const SizedBox(height: 16),
             ElevatedButton(
                 onPressed: () {
-                  navigatorServices.routeBase.replacementSegments.replacement
+                  navigatorServices.root.replacementSegments.replacement
                       .pushNamed(context, args: _argumentController.text);
                 },
                 child: const Text('Push New Replacement')),
@@ -48,15 +49,17 @@ class _ReplacementPagesState extends State<ReplacementPages> {
             ElevatedButton(
                 onPressed: () {
                   final oldRoute = navigatorServices.history.nearest((e) =>
-                      navigatorServices.routeBase.replacementSegments.replacement.isRoute(e) &&
+                      navigatorServices.root.replacementSegments.replacement.isRoute(e) &&
                       e.settings.arguments == _argumentController.text);
                   if (oldRoute != null) {
                     Navigator.replace(context,
                         oldRoute: oldRoute.route,
-                        newRoute: navigatorServices.routeBase.replacementSegments.replacement
+                        newRoute: navigatorServices.root.replacementSegments.replacement
                             .toRoute(args: 'This route was replaced.')!);
                   } else {
-                    print('Nothing matches');
+                    if (kDebugMode) {
+                      print('Nothing matches');
+                    }
                   }
                 },
                 child: const Text('Replace route, which matches the Arguments')),
@@ -64,12 +67,14 @@ class _ReplacementPagesState extends State<ReplacementPages> {
             ElevatedButton(
                 onPressed: () {
                   final routeFinder = navigatorServices.history.nearest((e) =>
-                      navigatorServices.routeBase.replacementSegments.replacement.isRoute(e) &&
+                      navigatorServices.root.replacementSegments.replacement.isRoute(e) &&
                       e.settings.arguments == _argumentController.text);
                   if (routeFinder != null) {
                     Navigator.removeRoute(context, routeFinder.route);
                   } else {
-                    print('Nothing matches');
+                    if (kDebugMode) {
+                      print('Nothing matches');
+                    }
                   }
                 },
                 child: const Text('Remove route, which matches the Arguments')),

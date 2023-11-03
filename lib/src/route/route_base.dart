@@ -1,164 +1,119 @@
 // ignore_for_file: missing_override_of_must_be_overridden
 
 /*
- Created by Thanh Son on 16/08/2023.
+ Created by Thanh Son on 30/10/2023.
  Copyright (c) 2023 . All rights reserved.
 */
 library route_base;
 
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:objectx/objectx.dart';
 
-import '../../rowlet.dart';
+import '../advance/navigation_service_provider.dart';
+import '../base/navigation_service.dart';
+import '../base/route_mixin.dart';
+import '../exceptions.dart';
 
+part 'extension/route_list_out.dart';
+part 'extension/router_extension.dart';
 part 'route_builder.dart';
-
 part 'route_set.dart';
 
-part 'router_extension.dart';
-
 /// Create a route wrapper with it's route path.
 /// The [parent] field is a lazy update after running.
-/// The parent is the object, which defines this in [RouteSegment.children].
+/// The parent is the object, which defines this in [RouteBase.children].
 ///
-/// Note that a route can have only one parent,
-/// which means, an error will be thrown if update a  non-null [RouteSegment.parent] to a new value.
-abstract class _RouteBase {
+/// __Note:__ A route can have only one parent,
+/// which means, an error will be thrown if update a non-null [RouteBase.parent] to a new value.
+class RouteBase extends RouteMixin {
   /// Create new route segment with it's path.
   ///
-  /// Note the the path should be started with '/'.
-  _RouteBase(this.segmentPath);
+  /// __Note:__ The the path must be started with '/'.
+  RouteBase(this.segment) : assert(segment.startsWith('/'), 'Path must be start with /');
 
-  /// This segment's path.
-  final String segmentPath;
+  /// The root route's path should be '/'.
+  RouteBase.root([this.segment = '/']);
 
-  /// Return this parent route of this segment.
-  /// If null, this may not have a parent or not have applied the parent route yet.
-  RouteSegment? get parent;
+  /// Returns the [RouteBase] if it exists in the [context].
+  /// The [depthSearch] allows the finder deep search within a tree model to find the first branch that matches the [R] data type
+  static R? maybeOf<R extends RouteBase>(BuildContext context, {bool depthSearch = false}) {
+    final root = NavigationServiceProvider.maybeOf(context)?.root;
+    if (!depthSearch) return root.castTo<R?>();
+    if (root == null) return null;
+    if (root is R) return root;
 
-  /// Must be overridden this getter.
-  /// If this route has children, all it's children must be defined in the returned list.¬
-  @mustBeOverridden
-  List<RouteSegment> get children => [];
+    R? find(RouteMixin base) {
+      R? result;
+      for (var e in base.children) {
+        if (e is R) {
+          result = e;
+          break;
+        }
+        result = find(e);
+      }
+      return result;
+    }
 
-  /// Return this route's [path] as [Uri]
-  Uri get uri => Uri.parse(path);
+    return find(root);
+  }
 
-  /// Return the final route's path, which contains the [parent]'s route and this [segmentPath].
-  /// If not have the [parent], only this [segmentPath] is returned.
-  String get path;
-
-  @override
-  String toString() => '$runtimeType($path)';
-
-  /// Set the parent for this route.
-  /// If the parent is this route's parent, nothing happens.
-  /// If this route's parent is null, the parent will be applied.
-  /// Otherwise, an exception will be thrown, cause the route had a parent.
-  void apply(RouteSegment? parent);
-
-  /// Compare this [path] with the [route.settings.name], and return true if the router path is the same.
-  bool isRoute(Route route) => route.settings.name?.let(Uri.tryParse)?.path == path;
-}
-
-/// Create a route wrapper with it's route path.
-/// The [parent] field is a lazy update after running.
-/// The parent is the object, which defines this in [RouteSegment.children].
-///
-/// Note that a route can have only one parent,
-/// which means, an error will be thrown if update a  non-null [RouteSegment.parent] to a new value.
-class RouteSegment extends _RouteBase {
-  /// Create new route segment with it's path.
-  ///
-  /// Note the the path should be started with '/'.
-  RouteSegment(super.segmentPath) : assert(segmentPath.startsWith('/'), 'Path must be start with /');
-
-  RouteSegment? _parent;
+  /// Returns the [RouteBase] if it exists in the [context]. But it will be thrown an error if the [NavigationService] not found.
+  /// The [depthSearch] allows the finder deep search within a tree model to find the first branch that matches the [R] data type
+  static R of<R extends RouteBase>(BuildContext context, {bool depthSearch = false}) {
+    final result = maybeOf<R>(context, depthSearch: depthSearch);
+    assert(result != null, 'No $R found in context');
+    return result!;
+  }
 
   @override
-  RouteSegment? get parent => _parent;
+  final String segment;
+
+  RouteBase? _parent;
 
   @override
+  RouteBase? get parent => _parent;
 
-  /// Return the final route's path, which contains the [parent]'s route and this [segmentPath].
-  /// If not have the [parent], only this [segmentPath] is returned.
+  @override
   String get path {
-    assert(segmentPath.startsWith('/'), 'Path must be start with /');
+    assert(segment.startsWith('/'), 'Path must be start with /');
     return parent.letOrNull(
       (it) {
-        if (it.segmentPath == '/') return segmentPath;
-        return '${it.path}$segmentPath';
+        if (it.segment == '/') return segment;
+        return '${it.path}$segment';
       },
-      onNull: () => segmentPath,
+      onNull: () => segment,
     );
   }
 
   /// Set the parent for this route.
-  /// If the parent is this route's parent, nothing happens.
+  /// If the [parent] is this route's parent, nothing happens.
   /// If this route's parent is null, the parent will be applied.
   /// Otherwise, an exception will be thrown, cause the route had a parent.
-  @override
-  void apply(RouteSegment? parent) {
+  void apply(RouteBase? parent) {
     if (this.parent != null && this.parent != parent) {
       throw InvalidRouteException(
           error: '${toString()} already has a parent (${this.parent.toString()}.'
               "Can not use an instance route in more than a parent route. Let's create another instance of this.");
     }
-
     _parent = parent;
   }
-}
 
-/// The top-level parent of routes. Using the Origin Route to apply the router to all of the route's members.
-///  [OriginRoute] provides the [routes] getter, which returns a list of routes in the router.
-///
-///  There are two modes in the origin route:
-///  - In normal mode, every time a new route is pushed, the router generator will be recalled.
-///  - Otherwise, in stability mode, the routes will be called once to increase performance when pushing a new route.
-class OriginRoute extends RouteSegment {
-  /// The Origin route's path should be '/'.
-  OriginRoute([String path = '/'])
-      : _stability = false,
-        super(path) {
-    _routesSet = _routes;
-  }
+  @override
+  List<RouteBase> get children => [];
 
-  /// Create an origin route with stability mode.
-  /// In this mode, the router will be initiated once,
-  /// which increases performance when pushing a new page.
-  /// Call [commit] if any changes happen to update the router.
-  OriginRoute.stabilityMode([String path = '/'])
-      : _stability = true,
-        super(path) {
-    _routesSet = _routes;
-  }
+  @override
+  bool isRoute(Route route) => route.settings.name?.let(Uri.tryParse)?.path == path;
 
-  late RouteSet _routesSet;
-  final bool _stability;
+  @override
+  Uri get uri => Uri.parse(path);
 
-  /// returns the list of routes in the router.
-  RouteSet get routes => _stability ? _routesSet : _routes;
+  @override
+  bool match(Uri uri) => uri.path == path;
 
-  /// In the stability mode, [routes] returns a singleton of [RouteSet].
-  /// which makes all of the changes after initiation be ignored.
-  /// Call [commit] method to update new changes.
-  void commit() {
-    _routesSet = _routes;
-  }
-}
+  @override
+  bool get canLaunch => false;
 
-extension _RouteGenerator on RouteSegment {
-  RouteSet get _routes {
-    final sets = RouteSet();
-    sets.add(this);
-    if (children.isNotEmpty) {
-      for (final i in children) {
-        i.apply(this);
-        sets.addAll(i._routes);
-      }
-    }
-    return sets;
-  }
+  @override
+  bool get isCallback => false;
 }

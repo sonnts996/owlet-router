@@ -1,36 +1,35 @@
 import 'package:example/main_routes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:rowlet/rowlet.dart';
+import 'package:owlet_router/router.dart';
 
-late final ROwletNavigationService<MainRoute> navigatorServices;
+late final NavigationService<MainRoute> navigatorServices;
 
 void main() {
-  navigatorServices = ROwletNavigationService<MainRoute>(
-      navigationKey: GlobalKey<NavigatorState>(),
-      routeBase: MainRoute(),
-      initialRoute: '/',
-      routeObservers: [],
-      unknownRoute: MaterialRouteBuilder(
-        '/page-not-found',
-        pageBuilder: (context, settings) => Scaffold(
-          appBar: AppBar(title: const Text('Page Not Found:')),
-          body: Center(child: Text('Page Not Found: ${settings.name}')),
-        ),
-      ))
-    ..history.addListener(() {
+  navigatorServices = NavigationService<MainRoute>(
+    navigationKey: GlobalKey<NavigatorState>(),
+    routeObservers: [],
+    root: MainRoute(),
+    initialRoute: '/',
+    finder: DefaultRouteFinder.cache(trailingSlash: true),
+    unknownRoute: owletDefaultUnknownRoute,
+  )..history.addListener(() {
       /// Listen when routes change.
       if (kDebugMode) {
         print(navigatorServices.history);
       }
     });
+
+  if (kDebugMode) {
+    print(navigatorServices.root.listOut());
+  }
   runApp(MyApp(service: navigatorServices));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.service});
 
-  final ROwletNavigationService service;
+  final NavigationService service;
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +38,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
           useMaterial3: true,
-          elevatedButtonTheme:
-              ElevatedButtonThemeData(style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 50))),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                  // minimumSize: const Size(double.infinity, 50),
+                  backgroundColor: Colors.indigoAccent,
+                  foregroundColor: Colors.white)),
           dividerTheme: DividerThemeData(
             color: Colors.grey.shade300,
             thickness: 1,

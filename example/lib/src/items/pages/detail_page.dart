@@ -3,6 +3,7 @@
  Copyright (c) 2023 . All rights reserved.
 */
 import 'package:flutter/material.dart';
+import 'package:lorem_ipsum/lorem_ipsum.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({super.key, required this.item});
@@ -18,11 +19,9 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.item)),
-      body: Center(
-          child: Column(
-        children: [
-          Text(widget.item),
-        ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Text(loremIpsum(paragraphs: 5),
       )),
     );
   }

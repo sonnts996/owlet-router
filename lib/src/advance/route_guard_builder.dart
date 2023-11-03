@@ -5,37 +5,64 @@
  Copyright (c) 2023 . All rights reserved.
 */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../route/route_base.dart';
+import 'owlet_navigator.dart';
 
-/// Editing [Route]'s function.
-typedef RouteGuard<R> = Future<Route?> Function(BuildContext pushContext, Route<R> route);
+/// The function is called before pushing the [route].
+typedef RouteGuard<R extends Object?> = FutureOr<Route?> Function(BuildContext pushContext, Route<R> route);
 
-/// With ROwletNavigator, when pushes a new route, if the route has route settings is [RouteGuardSettings]
-/// the [RouteGuardSettings.routeGuard] will be called before pushing.
-/// If  [RouteGuardBuilder.routeGuard] returns null, that means your pushing is canceled, the [cancelledValue] will be returned.
+/// In the [OwletNavigator], when a new route is pushed, if the route has settings as [RouteGuardSettings],
 class RouteGuardSettings<T extends Object?> extends RouteSettings {
-  /// With ROwletNavigator, when pushes a new route, if the route has route settings is [RouteGuardSettings]
-  /// the [RouteGuardSettings.routeGuard] will be called before pushing.
-  /// If  [RouteGuardBuilder.routeGuard] returns null, that means your pushing is canceled, the [cancelledValue] will be returned.
+  /// The [RouteGuardSettings]'s constructor
   RouteGuardSettings({
     super.arguments,
     super.name,
     this.routeGuard,
-    this.cancelledValue,
   });
 
-  /// Return the accepted route. It is called before push and after generated route (in case pushNamed)
+  /// the function will be called before pushing.
   final RouteGuard<T>? routeGuard;
-
-  /// Returned value if [routeGuard] returns null
-  final T? cancelledValue;
 }
 
-/// ROwletNavigator provides a feature that accepts editing the route before it pushes it.
-/// [RouteGuardBuilder.routeGuard] will call before the route is already pushed, the result of this method will apply (or replace) the origin pushing route.
-/// If  [RouteGuardBuilder.routeGuard] returns null, that means your pushing is canceled, the [cancelledValue] will be returned.
+/// In [RouteGuard], returns [CancelledRoute] to cancel the pushing.
+class CancelledRoute<T extends Object?> extends Route<T> {
+  /// The [CancelledRoute]'s constructor
+  CancelledRoute([this.value]);
+
+  /// The returned value when the pushing has been cancelled
+  final T? value;
+}
+
+/// In [RouteGuard], returns [RedirectRoute] to redirect the pushing to another route's name
+class RedirectRoute<T extends Object?> extends Route<T> {
+  /// The [RouteSettings.name] is required to redirect
+  RedirectRoute(String redirectTo, {Object? arguments})
+      : super(
+            settings: RouteSettings(
+          name: redirectTo,
+          arguments: arguments,
+        ));
+}
+
+/// In the [OwletNavigator], when a new route is pushed, if the route has settings as [RouteGuardSettings],
+/// the [RouteGuardSettings.routeGuard] will be called before pushing.
+///
+/// The route guard function result has a bearing on the pushing.
+/// If the result is a [Route], that route will be pushed on.
+/// The route's setting also can be rewritten at this function.
+/// This can be seen as a redirection feature.
+///
+/// Another way to redirect is to return a [RedirectRoute] with a special [RouteSettings] name.
+///
+/// If the returned value is null, the origin route will be pushed.
+///
+/// To cancel pushing, let's return a [CancelledRoute] value. Then, if the [CancelledRoute.value] is special and matches the result type, it will be the resulting push result.
+///
+/// __Note:__ If returns [CancelledRoute] but the  [CancelledRoute.value] is not matched to the result type. The origin route will be pushed.
 ///
 /// Note:
 /// This works only with these functions:
@@ -47,23 +74,31 @@ class RouteGuardSettings<T extends Object?> extends RouteSettings {
 /// - [Navigator.pushAndRemoveUntil],
 /// - [Navigator.pushNamedAndRemoveUntil]
 class RouteGuardBuilder<ARGS extends Object?, T extends Object?> extends RouteBuilder<ARGS, T> {
-  /// ROwletNavigator provides a feature that accepts editing the route before it pushes it.
-  /// [RouteGuardBuilder.routeGuard] will call before the route is already pushed, the result of this method will apply (or replace) the origin pushing route.
-  /// If  [RouteGuardBuilder.routeGuard] returns null, that means your pushing is canceled, the [cancelledValue] will be returned.
+  /// The [RouteGuardBuilder]'s constructor
   RouteGuardBuilder({
     this.routeGuard,
     required this.routeBuilder,
-    this.cancelledValue,
-  }) : super(routeBuilder.segmentPath, builder: null);
+  }) : super(routeBuilder.segment, builder: null);
 
   /// Return the origin [Route] of this segments.
+  /// This route will be passed into the [routeGuard]'s params. If the [routeGuard] returns null, it will be the final route to be pushed.
   final RouteBuilder<ARGS, T> routeBuilder;
 
-  /// Return the accepted route. It is called before push and after generated route (in case pushNamed)
+  /// The function will be called before pushing.
+  ///
+  /// The route guard function result has a bearing on the pushing.
+  /// If the result is a [Route], that route will be pushed on.
+  /// The route's setting also can be rewritten at this function.
+  /// This can be seen as a redirection feature.
+  ///
+  /// Another way to redirect is to return a [RedirectRoute] with a special [RouteSettings] name.
+  ///
+  /// If the returned value is null, the origin route will be pushed.
+  ///
+  /// To cancel pushing, let's return a [CancelledRoute] value. Then, if the [CancelledRoute.value] is special and matches the result type, it will be the resulting push result.
+  ///
+  /// __Note:__ If returns [CancelledRoute] but the  [CancelledRoute.value] is not matched to the result type. The origin route will be pushed.
   final RouteGuard? routeGuard;
-
-  /// Returned value if [routeGuard] returns null
-  final T? cancelledValue;
 
   @override
   Route<T>? builder(RouteSettings settings) => routeBuilder.builder(
@@ -71,7 +106,6 @@ class RouteGuardBuilder<ARGS extends Object?, T extends Object?> extends RouteBu
           arguments: settings.arguments,
           name: settings.name,
           routeGuard: routeGuard,
-          cancelledValue: cancelledValue,
         ),
       );
 }

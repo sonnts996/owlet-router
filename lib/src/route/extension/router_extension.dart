@@ -5,12 +5,12 @@
 part of route_base;
 
 /// Extension for [RouteBuilder] to shorter method push new page route.
-/// The [ARGS] is define the arguments type for this route.
+/// The [ARGS] defines the argument type for this route.
 ///
 /// Example:
 /// ```
-/// Navigator.of(context).pushNamed(AppRoutes.home.fullRoute); // Classic method
-/// AppRoutes.home.pushNamed(context); // New method
+/// Navigator.of(context).pushNamed(yourRoot.home.path); // Classic method
+/// yourRoot.home.pushNamed(context); // New method
 /// ```
 extension RouterExtension<ARGS, T> on RouteBuilder<ARGS, T> {
   /// Return a [Route] of this [RouteBuilder] to use for the function,

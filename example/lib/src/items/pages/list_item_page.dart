@@ -5,7 +5,7 @@
 import 'package:example/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rowlet/rowlet.dart';
+import 'package:owlet_router/router.dart';
 
 class ListItemPage extends StatefulWidget {
   const ListItemPage({super.key});
@@ -26,7 +26,7 @@ class _ListItemPageState extends State<ListItemPage> {
             title: Text('Item $index'),
             leading: const Icon(CupertinoIcons.bookmark_fill),
             onTap: () {
-              navigatorServices.routeBase.items.detail.pushNamed(context, args: 'Item $index');
+              navigatorServices.root.items.detail.pushNamed(context, args: 'Item $index');
             },
           );
         },

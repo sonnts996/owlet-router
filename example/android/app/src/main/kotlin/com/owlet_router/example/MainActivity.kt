@@ -1,4 +1,4 @@
-package com.example.example
+package com.owlet_router.example
 
 import io.flutter.embedding.android.FlutterActivity
 

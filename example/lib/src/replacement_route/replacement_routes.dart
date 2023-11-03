@@ -3,10 +3,10 @@
  Copyright (c) 2023 . All rights reserved.
 */
 import 'package:example/src/replacement_route/pages/replacement_pages.dart';
-import 'package:rowlet/rowlet.dart';
+import 'package:owlet_router/router.dart';
 
-class ReplacementRoutes extends RouteSegment {
-  ReplacementRoutes(super.segmentPath);
+class ReplacementRoutes extends RouteBase {
+  ReplacementRoutes(super.segment);
 
   final replacement = MaterialRouteBuilder(
     '/',
@@ -18,5 +18,5 @@ class ReplacementRoutes extends RouteSegment {
   );
 
   @override
-  List<RouteSegment> get children => [replacement];
+  List<RouteBase> get children => [replacement];
 }

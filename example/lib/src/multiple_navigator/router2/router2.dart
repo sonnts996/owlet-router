@@ -3,7 +3,7 @@
  Copyright (c) 2023 . All rights reserved.
 */
 import 'package:flutter/material.dart';
-import 'package:rowlet/rowlet.dart';
+import 'package:owlet_router/router.dart';
 
 class Page2 extends StatefulWidget {
   const Page2({super.key, required this.pageName, this.currentPage = 1});
@@ -38,7 +38,9 @@ class _Page2State extends State<Page2> {
   }
 }
 
-class Router2 extends OriginRoute {
+class Router2 extends RouteBase {
+  Router2() : super.root();
+
   final page1 = MaterialRouteBuilder(
     '/page1',
     pageBuilder: (context, settings) {
@@ -68,5 +70,5 @@ class Router2 extends OriginRoute {
   );
 
   @override
-  List<RouteSegment> get children => [page1, page2, page3, page4];
+  List<RouteBase> get children => [page1, page2, page3, page4];
 }

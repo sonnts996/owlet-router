@@ -5,16 +5,15 @@
 import 'package:example/src/authentication_required/pages/login_datasource.dart';
 import 'package:example/src/authentication_required/pages/login_page.dart';
 import 'package:example/src/authentication_required/pages/profile_page.dart';
-import 'package:rowlet/rowlet.dart';
+import 'package:owlet_router/router.dart';
 
 /// You can use injections for this, such as getIt.
 final LoginDataSource loginDataSource = LoginDataSource();
 
-class AuthenticationRoute extends RouteSegment {
-  AuthenticationRoute(super.segmentPath);
+class AuthenticationRoute extends RouteBase {
+  AuthenticationRoute(super.segment);
 
   final login = RouteGuardBuilder(
-    cancelledValue: true,
     routeBuilder: MaterialRouteBuilder(
       '/login',
       pageBuilder: (context, settings) => LoginPage(loginDataSource: loginDataSource),
@@ -23,7 +22,7 @@ class AuthenticationRoute extends RouteSegment {
       if (loginDataSource.isLogin) {
         /// Ignore pushing a new login route when you are already in a login state.
         /// [cancelledValue] will be result of Navigator.push
-        return null;
+        return CancelledRoute(false);
       }
       return route;
     },
@@ -51,5 +50,5 @@ class AuthenticationRoute extends RouteSegment {
   );
 
   @override
-  List<RouteSegment> get children => [profile, login];
+  List<RouteBase> get children => [profile, login];
 }

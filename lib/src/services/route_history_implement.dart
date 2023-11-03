@@ -2,14 +2,12 @@
  Created by Thanh Son on 26/09/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-import 'package:flutter/cupertino.dart';
+part of router_service;
 
-import '../../interfaces/history_base.dart';
-
-/// Implement [HistoryBase]. Logging the router history via using [RouteObserver] to watch when the router changes.
-class ROwletHistory extends RouteObserver with HistoryBase, ChangeNotifier {
-  /// [ROwletHistory]'s constructor
-  ROwletHistory();
+/// Implement [RouteHistoryImpl]. Logging the router history via using [RouteObserver] to watch when the router changes.
+class RouteHistoryImpl extends RouteObserver with RouteHistory, ChangeNotifier {
+  /// [RouteHistoryImpl]'s constructor
+  RouteHistoryImpl();
 
   final List<Route> _history = [];
 

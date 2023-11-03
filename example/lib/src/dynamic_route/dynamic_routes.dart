@@ -4,11 +4,10 @@
 */
 import 'package:example/main.dart';
 import 'package:example/src/dynamic_route/pages/premium_page.dart';
-import 'package:example/src/dynamic_route/pages/premium_upgrade_page.dart';
-import 'package:rowlet/rowlet.dart';
+import 'package:owlet_router/router.dart';
 
-class DynamicRoutes extends RouteSegment {
-  DynamicRoutes(super.segmentPath);
+class DynamicRoutes extends RouteBase {
+  DynamicRoutes(super.segment);
 
   RouteBuilder premiumPage = MaterialRouteBuilder('/premiumPage');
 
@@ -20,7 +19,7 @@ class DynamicRoutes extends RouteSegment {
       pageBuilder: (context, settings) => const PremiumPage(),
     );
     // If your origin route is in stability mode, must be called commit(); to apply the change.
-    navigatorServices.routeBase.commit();
+    navigatorServices.buildRouter();
   }
 
   void downgradeToPremium() {
@@ -31,14 +30,9 @@ class DynamicRoutes extends RouteSegment {
       pageBuilder: null,
     );
     // If your origin route is in stability mode, must be called commit(); to apply the change.
-    navigatorServices.routeBase.commit();
+    navigatorServices.buildRouter();
   }
 
-  final upgrade = MaterialRouteBuilder(
-    '/upgrade_premium',
-    pageBuilder: (context, settings) => const PremiumUpgradePage(),
-  );
-
   @override
-  List<RouteSegment> get children => [upgrade, premiumPage];
+  List<RouteBase> get children => [premiumPage];
 }

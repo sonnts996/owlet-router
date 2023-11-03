@@ -2,10 +2,10 @@
  Created by Thanh Son on 28/09/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-import 'package:example/src/multiple_navigator/router1/router1.dart';
 import 'package:flutter/material.dart';
-import 'package:rowlet/rowlet.dart';
+import 'package:owlet_router/router.dart';
 
+import '../router1/router1.dart';
 import '../router2/router2.dart';
 
 class MultipleNavigatorPage extends StatefulWidget {
@@ -16,16 +16,16 @@ class MultipleNavigatorPage extends StatefulWidget {
 }
 
 class _MultipleNavigatorPageState extends State<MultipleNavigatorPage> {
-  late final ROwletNavigationService service1;
-  late final ROwletNavigationService service2;
+  late final NavigationService service1;
+  late final NavigationService service2;
 
   int currentPage = 1;
 
   @override
   void initState() {
     super.initState();
-    service1 = ROwletNavigationService(routeBase: Router1(), initialRoute: '/page1');
-    service2 = ROwletNavigationService(routeBase: Router2(), initialRoute: '/page1');
+    service1 = NavigationService(root: Router1(), initialRoute: '/page1');
+    service2 = NavigationService(root: Router2(), initialRoute: '/page1');
   }
 
   @override
@@ -62,7 +62,7 @@ class _MultipleNavigatorPageState extends State<MultipleNavigatorPage> {
           ),
           SizedBox(
               height: 300,
-              child: ROwletNavigator(
+              child: Navigator(
                 key: service1.navigationKey,
                 initialRoute: service1.initialRoute,
                 observers: <NavigatorObserver>[service1.history, ...service1.routeObservers],
@@ -70,15 +70,8 @@ class _MultipleNavigatorPageState extends State<MultipleNavigatorPage> {
                 onPopPage: service1.onPopPage,
                 onUnknownRoute: service1.onUnknownRoute,
               )),
-          Expanded(
-              child: ROwletNavigator(
-            key: service2.navigationKey,
-            initialRoute: service2.initialRoute,
-            observers: <NavigatorObserver>[service2.history, ...service2.routeObservers],
-            onGenerateRoute: service2.onGenerateRoute,
-            onPopPage: service2.onPopPage,
-            onUnknownRoute: service2.onUnknownRoute,
-          )),
+          const Divider(),
+          Expanded(child: OwletNavigator.from(service2)),
         ],
       ),
     );

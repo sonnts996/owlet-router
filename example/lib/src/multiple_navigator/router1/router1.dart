@@ -3,7 +3,7 @@
  Copyright (c) 2023 . All rights reserved.
 */
 import 'package:flutter/material.dart';
-import 'package:rowlet/rowlet.dart';
+import 'package:owlet_router/router.dart';
 
 class Page1 extends StatelessWidget {
   const Page1({super.key, required this.color});
@@ -19,7 +19,9 @@ class Page1 extends StatelessWidget {
   }
 }
 
-class Router1 extends OriginRoute {
+class Router1 extends RouteBase {
+  Router1() : super.root();
+
   final page1 = MaterialRouteBuilder(
     '/page1',
     pageBuilder: (context, settings) {
@@ -49,5 +51,5 @@ class Router1 extends OriginRoute {
   );
 
   @override
-  List<RouteSegment> get children => [page1, page2, page3, page4];
+  List<RouteBase> get children => [page1, page2, page3, page4];
 }

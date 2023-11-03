@@ -15,8 +15,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController(text: 'John Smith');
+  final TextEditingController _passwordController = TextEditingController(text: '123456');
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,9 @@ class _LoginPageState extends State<LoginPage> {
             ElevatedButton(
                 onPressed: () async {
                   await widget.loginDataSource.login(_usernameController.text, _passwordController.text);
-                  Navigator.pop(context);
+                  if (mounted) {
+                    Navigator.pop(context);
+                  }
                 },
                 child: const Text('Login')),
           ],

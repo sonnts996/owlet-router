@@ -4,16 +4,16 @@
 */
 import 'package:example/src/authentication_required/authentication_route.dart';
 import 'package:example/src/dynamic_route/dynamic_routes.dart';
+import 'package:example/src/home/home_page.dart';
+import 'package:example/src/home/splash_page.dart';
 import 'package:example/src/multiple_navigator/multiple_navigator_routes.dart';
-import 'package:example/src/pages/home_page.dart';
-import 'package:example/src/pages/splash_page.dart';
 import 'package:example/src/replacement_route/replacement_routes.dart';
-import 'package:rowlet/rowlet.dart';
+import 'package:owlet_router/router.dart';
 
 import 'src/items/items_route.dart';
 
-class MainRoute extends OriginRoute {
-  MainRoute() : super.stabilityMode();
+class MainRoute extends RouteBase {
+  MainRoute() : super.root();
 
   final home = MaterialRouteBuilder('/home', pageBuilder: (context, settings) => const HomePage());
 
@@ -30,7 +30,7 @@ class MainRoute extends OriginRoute {
   final multiple = MultipleNavigatorRoutes('/multiple');
 
   @override
-  List<RouteSegment> get children => [
+  List<RouteBase> get children => [
         auth,
         home,
         splash,

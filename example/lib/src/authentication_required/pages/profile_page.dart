@@ -23,30 +23,14 @@ class _ProfilePageState extends State<ProfilePage> {
         title: const Text('Profile'),
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text('Your username:', style: Theme.of(context).textTheme.labelLarge),
-                    const SizedBox(width: 8),
-                    Expanded(child: Text(loginDataSource.userData!.username)),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text('Your password:', style: Theme.of(context).textTheme.labelLarge),
-                    const SizedBox(width: 8),
-                    Expanded(child: Text(loginDataSource.userData!.password)),
-                  ],
-                ),
-              ]),
-        ),
+        child: Text.rich(
+            TextSpan(text: 'Hello ', children: [
+              TextSpan(
+                  text: loginDataSource.userData!.username,
+                  style: Theme.of(context).textTheme.headlineLarge?.apply(fontWeightDelta: 2)),
+              TextSpan(text: ' ;)', style: Theme.of(context).textTheme.headlineLarge?.apply(fontWeightDelta: 2))
+            ]),
+            style: Theme.of(context).textTheme.headlineLarge),
       ),
     );
   }

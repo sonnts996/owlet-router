@@ -3,7 +3,9 @@
  Copyright (c) 2023 . All rights reserved.
 */
 
-part of owlet_router;
+import 'package:objectx/objectx.dart';
+
+import '../router.dart';
 
 /// Router exception's interface.
 class RouterException<T extends Object?> implements Exception {
@@ -36,14 +38,15 @@ class RouterException<T extends Object?> implements Exception {
   String toString() => _consoleString;
 }
 
-/// A [DuplicatePathException] throws when has 2 [RouteBuilder] with the same [RouteBuilder.path] in [ROwletNavigationService.routeBase].
-/// - What is this:
-///   A [RouteBuilder] is a destination route.
+/// A [DuplicatePathException] throws when has 2 launch-able route with the same [RouteMixin.path] in [NavigationService.root].
+///
+/// **What is this:**
+/// - A launch-able route is a destination route.
 ///   That means its path is mapped to a determination page. So, can not have a route's path mapped to 2 different pages.
 ///
-/// [ROwletNavigationService.findRoute] will prioritize to find a [RouteBuilder] matched.
-/// If can not, a [RouteSegment] will be considered.
-/// If there are multiple [RouteSegment] with the same path, the first result will be returned.
+/// [NavigationService.findRoute] will prioritize to find a launch-able route matched.
+/// If can not found, a non-launch-able route will be considered.
+/// If there are multiple non-launch-able routes with the same path, the first result will be returned.
 class DuplicatePathException extends RouterException<String> {
   /// Create [DuplicatePathException]
   const DuplicatePathException({
@@ -53,7 +56,7 @@ class DuplicatePathException extends RouterException<String> {
   });
 }
 
-/// A [InvalidRouteException] throws when an instance [RouteSegment] is defined in two difference parents.
+/// A [InvalidRouteException] throws when an instance [RouteMixin] is defined in two difference parents.
 ///
 /// Example:
 ///```

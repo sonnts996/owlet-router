@@ -4,18 +4,17 @@
 */
 import 'package:example/main.dart';
 import 'package:flutter/material.dart';
-import 'package:rowlet/rowlet.dart';
+import 'package:owlet_router/router.dart';
 
 import 'pages/detail_page.dart';
 import 'pages/list_item_page.dart';
 
-class ListItemRoute extends RouteSegment {
-  ListItemRoute(super.segmentPath);
+class ListItemRoute extends RouteBase {
+  ListItemRoute(super.segment);
 
   final list = MaterialRouteBuilder('/list', pageBuilder: (context, settings) => const ListItemPage());
 
   late final detail = RouteGuardBuilder(
-    cancelledValue: false,
     routeBuilder: RouteBuilder<String, dynamic>(
       '/detail',
       builder: (settings) {
@@ -23,7 +22,7 @@ class ListItemRoute extends RouteSegment {
           return MaterialPageRoute(
               settings: settings, builder: (context) => DetailPage(item: settings.arguments as String));
         }
-        return null;
+        return CancelledRoute(false);
       },
     ),
     routeGuard: (pushContext, route) async {
@@ -35,5 +34,5 @@ class ListItemRoute extends RouteSegment {
   );
 
   @override
-  List<RouteSegment> get children => [detail, list];
+  List<RouteBase> get children => [detail, list];
 }
