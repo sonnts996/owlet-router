@@ -1,6 +1,34 @@
 # Owlet Router
 
-Flutter router
+The `owlet_router` is a router manager. It is not a route, it uses the route builder to build the
+router.
+
+It is built based on purposes:
+
+- A clear router manager. Easy to define, read, and use it.
+- It uses on base Flutter Router, easy to integrate with many page route types, customize, and
+  extend the router.
+- Modularization of the router, easy to split the route, and built independent routes.
+- Can check before pushing, preventing, or redirecting route.
+
+# Table of content
+
+- [Getting started](#getting-started)
+- [Usage](#usage)
+    - [1. NavigationService](#1-navigationservice)
+        - [Second Navigator](#in-the-second-navigator)
+        - [1.1. Owlet Navigator](#11-owlet-navigator)
+        - [1.2. Provider](#12-provider)
+        - [1.2. Route history](#13-route-history)
+        - [1.4. Unknown Route](#14-if-the-route-can-not-build)
+    - [2. Route](#2-route)
+        - [2.1. Route builder](#21-route-builder)
+        - [2.2. Route usage](#22-how-does-it-work)
+        - [2.3. Custom route builder](#23-custom-route-builder)
+- [Integration](#integration)
+    - [Flutter Router](#flutter-router)
+    - [Modular](#modular)
+- [Features and bugs](#features-and-bugs)
 
 # Getting started
 
@@ -8,7 +36,7 @@ Add this line to your dependencies:
 
 ```yaml
 dependencies:
-  rowlet_router: 'newest'
+  rowlet_router: '0.0.1'
 ```
 
 - import the package:
@@ -19,7 +47,7 @@ import 'package:rowlet_router/router.dart';
 
 # Usage
 
-## 1. Navigation service
+## 1. NavigationService
 
 The `NavigationService` provides the necessary method for a new `Navigator`:
 
@@ -330,7 +358,7 @@ below. You also custom your PageRoute by overriding the `RouteBuilder.builder` m
    That is allowed if your route is non-launchable. Otherwise, if your route is launchable, an
    exception will be thrown because the NavigationService can not know which route will be pushed.
 
-### 2.1.1. Custom route builder
+### 2.3. Custom route builder
 
 - `MaterialRouteBuilder`: It will create a MaterialPageRoute.
 - `CupertinoRouteBuilder`:  It will create a CupertinoPageRoute.
@@ -383,7 +411,7 @@ below. You also custom your PageRoute by overriding the `RouteBuilder.builder` m
       > - `Navigator.pushAndRemoveUntil`,
       > - `Navigator.pushNamedAndRemoveUntil`
 
-- Named function route:
+- `NamedFunctionRoute`:
 
   An ideal about named a function, and call it by `Navigator`. If pushing a `NamedFunctionRoute`, no
   route is pushed, only the defined function is called and returns the result.
@@ -403,7 +431,7 @@ below. You also custom your PageRoute by overriding the `RouteBuilder.builder` m
   > - `Navigator.pushNamed`,
   > - `Navigator.popAndPushNamed`,
 
-# Intergration
+# Integration
 
 ## Flutter router
 
