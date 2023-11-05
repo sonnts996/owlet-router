@@ -39,6 +39,14 @@ void main() {
   });
   group('Navigation', () {
     final mainRoute = MainRoute();
+
+    test('Route parser', () {
+      expect(mainRoute.splash.path, '/');
+      expect(mainRoute.home.path, '/home');
+      expect(mainRoute.home.page1.path, '/home/page1');
+      expect(mainRoute.home.page2.path, '/home/page2');
+    });
+
     final navigationService = NavigationService(
         navigationKey: GlobalKey(),
         routeObservers: [],
@@ -48,13 +56,6 @@ void main() {
 
     /// Print all accepted routes
     navigationService.root.listOut().print();
-
-    test('Route parser', () {
-      expect(mainRoute.splash.path, '/');
-      expect(mainRoute.home.path, '/home');
-      expect(mainRoute.home.page1.path, '/home/page1');
-      expect(mainRoute.home.page2.path, '/home/page2');
-    });
 
     test('find route', () {
       expect(navigationService.findRoute('/'), mainRoute.splash);

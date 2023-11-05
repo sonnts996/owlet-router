@@ -9,7 +9,7 @@ import 'package:owlet_router/router.dart';
 class DynamicRoutes extends RouteBase {
   DynamicRoutes(super.segment);
 
-  RouteBuilder premiumPage = MaterialRouteBuilder('/premiumPage');
+  RouteBuilder? premiumPage;
 
   void upgradeToPremium() {
     // In default, [premiumPage] was not mapped to any page.
@@ -19,7 +19,9 @@ class DynamicRoutes extends RouteBase {
       pageBuilder: (context, settings) => const PremiumPage(),
     );
     // If your origin route is in stability mode, must be called commit(); to apply the change.
-    navigatorServices.buildRouter();
+    navigatorServices.resetCache();
+    // repair();
+    print(navigatorServices.root.listOut());
   }
 
   void downgradeToPremium() {
@@ -30,9 +32,9 @@ class DynamicRoutes extends RouteBase {
       pageBuilder: null,
     );
     // If your origin route is in stability mode, must be called commit(); to apply the change.
-    navigatorServices.buildRouter();
+    navigatorServices.resetCache();
   }
 
   @override
-  List<RouteBase> get children => [premiumPage];
+  List<RouteBase> get children => premiumPage != null ? [premiumPage!] : [];
 }

@@ -10,16 +10,17 @@ import '../route_base.dart';
 /// The [StabilityRouteFinder] will record this scan's result and use it to find the route by a path.
 class StabilityRouteFinder extends RouteFinderDelegate {
   /// The [StabilityRouteFinder]'s constructor
-  StabilityRouteFinder({super.trailingSlash});
+  StabilityRouteFinder(RouteBase root, {super.trailingSlash}) {
+    resetCache(root);
+  }
 
   late RouteSet _routesCache;
 
-  RouteSet _apply(RouteBase root) {
+  RouteSet _scan(RouteBase root) {
     final result = RouteSet();
 
     void listOut(RouteBase base) {
       for (var e in base.children) {
-        e.apply(base);
         result.add(e);
         listOut(e);
       }
@@ -31,8 +32,8 @@ class StabilityRouteFinder extends RouteFinderDelegate {
   }
 
   @override
-  void apply(RouteBase root) {
-    _routesCache = _apply(root);
+  void resetCache(RouteBase root) {
+    _routesCache = _scan(root);
   }
 
   @override

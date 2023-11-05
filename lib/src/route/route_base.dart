@@ -30,13 +30,17 @@ class RouteBase extends RouteMixin {
   /// Create new route segment with it's path.
   ///
   /// __Note:__ The the path must be started with '/'.
-  RouteBase(this.segment) : assert(segment.startsWith('/'), 'Path must be start with /');
+  RouteBase(this.segment) : assert(segment.startsWith('/'), 'Path must be start with /') {
+    children.forEach(_apply);
+  }
 
   /// The root route's path should be '/'.
-  RouteBase.root([this.segment = '/']);
+  RouteBase.root([this.segment = '/']) {
+    children.forEach(_apply);
+  }
 
   /// Returns the [RouteBase] if it exists in the [context].
-  /// The [depthSearch] allows the finder deep search within a tree model to find the first branch that matches the [R] data type
+  /// The [depthSearch] allows the finder deep search within a route tree to find the first branch that matches the [R] data type
   static R? maybeOf<R extends RouteBase>(BuildContext context, {bool depthSearch = false}) {
     final root = NavigationServiceProvider.maybeOf(context)?.root;
     if (!depthSearch) return root.castTo<R?>();
@@ -59,7 +63,7 @@ class RouteBase extends RouteMixin {
   }
 
   /// Returns the [RouteBase] if it exists in the [context]. But it will be thrown an error if the [NavigationService] not found.
-  /// The [depthSearch] allows the finder deep search within a tree model to find the first branch that matches the [R] data type
+  /// The [depthSearch] allows the finder deep search within a model tree to find the first branch that matches the [R] data type
   static R of<R extends RouteBase>(BuildContext context, {bool depthSearch = false}) {
     final result = maybeOf<R>(context, depthSearch: depthSearch);
     assert(result != null, 'No $R found in context');
@@ -90,13 +94,13 @@ class RouteBase extends RouteMixin {
   /// If the [parent] is this route's parent, nothing happens.
   /// If this route's parent is null, the parent will be applied.
   /// Otherwise, an exception will be thrown, cause the route had a parent.
-  void apply(RouteBase? parent) {
-    if (this.parent != null && this.parent != parent) {
+  void _apply(RouteBase child) {
+    if (child.parent != null && child.parent != this) {
       throw InvalidRouteException(
-          error: '${toString()} already has a parent (${this.parent.toString()}.'
+          error: '${toString()} already has a parent (${child.parent.toString()}.'
               "Can not use an instance route in more than a parent route. Let's create another instance of this.");
     }
-    _parent = parent;
+    child._parent = this;
   }
 
   @override
@@ -116,4 +120,16 @@ class RouteBase extends RouteMixin {
 
   @override
   bool get isCallback => false;
+
+  @override
+  void repair({bool deep = false}) {
+    if (deep) {
+      for (final e in children) {
+        _apply(e);
+        e.repair(deep: deep);
+      }
+    } else {
+      children.forEach(_apply);
+    }
+  }
 }

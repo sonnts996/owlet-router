@@ -18,10 +18,7 @@ class NavigationServiceImpl<R extends RouteBase> implements NavigationService<R>
   })  : unknownRoute = unknownRoute ?? owletDefaultUnknownRoute,
         history = history ?? RouteHistoryImpl(),
         navigationKey = navigationKey ?? GlobalKey(),
-        finder = finder ?? DefaultRouteFinder.cache(trailingSlash: true) {
-    /// Build the route tree.
-    this.finder.apply(root);
-  }
+        finder = finder ?? DefaultRouteFinder.cache(trailingSlash: true);
 
   /// If the route is not defined, [unknownRoute] with be returned.
   final RouteBuilder unknownRoute;
@@ -80,7 +77,7 @@ class NavigationServiceImpl<R extends RouteBase> implements NavigationService<R>
   Route? onUnknownRoute(RouteSettings settings) => unknownRoute.builder(settings);
 
   @override
-  void buildRouter() {
-    finder.apply(root);
+  void resetCache() {
+    finder.resetCache(root);
   }
 }

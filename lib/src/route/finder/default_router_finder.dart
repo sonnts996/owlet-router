@@ -59,12 +59,7 @@ class DefaultRouteFinder extends RouteFinderDelegate {
   }
 
   @override
-  void apply(RouteBase root) {
-    for (var e in root.children) {
-      e.apply(root);
-      apply(e);
-    }
-  }
+  void resetCache(RouteBase root) {}
 }
 
 /// In cache mode, the finder's result will be cached for the next time.
@@ -84,12 +79,8 @@ class DefaultFinderWithCache extends DefaultRouteFinder {
     return result;
   }
 
-  /// Remove all routes in the cache, the next find will re-scan in the router.
-  void clearCache() => _cache.clear();
-
   @override
-  void apply(covariant RouteBase root) {
-    clearCache();
-    super.apply(root);
+  void resetCache(covariant RouteBase root) {
+    _cache.clear();
   }
 }

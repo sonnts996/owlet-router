@@ -41,5 +41,5 @@ abstract class RouteFinderDelegate {
   RouteMixin? find(covariant RouteMixin root, String path);
 
   /// Call to scan and build router in the route tree
-  void apply(covariant RouteMixin root);
+  void resetCache(covariant RouteMixin root);
 }

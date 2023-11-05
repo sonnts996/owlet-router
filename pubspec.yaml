@@ -1,5 +1,5 @@
 name: owlet_router
-description: A new Flutter package project.
+description: The owlet_router serves as a router manager, utilizing the route builder to create the router. It allows you to build your router as a module tree, with each field of the object representing a branch, making it easy to obtain the router path.
 version: 0.0.1
 repository: https://github.com/sonnts996/owlet-router
 

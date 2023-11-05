@@ -72,7 +72,7 @@ abstract class NavigationService<R extends RouteBase> {
   ///
   RouterConfig<RouteMixin> get routerConfig;
 
-  /// returns the origin route. The route in the root of the tree router.
+  /// returns the origin route. The route in the root of the router tree.
   R get root;
 
   /// The router uses this as a [RouteBase] finder, which matches the input path.
@@ -92,5 +92,5 @@ abstract class NavigationService<R extends RouteBase> {
   Route<dynamic>? onUnknownRoute(RouteSettings settings);
 
   /// Call to scan and build router in the route tree
-  void buildRouter();
+  void resetCache();
 }

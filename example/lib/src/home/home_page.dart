@@ -74,10 +74,19 @@ class _HomePageState extends State<HomePage> {
                 descriptions:
                     "A Dynamic Page Route, that means the route path is not existed in the router until upgrade.",
                 onPressed: () {
-                  navigatorServices.root.dynamicRoute.premiumPage.pushNamed(context);
+                  navigatorServices.root.dynamicRoute.premiumPage?.pushNamed(context);
                 },
                 icon: CupertinoIcons.lock,
                 buttonLabel: 'Dynamic Route',
+              ),
+              HomeActionItem(
+                descriptions:
+                    "A Dynamic Page Route, that means the route path is not existed in the router until upgrade.",
+                onPressed: () {
+                  navigatorServices.root.dynamicRoute.upgradeToPremium();
+                },
+                icon: CupertinoIcons.lock,
+                buttonLabel: 'Apply Dynamic Route',
               ),
               HomeActionItem(
                 descriptions: "Demo using multiple navigator in a Page.",

@@ -51,4 +51,7 @@ abstract class RouteMixin {
   /// Return false if this route is a callback route, which can not return any PageRoute.
   /// __Note:__ It always returns true in route guard, although it (route guard) can prevent from opening a route.
   bool get isCallback;
+
+  /// Repairs a route tree. If the [deep] flag is false, only its children are repaired. Otherwise, the function will recursively apply the repair to all its branches in the tree.
+  void repair({bool deep = false});
 }
