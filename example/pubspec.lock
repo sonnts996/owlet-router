@@ -140,7 +140,7 @@ packages:
     source: hosted
     version: "1.9.1"
   objectx:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: objectx
       sha256: "3b26e05383d6fc9dcabfba265b3e5e7540722538ee8c49cac536426d538bd613"

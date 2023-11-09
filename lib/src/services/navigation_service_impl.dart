@@ -62,7 +62,12 @@ class NavigationServiceImpl<R extends RouteBase> implements NavigationService<R>
     final route = settings.name?.let(findRoute);
     final routeBuilder = route?.let((it) => route is RouteBuilder ? route : null);
 
-    return routeBuilder?.builder(settings);
+    final finalRoute = routeBuilder?.builder(settings);
+
+    if (routeBuilder != null && finalRoute == null) {
+      debugPrint('"${settings.name}" is a launchable route, but a route cannot be found within it.');
+    }
+    return finalRoute;
   }
 
   @override

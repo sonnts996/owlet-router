@@ -7,9 +7,9 @@
 part of route_builder;
 
 /// The [RouteBuilder] generates the [CupertinoPageRoute].
-/// The argument of this route has type is [ARGS]. The [T] is type of the result when pop this route.
-class CupertinoRouteBuilder<ARGS extends Object?, T extends Object?> extends RouteBuilder<ARGS, T>
-    with PageRouteMixin, ConvertToNoTransitionBuilderMixin<ARGS, T> {
+/// The argument of this route has type is [A]. The [T] is type of the result when pop this route.
+class CupertinoRouteBuilder<A extends Object?, T extends Object?> extends RouteBuilder<A, T>
+    with PageRouteMixin, ConvertToNoTransitionBuilderMixin<A, T> {
   /// Create the [CupertinoRouteBuilder] with [CupertinoPageRoute] options.
   CupertinoRouteBuilder(
     super.segment, {

@@ -11,8 +11,8 @@ part of route_base;
 typedef RouterBuilder<R> = Route<R>? Function(RouteSettings settings);
 
 /// If the route can build a page, it must be an instance of [RouteBuilder].
-/// The argument of this route has type is [ARGS]. The [T] is type of the result when pop this route.
-class RouteBuilder<ARGS extends Object?, T extends Object?> extends RouteBase {
+/// The argument of this route has type is [A]. The [T] is type of the result when pop this route.
+class RouteBuilder<A extends Object?, T extends Object?> extends RouteBase {
   /// Route's [builder] return a [Route] for [Navigator] build this page.
   /// If don't want to define it, can override the [builder] function.
   RouteBuilder(

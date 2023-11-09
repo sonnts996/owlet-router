@@ -36,7 +36,7 @@ class NamedFunctionRouteSettings<T extends Object?> extends RouteSettings {
 /// - [Navigator.pushNamed],
 ///
 /// __WARNING:__ The [Navigator.popAndPushNamed] may be bright an error
-class NamedFunctionRouteBuilder<ARGS extends Object?, T extends Object?> extends RouteBuilder<ARGS, T> {
+class NamedFunctionRouteBuilder<A extends Object?, T extends Object?> extends RouteBuilder<A, T> {
   /// The [NamedFunctionRouteBuilder]'s constructor with the [segment] path and your [callback].
   /// The result of the [callback] is also passed into the result of [Navigator.pushNamed]
   NamedFunctionRouteBuilder(super.segment, {required this.callback});

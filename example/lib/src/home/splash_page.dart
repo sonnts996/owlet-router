@@ -5,9 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:owlet_router/router.dart';
-
-import '../../main.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -22,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       Future.delayed(const Duration(seconds: 1), () {
-        navigatorServices.root.home.pushReplacementNamed(context);
+        Navigator.of(context).pushNamed('/home');
       });
     });
   }

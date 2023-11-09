@@ -22,20 +22,15 @@ class DefaultRouteFinder extends RouteFinderDelegate {
   @override
   RouteMixin? find(RouteBase root, String path) {
     final uri = Uri.parse(path);
-    if (root.match(uri)) {
-      if (root is RouteBuilder) {
-        return root;
-      }
-    }
 
     var routes = _routeSelector(root, uri.path);
-    if (trailingSlash && routes.isEmpty) {
+    if (trailingSlash && routes.where((element) => element.canLaunch).isEmpty) {
       final nextUri = (uri.path.endsWith('/')) ? uri.path.substring(0, uri.path.length - 1) : '${uri.path}/';
       routes = _routeSelector(root, nextUri);
     }
     if (routes.isEmpty) return null;
     if (routes.length == 1) return routes.first;
-    final builders = routes.whereType<RouteBuilder>();
+    final builders = routes.where((element) => element.canLaunch);
     if (builders.length > 1) {
       throw DuplicatePathException(error: 'Duplicate route found with $path:\n${RouteSet(builders.toList())}');
     }

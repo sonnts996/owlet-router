@@ -55,7 +55,7 @@ void main() {
         unknownRoute: mainRoute.routeNotFound);
 
     /// Print all accepted routes
-    navigationService.root.listOut().print();
+    navigationService.root.listAll().print();
 
     test('find route', () {
       expect(navigationService.findRoute('/'), mainRoute.splash);

@@ -9,8 +9,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../route/route_base.dart';
-import 'owlet_navigator.dart';
+import '../../router.dart';
 
 /// The function is called before pushing the [route].
 typedef RouteGuard<R extends Object?> = FutureOr<Route?> Function(BuildContext pushContext, Route<R> route);
@@ -73,7 +72,7 @@ class RedirectRoute<T extends Object?> extends Route<T> {
 /// - [Navigator.pushReplacementNamed],
 /// - [Navigator.pushAndRemoveUntil],
 /// - [Navigator.pushNamedAndRemoveUntil]
-class RouteGuardBuilder<ARGS extends Object?, T extends Object?> extends RouteBuilder<ARGS, T> {
+class RouteGuardBuilder<A extends Object?, T extends Object?> extends RouteBuilder<A, T> {
   /// The [RouteGuardBuilder]'s constructor
   RouteGuardBuilder({
     this.routeGuard,
@@ -82,7 +81,7 @@ class RouteGuardBuilder<ARGS extends Object?, T extends Object?> extends RouteBu
 
   /// Return the origin [Route] of this segments.
   /// This route will be passed into the [routeGuard]'s params. If the [routeGuard] returns null, it will be the final route to be pushed.
-  final RouteBuilder<ARGS, T> routeBuilder;
+  final RouteBuilder<A, T> routeBuilder;
 
   /// The function will be called before pushing.
   ///
@@ -108,4 +107,17 @@ class RouteGuardBuilder<ARGS extends Object?, T extends Object?> extends RouteBu
           routeGuard: routeGuard,
         ),
       );
+}
+
+/// At times, the [RouteGuardBuilder] solely relies on the route within the [RouteGuardBuilder.routeGuard] result.
+/// For such cases, the [PlaceholderRoute] provides a way to map this situation when the routeBuilder doesn't need to specify anything else
+class PlaceholderRoute<A extends Object?, T extends Object?> extends NoTransitionRouteBuilder<A, T> {
+  /// The [NoTransitionRouteBuilder] without required [pageBuilder]
+  PlaceholderRoute(
+    super.segment, {
+    PageBuilder? pageBuilder,
+    super.maintainState,
+    super.allowSnapshotting,
+    super.fullscreenDialog,
+  }) : super(pageBuilder: pageBuilder ?? owletDefaultUnknownRoute.pageBuilder);
 }

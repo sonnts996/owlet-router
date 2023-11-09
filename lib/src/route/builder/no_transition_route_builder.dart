@@ -7,9 +7,8 @@
 part of route_builder;
 
 /// The [RouteBuilder] generates the [NoTransitionPageRoute].
-/// The argument of this route has type is [ARGS]. The [T] is type of the result when pop this route.
-class NoTransitionRouteBuilder<ARGS extends Object?, T extends Object?> extends RouteBuilder<ARGS, T>
-    with PageRouteMixin {
+/// The argument of this route has type is [A]. The [T] is type of the result when pop this route.
+class NoTransitionRouteBuilder<A extends Object?, T extends Object?> extends RouteBuilder<A, T> with PageRouteMixin {
   /// Create the [NoTransitionRouteBuilder] with [PageRoute] options.
   NoTransitionRouteBuilder(
     super.segment, {

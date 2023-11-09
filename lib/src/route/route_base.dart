@@ -8,11 +8,11 @@ library route_base;
 
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 import 'package:objectx/objectx.dart';
 
+import '../../router.dart';
 import '../advance/navigation_service_provider.dart';
-import '../base/navigation_service.dart';
-import '../base/route_mixin.dart';
 import '../exceptions.dart';
 
 part 'extension/route_list_out.dart';
@@ -41,8 +41,10 @@ class RouteBase extends RouteMixin {
 
   /// Returns the [RouteBase] if it exists in the [context].
   /// The [depthSearch] allows the finder deep search within a route tree to find the first branch that matches the [R] data type
-  static R? maybeOf<R extends RouteBase>(BuildContext context, {bool depthSearch = false}) {
-    final root = NavigationServiceProvider.maybeOf(context)?.root;
+  ///
+  /// __Note:__ This function only find in the root Navigator.
+  static R? maybeOf<R extends RouteBase>(BuildContext context, {bool depthSearch = false, bool useRoot = false}) {
+    final root = NavigationServiceProvider.maybeOf(context, useRoot: useRoot)?.root;
     if (!depthSearch) return root.castTo<R?>();
     if (root == null) return null;
     if (root is R) return root;
@@ -64,8 +66,8 @@ class RouteBase extends RouteMixin {
 
   /// Returns the [RouteBase] if it exists in the [context]. But it will be thrown an error if the [NavigationService] not found.
   /// The [depthSearch] allows the finder deep search within a model tree to find the first branch that matches the [R] data type
-  static R of<R extends RouteBase>(BuildContext context, {bool depthSearch = false}) {
-    final result = maybeOf<R>(context, depthSearch: depthSearch);
+  static R of<R extends RouteBase>(BuildContext context, {bool depthSearch = false, bool useRoot = false}) {
+    final result = maybeOf<R>(context, depthSearch: depthSearch, useRoot: useRoot);
     assert(result != null, 'No $R found in context');
     return result!;
   }
@@ -104,6 +106,7 @@ class RouteBase extends RouteMixin {
   }
 
   @override
+  @mustBeOverridden
   List<RouteBase> get children => [];
 
   @override

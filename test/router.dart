@@ -38,7 +38,7 @@ class HomeRoute extends RouteBase {
     ),
   );
 
-  final page2 = RouteBuilder<String, dynamic>(
+  final page2 = RouteBuilder<String, int>(
     '/page2',
     builder: (settings) {
       final greeting = settings.arguments?.castTo<String?>() ?? 'Page 2';

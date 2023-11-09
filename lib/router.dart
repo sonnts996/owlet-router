@@ -1,7 +1,7 @@
 library owlet_router;
 
 export 'src/advance/named_function_route_builder.dart';
-export 'src/advance/navigation_service_provider.dart';
+export 'src/advance/navigation_service_provider.dart' hide RootNavigationServiceProvider;
 export 'src/advance/owlet_navigator.dart';
 export 'src/advance/route_guard_builder.dart';
 export 'src/base/navigation_service.dart';

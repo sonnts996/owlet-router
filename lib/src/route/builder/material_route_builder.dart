@@ -7,9 +7,9 @@
 part of route_builder;
 
 /// The [RouteBuilder] generates the [MaterialPageRoute].
-/// The argument of this route has type is [ARGS]. The [T] is type of the result when pop this route.
-class MaterialRouteBuilder<ARGS extends Object?, T extends Object?> extends RouteBuilder<ARGS, T>
-    with PageRouteMixin, ConvertToNoTransitionBuilderMixin<ARGS, T> {
+/// The argument of this route has type is [A]. The [T] is type of the result when pop this route.
+class MaterialRouteBuilder<A extends Object?, T extends Object?> extends RouteBuilder<A, T>
+    with PageRouteMixin, ConvertToNoTransitionBuilderMixin<A, T> {
   /// Create the  [MaterialRouteBuilder] with [MaterialPageRoute] options.
   MaterialRouteBuilder(
     super.segment, {

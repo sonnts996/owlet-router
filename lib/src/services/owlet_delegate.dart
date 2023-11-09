@@ -21,7 +21,16 @@ class OwletDelegate extends RouterDelegate<RouteBuilder> with ChangeNotifier, Po
   GlobalKey<NavigatorState>? get navigatorKey => service.navigationKey;
 
   @override
-  Widget build(BuildContext context) => OwletNavigator.from(service);
+  Widget build(BuildContext context) => RootNavigationServiceProvider(
+      service: service,
+      child: OwletNavigator(
+        key: service.navigationKey,
+        initialRoute: service.initialRoute,
+        observers: <NavigatorObserver>[service.history, ...service.routeObservers],
+        onGenerateRoute: service.onGenerateRoute,
+        onPopPage: service.onPopPage,
+        onUnknownRoute: service.onUnknownRoute,
+      ));
 
   @override
   RouteBuilder? get currentConfiguration => _currentConfiguration;

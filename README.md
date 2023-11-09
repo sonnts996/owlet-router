@@ -1,16 +1,27 @@
 # Owlet Router
 
-The `owlet_router` is a router manager, not a route itself. It utilizes the route builder to
+<table style="border: none;">
+<tr style="border: none;">
+<td style="border: none; vertical-align: top;">
+<img src="https://github.com/sonnts996/owlet-router/blob/main/owlets_on_the_tree.jpg?raw=true" alt="owlets_on_the_tree" width="300"/>
+
+</td>
+<td style="border: none; vertical-align: top;">
+The `owlet_router` is a route manager, not a route itself. It utilizes the route builder to
 construct the router.
 
 It is designed with several purposes in mind:
 
-- Providing a clear and easily definable router manager that is simple to read and use.
+- Providing a clear and easily definable route manager that is simple to read and use.
 - Built upon the base Flutter Router, allowing for integration with various page route types and the
   ability to customize and extend the router.
 - Enabling modularization of the router, making it easy to segment routes and create independent
   routes.
 - Offering the capability to check, prevent, or redirect routes before they are pushed.
+
+</td>
+</tr>
+</table>
 
 ```dart
 class AppRoute extends RouteBase {
@@ -153,8 +164,8 @@ Widget build(BuildContext context) {
 The `NavigationService` should be a singleton in the `Navigator`. You can create a singleton
 variable or use dependency injection, for example, with GetIt.
 
-The `NavigationServiceProvider` enables you to access the `NavigationService` within the context. By
-default, it is used in `RouteDelegate` through `service.routerConfig` or with `OwletNavigator.from`.
+The `NavigationServiceProvider` allows you to access the `NavigationService` within the
+context. By default, it is exclusively used in `RouteDelegate` through `service.routerConfig`.
 
 ```dart
 // To get NavigationServiceProvider
@@ -334,7 +345,7 @@ overriding the `RouteBuilder.builder` method.
 
 3. Argument and result
 
-   The RouteBuilder<ARGS, T>.pushNamed method provides information about the route's argument type
+   The RouteBuilder<A, T>.pushNamed method provides information about the route's argument type
    and result type
 
     ```dart
@@ -461,3 +472,5 @@ overriding the `RouteBuilder.builder` method.
 
 Please file feature requests and bugs at
 the [issue tracker](https://github.com/sonnts996/owlet-router/issues).
+
+![owlets_on_the_tree](https://images.nightcafe.studio/jobs/P1vs0GDp5naoFCjuweLM/P1vs0GDp5naoFCjuweLM--1--glmih.jpg?tr=w-500,c-at_max)

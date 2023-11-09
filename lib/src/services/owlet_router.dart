@@ -10,8 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:objectx/objectx.dart';
 
 import '../../router.dart';
+import '../advance/navigation_service_provider.dart';
 
 part 'navigation_service_impl.dart';
+
 part 'owlet_delegate.dart';
+
 part 'owlet_information_parser.dart';
+
 part 'route_history_implement.dart';
+
+part 'navigation_service_extension.dart';

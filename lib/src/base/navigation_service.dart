@@ -5,6 +5,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../router.dart';
+import '../advance/navigation_service_provider.dart';
 import '../services/owlet_router.dart';
 
 /// Provides the necessary method for a new [Navigator]:
@@ -42,11 +43,12 @@ abstract class NavigationService<R extends RouteBase> {
   }) = NavigationServiceImpl;
 
   /// Returns the [NavigationService] if it exists in the [context].
-  static NavigationService? maybeOf(BuildContext context) => NavigationServiceProvider.maybeOf(context)?.service;
+  static NavigationService<R>? maybeOf<R extends RouteBase>(BuildContext context, {bool useRoot = false}) =>
+      NavigationServiceProvider.maybeOf<R>(context, useRoot: useRoot)?.service;
 
   /// Returns the [NavigationService] if it exists in the [context]. But it will be thrown an error if the [NavigationService] not found.
-  static NavigationService of(BuildContext context) {
-    final result = maybeOf(context);
+  static NavigationService<R> of<R extends RouteBase>(BuildContext context, {bool useRoot = false}) {
+    final result = maybeOf<R>(context, useRoot: useRoot);
     assert(result != null, 'No NavigationService found in context');
     return result!;
   }

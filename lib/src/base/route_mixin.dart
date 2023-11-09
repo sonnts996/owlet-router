@@ -6,7 +6,6 @@
 */
 
 import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
 
 import '../../router.dart';
 
@@ -26,8 +25,8 @@ abstract class RouteMixin {
 
   /// Must be overridden this getter.
   /// If this route has children, all it's children must be defined in the returned list.¬
-  @mustBeOverridden
-  List<RouteMixin> get children => [];
+
+  List<RouteMixin> get children;
 
   /// Return this route's [path] as [Uri]
   Uri get uri;

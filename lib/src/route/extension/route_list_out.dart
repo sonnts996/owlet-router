@@ -9,12 +9,12 @@ part of route_base;
 extension RouteListOut on RouteMixin {
   /// List out this route and its children. It has no role except to allow Developers to preview router information.
   @visibleForTesting
-  RouteSet listOut() {
+  RouteSet listAll() {
     final set = RouteSet();
 
     set.add(this);
     for (var i in children) {
-      set.addAll(i.listOut());
+      set.addAll(i.listAll());
     }
     set.sorted();
     return set;
