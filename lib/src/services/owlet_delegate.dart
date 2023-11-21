@@ -3,17 +3,18 @@
  Copyright (c) 2023 . All rights reserved.
 */
 
-part of router_service;
+part of router_services;
 
 /// Create [RouterDelegate] with [RouteBuilder].
 /// If the route path is not found, a [NavigationServiceImpl.unknownRoute] will be returned.
 /// If the route is located or can not be built, an exception with the thrown.
-class OwletDelegate extends RouterDelegate<RouteBuilder> with ChangeNotifier, PopNavigatorRouterDelegateMixin {
+class OwletDelegate<R extends RouteMixin> extends RouterDelegate<RouteBuilder>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   /// The [OwletDelegate]'s constructor.
   OwletDelegate({required this.service});
 
   /// This provides for router owlet information.
-  final NavigationService service;
+  final NavigationService<R> service;
 
   RouteBuilder? _currentConfiguration;
 
@@ -21,16 +22,10 @@ class OwletDelegate extends RouterDelegate<RouteBuilder> with ChangeNotifier, Po
   GlobalKey<NavigatorState>? get navigatorKey => service.navigationKey;
 
   @override
-  Widget build(BuildContext context) => RootNavigationServiceProvider(
-      service: service,
-      child: OwletNavigator(
-        key: service.navigationKey,
-        initialRoute: service.initialRoute,
-        observers: <NavigatorObserver>[service.history, ...service.routeObservers],
-        onGenerateRoute: service.onGenerateRoute,
-        onPopPage: service.onPopPage,
-        onUnknownRoute: service.onUnknownRoute,
-      ));
+  Widget build(BuildContext context) => OwletNavigator(
+        service,
+        reportsRouteUpdateToEngine: kIsWeb,
+      );
 
   @override
   RouteBuilder? get currentConfiguration => _currentConfiguration;

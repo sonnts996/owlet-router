@@ -5,14 +5,10 @@
  Copyright (c) 2023 . All rights reserved.
 */
 
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-
-import '../../router.dart';
+part of route_builder;
 
 /// The function is called before pushing the [route].
-typedef RouteGuard<R extends Object?> = FutureOr<Route?> Function(BuildContext pushContext, Route<R> route);
+typedef RouteGuardFunction<R extends Object?> = FutureOr<Route?> Function(BuildContext pushContext, Route<R> route);
 
 /// In the [OwletNavigator], when a new route is pushed, if the route has settings as [RouteGuardSettings],
 class RouteGuardSettings<T extends Object?> extends RouteSettings {
@@ -24,10 +20,10 @@ class RouteGuardSettings<T extends Object?> extends RouteSettings {
   });
 
   /// the function will be called before pushing.
-  final RouteGuard<T>? routeGuard;
+  final RouteGuardFunction<T>? routeGuard;
 }
 
-/// In [RouteGuard], returns [CancelledRoute] to cancel the pushing.
+/// In [RouteGuardFunction], returns [CancelledRoute] to cancel the pushing.
 class CancelledRoute<T extends Object?> extends Route<T> {
   /// The [CancelledRoute]'s constructor
   CancelledRoute([this.value]);
@@ -36,7 +32,7 @@ class CancelledRoute<T extends Object?> extends Route<T> {
   final T? value;
 }
 
-/// In [RouteGuard], returns [RedirectRoute] to redirect the pushing to another route's name
+/// In [RouteGuardFunction], returns [RedirectRoute] to redirect the pushing to another route's name
 class RedirectRoute<T extends Object?> extends Route<T> {
   /// The [RouteSettings.name] is required to redirect
   RedirectRoute(String redirectTo, {Object? arguments})
@@ -72,16 +68,19 @@ class RedirectRoute<T extends Object?> extends Route<T> {
 /// - [Navigator.pushReplacementNamed],
 /// - [Navigator.pushAndRemoveUntil],
 /// - [Navigator.pushNamedAndRemoveUntil]
-class RouteGuardBuilder<A extends Object?, T extends Object?> extends RouteBuilder<A, T> {
-  /// The [RouteGuardBuilder]'s constructor
-  RouteGuardBuilder({
+class RouteGuard<A extends Object?, T extends Object?> extends NestedRoute<RouteBuilder<A, T>> {
+  /// The [RouteGuard]'s constructor
+  RouteGuard({
     this.routeGuard,
-    required this.routeBuilder,
-  }) : super(routeBuilder.segment, builder: null);
+    required super.route,
+  });
 
-  /// Return the origin [Route] of this segments.
-  /// This route will be passed into the [routeGuard]'s params. If the [routeGuard] returns null, it will be the final route to be pushed.
-  final RouteBuilder<A, T> routeBuilder;
+  /// This route will be ignored by default if it already exists in the Navigator.
+  /// Override [onRouteExisted] to modify or to do something when it happened.
+  factory RouteGuard.awareExisted({
+    required RouteBuilder<A, T> route,
+    RouteGuardFunction? onRouteExisted,
+  }) = _AwareExistedRoute;
 
   /// The function will be called before pushing.
   ///
@@ -97,11 +96,11 @@ class RouteGuardBuilder<A extends Object?, T extends Object?> extends RouteBuild
   /// To cancel pushing, let's return a [CancelledRoute] value. Then, if the [CancelledRoute.value] is special and matches the result type, it will be the resulting push result.
   ///
   /// __Note:__ If returns [CancelledRoute] but the  [CancelledRoute.value] is not matched to the result type. The origin route will be pushed.
-  final RouteGuard? routeGuard;
+  final RouteGuardFunction? routeGuard;
 
   @override
-  Route<T>? builder(RouteSettings settings) => routeBuilder.builder(
-        RouteGuardSettings<T>(
+  Route<Object?>? build(RouteSettings settings) => route.build(
+        RouteGuardSettings<Object?>(
           arguments: settings.arguments,
           name: settings.name,
           routeGuard: routeGuard,
@@ -109,15 +108,17 @@ class RouteGuardBuilder<A extends Object?, T extends Object?> extends RouteBuild
       );
 }
 
-/// At times, the [RouteGuardBuilder] solely relies on the route within the [RouteGuardBuilder.routeGuard] result.
-/// For such cases, the [PlaceholderRoute] provides a way to map this situation when the routeBuilder doesn't need to specify anything else
-class PlaceholderRoute<A extends Object?, T extends Object?> extends NoTransitionRouteBuilder<A, T> {
-  /// The [NoTransitionRouteBuilder] without required [pageBuilder]
-  PlaceholderRoute(
-    super.segment, {
-    PageBuilder? pageBuilder,
-    super.maintainState,
-    super.allowSnapshotting,
-    super.fullscreenDialog,
-  }) : super(pageBuilder: pageBuilder ?? owletDefaultUnknownRoute.pageBuilder);
+class _AwareExistedRoute<A extends Object?, T extends Object?> extends RouteGuard<A, T> {
+  _AwareExistedRoute({required super.route, this.onRouteExisted});
+
+  final RouteGuardFunction? onRouteExisted;
+
+  @override
+  RouteGuardFunction<Object?>? get routeGuard => (pushContext, route) async {
+        if (service.history.contains(path)) {
+          final result = await onRouteExisted?.call(pushContext, route);
+          return result ?? CancelledRoute();
+        }
+        return null;
+      };
 }

@@ -3,7 +3,7 @@
  Copyright (c) 2023 . All rights reserved.
 */
 
-part of router_service;
+part of router_services;
 
 /// A [RouteInformationParser] to parse between [RouteBase] and [RouteInformation]
 class OwletInformationParser extends RouteInformationParser<RouteMixin> {

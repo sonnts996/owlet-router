@@ -3,23 +3,20 @@
  Copyright (c) 2023 . All rights reserved.
 */
 
-import 'package:flutter/material.dart';
-import 'package:objectx/objectx.dart';
-
-import '../../router.dart';
+part of router_services;
 
 /// The [Navigator]'s implementation for the advanced features such as route guard or named function.
-/// The [RouteGuardBuilder] or the [NamedFunctionRouteBuilder] is only active when used inside [OwletNavigator].
+/// The [RouteGuard] or the [NamedFunctionRouteBuilder] is only active when used inside [OwletNavigator].
 ///
-/// **Note that some advanced features can only work in some [Navigator] functions, for more information, please see that features document.**
+/// __Note:__ that some advanced features can only work in some [Navigator] functions, for more information, please see that features document.
 class OwletNavigator extends Navigator {
-  /// Mapping to the constructor of [Navigator].
+  /// Create a new [OwletNavigator] with a [NavigationService].
   ///
   /// Example:
   ///
   /// ```dart
   /// final service = NavigationService( //... );
-  /// OwletNavigator(
+  /// Navigator(
   ///   key: service.navigationKey,
   ///   initialRoute: service.initialRoute,
   ///   observers: <NavigatorObserver>[service.history, ...service.routeObservers],
@@ -28,41 +25,36 @@ class OwletNavigator extends Navigator {
   ///   onUnknownRoute: service.onUnknownRoute,
   /// )
   /// ```
-  OwletNavigator({
-    super.key,
-    super.onGenerateRoute,
-    super.initialRoute,
-    super.onGenerateInitialRoutes,
-    super.onPopPage,
-    super.onUnknownRoute,
-    super.observers,
-    super.clipBehavior,
-    super.pages,
-    super.reportsRouteUpdateToEngine,
-    super.requestFocus,
+  OwletNavigator(
+    this.service, {
+    super.transitionDelegate = const DefaultTransitionDelegate(),
+    super.onGenerateInitialRoutes = Navigator.defaultGenerateInitialRoutes,
+    super.clipBehavior = Clip.hardEdge,
+    super.reportsRouteUpdateToEngine = false,
+    super.requestFocus = true,
     super.restorationScopeId,
-    super.routeTraversalEdgeBehavior,
-    super.transitionDelegate,
-  });
+    super.routeTraversalEdgeBehavior = kDefaultRouteTraversalEdgeBehavior,
+  }) : super(
+          key: service.navigationKey,
+          initialRoute: service.initialRoute,
+          observers: <NavigatorObserver>[service.history, ...service.routeObservers],
+          onGenerateRoute: service.onGenerateRoute,
+          onPopPage: service.onPopPage,
+          onUnknownRoute: service.onUnknownRoute,
+        );
 
-  /// Create a new [OwletNavigator] with a [NavigationService].
-  /// It also creates a [NavigationServiceProvider] to get the [NavigationService] in the context.
-  static Widget from(NavigationService service,
-      {TransitionDelegate transitionDelegate = const DefaultTransitionDelegate(),
-      RouteListFactory onGenerateInitialRoutes = Navigator.defaultGenerateInitialRoutes,
-      Clip clipBehavior = Clip.hardEdge,
-      bool reportsRouteUpdateToEngine = false,
-      bool requestFocus = true,
-      String? restorationScopeId,
-      TraversalEdgeBehavior routeTraversalEdgeBehavior = kDefaultRouteTraversalEdgeBehavior}) {
-    return NavigationServiceProvider(child: _OwletNavigatorWithService(service), service: service);
-  }
+  /// This [Navigator]'s service
+  final NavigationService service;
 
   @override
-  NavigatorState createState() => _OwletNavigatorState();
+  NavigatorState createState() => OwletNavigatorState();
 }
 
-class _OwletNavigatorState extends NavigatorState {
+/// This is the state of [OwletNavigator]
+class OwletNavigatorState extends NavigatorState {
+  /// return this [Navigator]'s service
+  NavigationService get service => (widget as OwletNavigator).service;
+
   Future<T?> _namedFunction<T extends Object?>(Route<T> route) async =>
       route.settings.castTo<NamedFunctionRouteSettings<T>?>()?.callback.call(context, route);
 
@@ -165,25 +157,4 @@ class _OwletNavigatorState extends NavigatorState {
     }
     return super.pushAndRemoveUntil(newRoute, predicate);
   }
-}
-
-class _OwletNavigatorWithService<R extends RouteBase> extends OwletNavigator {
-  _OwletNavigatorWithService(this.service,
-      {super.transitionDelegate = const DefaultTransitionDelegate(),
-      super.onGenerateInitialRoutes = Navigator.defaultGenerateInitialRoutes,
-      super.clipBehavior = Clip.hardEdge,
-      super.reportsRouteUpdateToEngine = false,
-      super.requestFocus = true,
-      super.restorationScopeId,
-      super.routeTraversalEdgeBehavior = kDefaultRouteTraversalEdgeBehavior})
-      : super(
-          key: service.navigationKey,
-          initialRoute: service.initialRoute,
-          observers: <NavigatorObserver>[service.history, ...service.routeObservers],
-          onGenerateRoute: service.onGenerateRoute,
-          onPopPage: service.onPopPage,
-          onUnknownRoute: service.onUnknownRoute,
-        );
-
-  final NavigationService<R> service;
 }

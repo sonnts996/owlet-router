@@ -4,11 +4,7 @@
  Created by Thanh Son on 06/10/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-
-import '../../router.dart';
+part of route_builder;
 
 /// The function will be called when pushing a route with the settings as [NamedFunctionRouteSettings]
 typedef RouteCallback<R> = FutureOr<R?> Function(BuildContext pushContext, Route<R?> route);
@@ -48,7 +44,7 @@ class NamedFunctionRouteBuilder<A extends Object?, T extends Object?> extends Ro
   bool get isCallback => true;
 
   @override
-  Route<T>? builder(RouteSettings settings) {
+  Route<T>? build(RouteSettings settings) {
     final newSetting = NamedFunctionRouteSettings<T>(
       arguments: settings.arguments,
       name: settings.name,
@@ -56,9 +52,7 @@ class NamedFunctionRouteBuilder<A extends Object?, T extends Object?> extends Ro
     );
     return NoTransitionPageRoute(
       settings: newSetting,
-      builder: (context) => Material(
-        child: Container(alignment: Alignment.center, child: Text('${settings.name}')),
-      ),
+      builder: (context) => owletDefaultPlaceholder(context, settings),
     );
   }
 }

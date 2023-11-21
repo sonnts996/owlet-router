@@ -1,17 +1,17 @@
 library owlet_router;
 
-export 'src/advance/named_function_route_builder.dart';
-export 'src/advance/navigation_service_provider.dart' hide RootNavigationServiceProvider;
-export 'src/advance/owlet_navigator.dart';
-export 'src/advance/route_guard_builder.dart';
-export 'src/base/navigation_service.dart';
-export 'src/base/route_finder_delegate.dart';
-export 'src/base/route_history.dart';
-export 'src/base/route_index.dart';
-export 'src/base/route_mixin.dart';
+import 'package:flutter/widgets.dart';
+import 'package:objectx/objectx.dart';
+
+import 'src/route/route_base.dart';
+import 'src/services/router_services.dart';
+
 export 'src/route/builder/builder.dart';
-export 'src/route/finder/default_router_finder.dart';
-export 'src/route/finder/stability_router_finder.dart';
-export 'src/route/route_base.dart' hide RouteSet;
-export 'src/services/default_value.dart';
-export 'src/services/owlet_router.dart' hide NavigationServiceImpl, RouteHistoryImpl;
+export 'src/route/route_base.dart';
+export 'src/services/router_services.dart' hide NavigationServiceImpl, RouteHistoryImpl;
+export 'src/utilities.dart';
+
+part 'navigation_service.dart';
+part 'route_finder_delegate.dart';
+part 'route_history.dart';
+part 'route_mixin.dart';

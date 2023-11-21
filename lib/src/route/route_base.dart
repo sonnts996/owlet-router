@@ -12,13 +12,11 @@ import 'package:meta/meta.dart';
 import 'package:objectx/objectx.dart';
 
 import '../../router.dart';
-import '../advance/navigation_service_provider.dart';
-import '../exceptions.dart';
 
 part 'extension/route_list_out.dart';
 part 'extension/router_extension.dart';
+part 'nested_route.dart';
 part 'route_builder.dart';
-part 'route_set.dart';
 
 /// Create a route wrapper with it's route path.
 /// The [parent] field is a lazy update after running.
@@ -30,7 +28,8 @@ class RouteBase extends RouteMixin {
   /// Create new route segment with it's path.
   ///
   /// __Note:__ The the path must be started with '/'.
-  RouteBase(this.segment) : assert(segment.startsWith('/'), 'Path must be start with /') {
+  RouteBase(this.segment)
+      : assert(segment.startsWith('/'), 'Segment must be start with / and without parameter or fragment') {
     children.forEach(_apply);
   }
 
@@ -39,50 +38,54 @@ class RouteBase extends RouteMixin {
     children.forEach(_apply);
   }
 
-  /// Returns the [RouteBase] if it exists in the [context].
-  /// The [depthSearch] allows the finder deep search within a route tree to find the first branch that matches the [R] data type
-  ///
-  /// __Note:__ This function only find in the root Navigator.
-  static R? maybeOf<R extends RouteBase>(BuildContext context, {bool depthSearch = false, bool useRoot = false}) {
-    final root = NavigationServiceProvider.maybeOf(context, useRoot: useRoot)?.root;
-    if (!depthSearch) return root.castTo<R?>();
-    if (root == null) return null;
-    if (root is R) return root;
+  /// Returns the [RouteMixin] if it have been injected in the Navigator.
+  /// It may take some time, the algorithm complexity is O(n) with n as the number of the route tree level.
+  static R? maybeOf<R extends RouteMixin>(BuildContext context, {bool useRoot = false, bool deepSearch = false}) {
+    final root = context.findRootAncestorStateOfType<NavigatorState>();
 
-    R? find(RouteMixin base) {
-      R? result;
-      for (var e in base.children) {
-        if (e is R) {
-          result = e;
+    if (useRoot) {
+      if (root is OwletNavigatorState) {
+        return root.service.route.findType<R>();
+      }
+    } else if (!deepSearch) {
+      final navigator = context.findAncestorStateOfType<OwletNavigatorState>();
+      return navigator?.service.route.findType<R>();
+    } else {
+      var findContext = context;
+      do {
+        final navigator = findContext.findAncestorStateOfType<OwletNavigatorState>();
+        final result = navigator?.service.route.findType<R>();
+        if (result != null) {
+          return result;
+        } else if (navigator != null && navigator != root) {
+          findContext = navigator.context;
+        } else {
           break;
         }
-        result = find(e);
-      }
-      return result;
+      } while (true);
     }
-
-    return find(root);
+    return null;
   }
 
-  /// Returns the [RouteBase] if it exists in the [context]. But it will be thrown an error if the [NavigationService] not found.
-  /// The [depthSearch] allows the finder deep search within a model tree to find the first branch that matches the [R] data type
-  static R of<R extends RouteBase>(BuildContext context, {bool depthSearch = false, bool useRoot = false}) {
-    final result = maybeOf<R>(context, depthSearch: depthSearch, useRoot: useRoot);
-    assert(result != null, 'No $R found in context');
+  /// Returns the [RouteMixin] if it have been injected in the Navigator. But it will be thrown an error if the [NavigationService] not found.
+  /// It may take some time, the algorithm complexity is O(n) with n as the number of the route tree level.
+  static R of<R extends RouteMixin>(BuildContext context, {bool useRoot = false, bool deepSearch = false}) {
+    final result = maybeOf<R>(context, useRoot: useRoot, deepSearch: deepSearch);
+    assert(result != null, 'No $R found, maybe it has not been injected in the Navigator');
     return result!;
   }
 
   @override
   final String segment;
 
-  RouteBase? _parent;
+  RouteMixin? _parent;
 
   @override
-  RouteBase? get parent => _parent;
+  RouteMixin? get parent => _parent;
 
   @override
   String get path {
-    assert(segment.startsWith('/'), 'Path must be start with /');
+    assert(segment.startsWith('/'), 'Segment must be start with / and without parameter or fragment');
     return parent.letOrNull(
       (it) {
         if (it.segment == '/') return segment;
@@ -92,22 +95,28 @@ class RouteBase extends RouteMixin {
     );
   }
 
+  @override
+  String argsPath(Map<String, Object?> args, {bool encode = false, String? fragment}) =>
+      '$path?${mapToQueryParameter(args, encode: encode, fragment: fragment)}';
+
   /// Set the parent for this route.
   /// If the [parent] is this route's parent, nothing happens.
   /// If this route's parent is null, the parent will be applied.
   /// Otherwise, an exception will be thrown, cause the route had a parent.
-  void _apply(RouteBase child) {
-    if (child.parent != null && child.parent != this) {
-      throw InvalidRouteException(
-          error: '${toString()} already has a parent (${child.parent.toString()}.'
-              "Can not use an instance route in more than a parent route. Let's create another instance of this.");
-    }
-    child._parent = this;
+  void _apply(RouteMixin child) {
+    assert(
+        child.parent == null || child.parent == this,
+        '${child.toString()} already has a parent (${child.parent.toString()}.'
+        "Can not use an instance route in more than a parent route. Let's create another instance of this.");
+
+    child.castTo<RouteBase?>()?.let((it) {
+      it._parent = this;
+    });
   }
 
   @override
   @mustBeOverridden
-  List<RouteBase> get children => [];
+  List<RouteMixin> get children => [];
 
   @override
   bool isRoute(Route route) => route.settings.name?.let(Uri.tryParse)?.path == path;
@@ -116,7 +125,11 @@ class RouteBase extends RouteMixin {
   Uri get uri => Uri.parse(path);
 
   @override
-  bool match(Uri uri) => uri.path == path;
+  bool match(String name) {
+    final uri = Uri.tryParse(name);
+    if (uri == null) return false;
+    return uri.path == path;
+  }
 
   @override
   bool get canLaunch => false;
@@ -134,5 +147,19 @@ class RouteBase extends RouteMixin {
     } else {
       children.forEach(_apply);
     }
+  }
+
+  @override
+  T? findType<T extends RouteMixin>() {
+    final queue = <RouteMixin>[this];
+    while (queue.isNotEmpty) {
+      final route = queue.removeAt(0);
+      if (route is T) {
+        return route;
+      } else {
+        queue.addAll(route.children);
+      }
+    }
+    return null;
   }
 }

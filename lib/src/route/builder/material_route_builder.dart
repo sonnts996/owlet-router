@@ -32,7 +32,7 @@ class MaterialRouteBuilder<A extends Object?, T extends Object?> extends RouteBu
   final bool allowSnapshotting;
 
   @override
-  Route<T>? builder(RouteSettings settings) => pageBuilder?.let(
+  Route<T>? build(RouteSettings settings) => pageBuilder?.let(
         (it) => MaterialPageRoute<T>(
           builder: (context) => it(context, settings),
           allowSnapshotting: allowSnapshotting,

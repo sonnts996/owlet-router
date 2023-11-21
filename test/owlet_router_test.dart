@@ -2,41 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:objectx/objectx.dart';
 import 'package:owlet_router/router.dart';
-import 'package:owlet_router/src/route/route_base.dart';
 
 import 'router.dart';
 
 void main() {
-  group('Route assert', () {
-    late RouteSet sets;
-
-    setUp(() {
-      sets = RouteSet();
-    });
-
-    test('Route path', () {
-      expect(() => RouteBase('home').path, throwsAssertionError);
-      expect(RouteBase('/home').path, '/home');
-    });
-
-    test('Duplicate Base Path', () {
-      expect((() {
-        sets.add(RouteBase('/'));
-        sets.add(RouteBase('/'));
-        sets.add(RouteBuilder('/'));
-        return sets.length;
-      })(), 3);
-    });
-
-    test('Duplicate Builder Path', () {
-      expect(() {
-        sets.add(RouteBase('/'));
-        sets.add(RouteBuilder('/'));
-        sets.add(RouteBuilder('/'));
-        return sets.length;
-      }, throwsException);
-    });
-  });
   group('Navigation', () {
     final mainRoute = MainRoute();
 
@@ -51,26 +20,26 @@ void main() {
         navigationKey: GlobalKey(),
         routeObservers: [],
         initialRoute: '/',
-        root: mainRoute,
+        route: mainRoute,
         unknownRoute: mainRoute.routeNotFound);
 
     /// Print all accepted routes
-    navigationService.root.listAll().print();
+    navigationService.route.listAll().print();
 
     test('find route', () {
       expect(navigationService.findRoute('/'), mainRoute.splash);
-      expect(navigationService.findRoute('/home'), mainRoute.home);
-      expect(navigationService.findRoute('/home/'), mainRoute.home);
+      expect(navigationService.findRoute('/home'), mainRoute.home.home);
+      expect(navigationService.findRoute('/home/'), mainRoute.home.home);
       expect(navigationService.findRoute('/home/page1'), mainRoute.home.page1);
       expect(navigationService.findRoute('/home/page2'), mainRoute.home.page2);
     });
 
     test("Route's Flag", () {
-      expect(navigationService.root.canLaunch, false);
-      expect(navigationService.root.isCallback, false);
+      expect(navigationService.route.canLaunch, false);
+      expect(navigationService.route.isCallback, false);
       expect(navigationService.findRoute('/')?.canLaunch, true);
-      expect(navigationService.findRoute('/home')?.canLaunch, false);
-      expect(navigationService.findRoute('/home')?.isCallback, false);
+      expect(navigationService.findRoute('/home')?.canLaunch, true);
+      expect(navigationService.findRoute('/home/')?.canLaunch, true);
       expect(navigationService.findRoute('/home/action')?.canLaunch, true);
       expect(navigationService.findRoute('/home/action')?.isCallback, true);
       expect(navigationService.findRoute('/home/guard')?.canLaunch, true);
@@ -85,13 +54,13 @@ void main() {
         routeObservers: [],
         initialRoute: '/',
         finder: DefaultRouteFinder(trailingSlash: false),
-        root: mainRoute,
+        route: mainRoute,
         unknownRoute: mainRoute.routeNotFound);
 
     test('find route', () {
       expect(navigationService.findRoute('/'), mainRoute.splash);
-      expect(navigationService.findRoute('/home'), mainRoute.home);
-      expect(navigationService.findRoute('/home/'), null);
+      expect(navigationService.findRoute('/home'), null);
+      expect(navigationService.findRoute('/home/'), mainRoute.home.home);
       expect(navigationService.findRoute('/home/page1'), mainRoute.home.page1);
       expect(navigationService.findRoute('/home/page2'), mainRoute.home.page2);
     });

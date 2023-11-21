@@ -41,6 +41,7 @@ dependencies:
   lorem_ipsum: ^0.0.3
   flutter_svg: ^2.0.9
   objectx: ^1.0.1
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:

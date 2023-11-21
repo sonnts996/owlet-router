@@ -3,7 +3,7 @@
 <table style="border: none;">
 <tr style="border: none;">
 <td style="border: none; vertical-align: top;">
-<img src="https://github.com/sonnts996/owlet-router/blob/main/owlets_on_the_tree.jpg?raw=true" alt="owlets_on_the_tree" width="300"/>
+<img src="https://github.com/sonnts996/owlet-router/blob/main/example/assets/owlets_on_the_tree.jpg?raw=true" alt="owlets_on_the_tree" width="300"/>
 
 </td>
 <td style="border: none; vertical-align: top;">
@@ -472,5 +472,3 @@ overriding the `RouteBuilder.builder` method.
 
 Please file feature requests and bugs at
 the [issue tracker](https://github.com/sonnts996/owlet-router/issues).
-
-![owlets_on_the_tree](https://images.nightcafe.studio/jobs/P1vs0GDp5naoFCjuweLM/P1vs0GDp5naoFCjuweLM--1--glmih.jpg?tr=w-500,c-at_max)

@@ -36,7 +36,7 @@ class CupertinoRouteBuilder<A extends Object?, T extends Object?> extends RouteB
   final String? title;
 
   @override
-  Route<T>? builder(RouteSettings settings) => pageBuilder?.let((it) => CupertinoPageRoute<T>(
+  Route<T>? build(RouteSettings settings) => pageBuilder?.let((it) => CupertinoPageRoute<T>(
         builder: (context) => it(context, settings),
         allowSnapshotting: allowSnapshotting,
         maintainState: maintainState,

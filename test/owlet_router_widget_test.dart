@@ -19,7 +19,7 @@ void main() {
         navigationKey: navigator,
         routeObservers: <NavigatorObserver>[mockObserver],
         initialRoute: '/',
-        root: mainRoute,
+        route: mainRoute,
         unknownRoute: mainRoute.routeNotFound);
 
     testWidgets('Test Navigator', (widgetTester) async {
@@ -36,9 +36,9 @@ void main() {
         },
       ), 'Splash');
 
-      mainRoute.home.page1.pushNamed(navigator.currentContext!);
+      mainRoute.home.page1.pushNamed();
       verifyNever(mockObserver.didPush(
-          mainRoute.home.page1.builder(
+          mainRoute.home.page1.build(
             RouteSettings(name: mainRoute.home.page1.path),
           )!,
           any));
@@ -52,7 +52,7 @@ void main() {
       final button = find.byType(ElevatedButton);
       await widgetTester.tap(button);
       verifyNever(mockObserver.didPush(
-          mainRoute.home.page2.builder(
+          mainRoute.home.page2.build(
             RouteSettings(name: mainRoute.home.page2.path),
           )!,
           any));
@@ -71,7 +71,8 @@ void main() {
 
       await widgetTester.pumpAndSettle();
 
-      expect(() => mainRoute.home.action.pushNamed(navigator.currentContext!), prints('Hello World\n'));
+      // ignore: unnecessary_lambdas
+      expect(() => mainRoute.home.action.pushNamed(), prints('Hello World\n'));
     });
 
     testWidgets('Test Guard', (widgetTester) async {
@@ -81,12 +82,12 @@ void main() {
 
       await widgetTester.pumpAndSettle();
 
-      expect(() => mainRoute.home.guard.pushNamed(navigator.currentContext!, args: 'cancelled'), prints('cancelled\n'),
+      expect(() => mainRoute.home.guard.pushNamed(args: 'cancelled'), prints('cancelled\n'),
           reason: 'Check the route guard is running');
 
-      mainRoute.home.guard.pushNamed(navigator.currentContext!, args: 'cancelled');
+      mainRoute.home.guard.pushNamed(args: 'cancelled');
       verifyNever(mockObserver.didPush(
-          mainRoute.home.guard.builder(
+          mainRoute.home.guard.build(
             RouteSettings(name: mainRoute.home.guard.path),
           )!,
           any));
@@ -97,9 +98,9 @@ void main() {
         return text.data;
       }), completion('Splash'), reason: 'The route is cancelled by route guard');
 
-      mainRoute.home.guard.pushNamed(navigator.currentContext!);
+      mainRoute.home.guard.pushNamed();
       verifyNever(mockObserver.didPush(
-          mainRoute.home.guard.builder(
+          mainRoute.home.guard.build(
             RouteSettings(name: mainRoute.home.guard.path),
           )!,
           any));
@@ -110,9 +111,9 @@ void main() {
         return text.data;
       }), completion('RouteGuard'), reason: 'The route is allowed by route guard');
 
-      mainRoute.home.guard.pushNamed(navigator.currentContext!, args: 'redirect_named');
+      mainRoute.home.guard.pushNamed(args: 'redirect_named');
       verifyNever(mockObserver.didPush(
-          mainRoute.home.guard.builder(
+          mainRoute.home.guard.build(
             RouteSettings(name: mainRoute.home.guard.path),
           )!,
           any));
@@ -121,11 +122,11 @@ void main() {
       expect(executor(() async {
         final text = find.byType(Text).evaluate().single.widget as Text;
         return text.data;
-      }), completion('Page 1'), reason: 'The route is redirect by route guard');
+      }), completion('Page 1'), reason: 'The route is redirected by route guard');
 
-      mainRoute.home.guard.pushNamed(navigator.currentContext!, args: 'redirect_itself');
+      mainRoute.home.guard.pushNamed(args: 'redirect_itself');
       verifyNever(mockObserver.didPush(
-          mainRoute.home.guard.builder(
+          mainRoute.home.guard.build(
             RouteSettings(name: mainRoute.home.guard.path),
           )!,
           any));
@@ -134,11 +135,11 @@ void main() {
       expect(executor(() async {
         final text = find.byType(Text).evaluate().single.widget as Text;
         return text.data;
-      }), completion('RouteGuard'), reason: 'The route is redirect by route guard');
+      }), completion('RouteGuard'), reason: 'The route is redirected by route guard');
 
-      mainRoute.home.guard.pushNamed(navigator.currentContext!, args: 'redirect_route');
+      mainRoute.home.guard.pushNamed(args: 'redirect_route');
       verifyNever(mockObserver.didPush(
-          mainRoute.home.guard.builder(
+          mainRoute.home.guard.build(
             RouteSettings(name: mainRoute.home.guard.path),
           )!,
           any));
@@ -147,7 +148,7 @@ void main() {
       expect(executor(() async {
         final text = find.byType(Text).evaluate().single.widget as Text;
         return text.data;
-      }), completion('Redirected'), reason: 'The route is redirect by route guard');
+      }), completion('Redirected'), reason: 'The route is redirected by route guard');
     });
   });
 }

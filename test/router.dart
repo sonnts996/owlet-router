@@ -26,13 +26,20 @@ class MainRoute extends RouteBase {
 class HomeRoute extends RouteBase {
   HomeRoute(super.segmentPath);
 
+  late final home = RouteBuilder(
+    '/',
+    builder: (settings) => MaterialPageRoute(
+      builder: (context) => TestApp(content: 'Home Page'),
+    ),
+  );
+
   late final page1 = RouteBuilder(
     '/page1',
     builder: (settings) => MaterialPageRoute(
       builder: (context) => TestApp(
         content: 'Page 1',
         onTab: () {
-          page2.pushNamed(context, args: 'Hello, this page is opened by page 1');
+          page2.pushNamed(args: 'Hello, this page is opened by page 1');
         },
       ),
     ),
@@ -53,11 +60,11 @@ class HomeRoute extends RouteBase {
     callback: (pushContext, route) => print('Hello World'),
   );
 
-  final guard = RouteGuardBuilder(
+  final guard = RouteGuard(
       routeGuard: (pushContext, route) {
         if (route.settings.arguments is String) {
-          print(route.settings.arguments);
           if (route.settings.arguments == 'cancelled') {
+            print('cancelled');
             return CancelledRoute();
           } else if (route.settings.arguments == 'redirect_named') {
             return RedirectRoute('/home/page1');
@@ -71,8 +78,8 @@ class HomeRoute extends RouteBase {
         }
         return route;
       },
-      routeBuilder: MaterialRouteBuilder('/guard', pageBuilder: (context, settings) => TestApp(content: 'RouteGuard')));
+      route: MaterialRouteBuilder('/guard', pageBuilder: (context, settings) => TestApp(content: 'RouteGuard')));
 
   @override
-  List<RouteBase> get children => [page1, page2, action, guard];
+  List<RouteBase> get children => [home, page1, page2, action, guard];
 }

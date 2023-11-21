@@ -2,11 +2,8 @@
  Created by Thanh Son on 26/09/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-import 'package:flutter/cupertino.dart';
 
-import '../../router.dart';
-import '../advance/navigation_service_provider.dart';
-import '../services/owlet_router.dart';
+part of owlet_router;
 
 /// Provides the necessary method for a new [Navigator]:
 ///
@@ -22,34 +19,51 @@ import '../services/owlet_router.dart';
 //         onUnknownRoute: service.onUnknownRoute,
 //       );
 ///```
-abstract class NavigationService<R extends RouteBase> {
-  /// Create a [NavigationService]
-  /// ===================================
-  ///
-  /// ### Find a route by path:
-  /// - Only one launchable [Route] with a determined path in [root]. But the [root] can have multi [RouteMixin]
-  /// with the same path (an instance of [RouteMixin] with [RouteMixin.canLaunch] is false).
-  /// [findRoute] will prioritize to find a launchable [Route] matched, if can not found, a non-launchable [Route] will be considered.
-  /// - If there are multi non-launchable [Route] with the same path, the first result will be returned.
-  /// - If the route is not defined, [unknownRoute] with be returned.
+abstract class NavigationService<R extends RouteMixin> {
+  /// Create a default [NavigationServiceImpl]
   factory NavigationService({
     GlobalKey<NavigatorState>? navigationKey,
     List<NavigatorObserver> routeObservers,
     String initialRoute,
     RouteBuilder? unknownRoute,
-    required R root,
+    required R route,
     RouteFinderDelegate? finder,
     RouteHistory? history,
   }) = NavigationServiceImpl;
 
-  /// Returns the [NavigationService] if it exists in the [context].
-  static NavigationService<R>? maybeOf<R extends RouteBase>(BuildContext context, {bool useRoot = false}) =>
-      NavigationServiceProvider.maybeOf<R>(context, useRoot: useRoot)?.service;
+  /// Create a new [NavigationService], it will inject the service into the root route.
+  NavigationService.create() {
+    route._service = this;
+  }
 
-  /// Returns the [NavigationService] if it exists in the [context]. But it will be thrown an error if the [NavigationService] not found.
-  static NavigationService<R> of<R extends RouteBase>(BuildContext context, {bool useRoot = false}) {
+  /// Get the nearest NavigationService<R> in the [context]. It requires the [OwletNavigator] must be used.
+  static NavigationService<R>? maybeOf<R extends RouteMixin>(BuildContext context, {bool useRoot = false}) {
+    final root = context.findRootAncestorStateOfType<NavigatorState>();
+
+    if (useRoot) {
+      if (root is OwletNavigatorState && root.service is NavigationService<R>) {
+        return root.service.castTo<NavigationService<R>?>();
+      }
+    } else {
+      var findContext = context;
+      do {
+        final navigator = findContext.findAncestorStateOfType<OwletNavigatorState>();
+        if (navigator?.service is NavigationService<R>) {
+          return navigator!.service.castTo<NavigationService<R>?>();
+        } else if (navigator != null && navigator != root) {
+          findContext = navigator.context;
+        } else {
+          break;
+        }
+      } while (true);
+    }
+    return null;
+  }
+
+  /// Get the nearest NavigationService<R> in the [context]. It requires the [OwletNavigator] must be used.
+  static NavigationService<R> of<R extends RouteMixin>(BuildContext context, {bool useRoot = false}) {
     final result = maybeOf<R>(context, useRoot: useRoot);
-    assert(result != null, 'No NavigationService found in context');
+    assert(result != null, 'No ${NavigationService<R>} found in context');
     return result!;
   }
 
@@ -75,9 +89,9 @@ abstract class NavigationService<R extends RouteBase> {
   RouterConfig<RouteMixin> get routerConfig;
 
   /// returns the origin route. The route in the root of the router tree.
-  R get root;
+  R get route;
 
-  /// The router uses this as a [RouteBase] finder, which matches the input path.
+  /// The router uses this as a [RouteMixin] finder, which matches the input path.
   RouteFinderDelegate get finder;
 
   /// Return a route matching this path (ignore query parameters).
@@ -95,4 +109,7 @@ abstract class NavigationService<R extends RouteBase> {
 
   /// Call to scan and build router in the route tree
   void resetCache();
+
+  @override
+  String toString() => '$runtimeType(route: $route)';
 }
