@@ -79,7 +79,7 @@ abstract class RouteMixin {
 }
 
 /// A route can be built (or called to an action)
-mixin BuildableRouteMixin<A extends Object?, T extends Object?> on RouteMixin {
+mixin RouteBuilderMixin<A extends Object?, T extends Object?> on RouteMixin {
   /// returns the builder to generate the route.
   Route<T>? build(RouteSettings settings);
 

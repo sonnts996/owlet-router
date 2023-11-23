@@ -1,3 +1,11 @@
+/*
+ Created by Thanh Son on 16/08/2023.
+ Copyright (c) 2023 . All rights reserved.
+*/
+
+/// The owlet_router serves as a router manager, utilizing the route builder to create the router.
+/// It allows you to build your router as a module tree, with each field of the object representing a branch,
+/// making it easy to obtain the router path.
 library owlet_router;
 
 import 'package:flutter/widgets.dart';

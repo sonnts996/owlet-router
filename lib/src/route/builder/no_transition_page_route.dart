@@ -5,9 +5,11 @@
 
 part of route_builder;
 
-/// Create a page route without effects when pushing.
+///
+/// Construct a [PageRoute] without effects when pushing.
 class NoTransitionPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin {
-  /// The [NoTransitionPageRoute]'s constructor, required the page's [builder].
+  ///
+  /// The [NoTransitionPageRoute]'s constructor.
   NoTransitionPageRoute(
       {super.allowSnapshotting,
       super.fullscreenDialog,
@@ -18,7 +20,8 @@ class NoTransitionPageRoute<T> extends PageRoute<T> with MaterialRouteTransition
   @override
   final bool maintainState;
 
-  /// When the route is created, the [builder] will be called to build the widget which is displayed on the screen.
+  ///
+  /// Builds the primary contents of the route.
   final WidgetBuilder builder;
 
   @override

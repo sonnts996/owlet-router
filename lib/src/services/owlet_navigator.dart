@@ -5,11 +5,14 @@
 
 part of router_services;
 
-/// The [Navigator]'s implementation for the advanced features such as route guard or named function.
-/// The [RouteGuard] or the [NamedFunctionRouteBuilder] is only active when used inside [OwletNavigator].
 ///
-/// __Note:__ that some advanced features can only work in some [Navigator] functions, for more information, please see that features document.
+/// Implementation of advanced navigation features for the [Navigator], including route guards and named route builders.
+/// These features, such as [RouteGuard] and [NamedFunctionRouteBuilder], are only active when used within the [OwletNavigator].
+///
+/// **Note:** Certain advanced navigation features are limited to specific [Navigator] push functions.
+/// Refer to the features documentation for detailed information.
 class OwletNavigator extends Navigator {
+  ///
   /// Create a new [OwletNavigator] with a [NavigationService].
   ///
   /// Example:
@@ -43,6 +46,7 @@ class OwletNavigator extends Navigator {
           onUnknownRoute: service.onUnknownRoute,
         );
 
+  ///
   /// This [Navigator]'s service
   final NavigationService service;
 
@@ -50,8 +54,10 @@ class OwletNavigator extends Navigator {
   NavigatorState createState() => OwletNavigatorState();
 }
 
+///
 /// This is the state of [OwletNavigator]
 class OwletNavigatorState extends NavigatorState {
+  ///
   /// return this [Navigator]'s service
   NavigationService get service => (widget as OwletNavigator).service;
 
@@ -84,7 +90,8 @@ class OwletNavigatorState extends NavigatorState {
 
   bool _isSameName(Route originRoute, String name) => originRoute.settings.name?.let((it) => it == name) ?? false;
 
-  /// __Note:__ this function also works with [pushNamed], [popAndPushNamed].
+  ///
+  /// This function also works with [pushNamed], [popAndPushNamed].
   @override
   Future<T?> push<T extends Object?>(Route<T> route) async {
     if (route.settings is NamedFunctionRouteSettings<T>) {
@@ -108,7 +115,8 @@ class OwletNavigatorState extends NavigatorState {
     return super.push(route);
   }
 
-  /// __Note:__ this function also works with [pushReplacementNamed].
+  ///
+  /// This function also works with [pushReplacementNamed].
   @override
   Future<T?> pushReplacement<T extends Object?, TO extends Object?>(Route<T> newRoute, {TO? result}) async {
     if (newRoute.settings is RouteGuardSettings<T>) {
@@ -133,7 +141,8 @@ class OwletNavigatorState extends NavigatorState {
     return super.pushReplacement(newRoute, result: result);
   }
 
-  /// __Note:__ this function also works with [pushNamedAndRemoveUntil].
+  ///
+  /// This function also works with [pushNamedAndRemoveUntil].
   @override
   Future<T?> pushAndRemoveUntil<T extends Object?>(Route<T> newRoute, RoutePredicate predicate) async {
     if (newRoute.settings is RouteGuardSettings<T>) {

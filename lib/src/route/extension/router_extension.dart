@@ -4,23 +4,26 @@
 */
 part of route_base;
 
-/// Extension for [RouteBuilder] to shorter method push new page route.
-/// The [A] defines the argument type for this route.
+///
+/// RouteBuilder extension to push a route.
+/// The [A] argument defines the route's argument type, and the [T] argument defines the route's result type.
 ///
 /// Example:
+///
 /// ```
 /// Navigator.of(context).pushNamed(yourRoot.home.path); // Classic method
-/// yourRoot.home.pushNamed(context); // New method
+/// yourRoot.home.pushNamed(); // New method
 /// ```
-extension RouterExtension<A, T> on BuildableRouteMixin<A, T> {
-  /// Return a [Route] of this [RouteBuilder] to use for the function,
-  /// which requires the [Route] such as [Navigator.replace] or [Navigator.removeRoute].
+extension RouterExtension<A, T> on RouteBuilderMixin<A, T> {
+  ///
+  /// This function generates a [Route] from this [RouteBuilder] for use with functions like [Navigator.replace] or [Navigator.removeRoute].
   Route<T>? toRoute({A? args, Map<String, dynamic>? params, String? fragment, bool encode = false}) =>
       build(RouteSettings(
         name: _finalPath(params, fragment, encode: encode),
         arguments: args,
       ));
 
+  ///
   /// Return the [service.navigationKey.currentContext] if it has been injected into the Navigator
   BuildContext get context => service.context;
 
@@ -31,7 +34,8 @@ extension RouterExtension<A, T> on BuildableRouteMixin<A, T> {
     return path;
   }
 
-  /// Maps to [Navigator.pushNamed] with [T] type of result and [A] type of arguments.
+  ///
+  /// Map to [Navigator.pushNamed] with a result type of [T] and an argument type of [A].
   Future<T1?> pushNamed<T1 extends T?>({
     A? args,
     Map<String, dynamic>? params,
@@ -42,7 +46,8 @@ extension RouterExtension<A, T> on BuildableRouteMixin<A, T> {
       Navigator.of(context, rootNavigator: rootNavigator)
           .pushNamed<T1>(_finalPath(params, fragment, encode: encode), arguments: args);
 
-  /// Map to [Navigator.pushReplacementNamed] with [T] type of result and [A] type of arguments.
+  ///
+  /// Map to [Navigator.pushReplacementNamed] with a result type of [T] and an argument type of [A].
   Future<T1?> pushReplacementNamed<T1 extends T?, T0 extends Object?>({
     T0? result,
     A? args,
@@ -57,7 +62,8 @@ extension RouterExtension<A, T> on BuildableRouteMixin<A, T> {
         result: result,
       );
 
-  /// New [Navigator.pushNamedAndRemoveUntil] with [T] type of result and [A] type of arguments.
+  ///
+  /// Map to [Navigator.pushNamedAndRemoveUntil] with a result type of [T] and an argument type of [A].
   Future<T1?> pushNamedAndRemoveUntil<T1 extends T?>(
     bool Function(Route<dynamic>) predicate, {
     A? args,
@@ -72,7 +78,8 @@ extension RouterExtension<A, T> on BuildableRouteMixin<A, T> {
         arguments: args,
       );
 
-  /// New [Navigator.popAndPushNamed] with [T] type of result and [A] type of arguments.
+  ///
+  /// Map to [Navigator.popAndPushNamed] with a result type of [T] and an argument type of [A].
   Future<T1?> popAndPushNamed<T1 extends T?, T0 extends Object?>({
     A? args,
     Map<String, dynamic>? params,
@@ -87,7 +94,8 @@ extension RouterExtension<A, T> on BuildableRouteMixin<A, T> {
         result: result,
       );
 
-  /// New [Navigator.restorablePushNamed] with [T] type of result and [A] type of arguments.
+  ///
+  /// Map to [Navigator.restorablePushNamed] with a result type of [T] and an argument type of [A].
   String restorablePushNamed({
     A? args,
     Map<String, dynamic>? params,
@@ -100,7 +108,8 @@ extension RouterExtension<A, T> on BuildableRouteMixin<A, T> {
         arguments: args,
       );
 
-  /// New [Navigator.restorablePushReplacementNamed] with [T] type of result and [A] type of arguments.
+  ///
+  /// Map to [Navigator.restorablePushReplacementNamed] with a result type of [T] and an argument type of [A].
   String restorablePushReplacementNamed<T1 extends T?, T0 extends Object?>({
     T0? result,
     A? args,
@@ -115,7 +124,8 @@ extension RouterExtension<A, T> on BuildableRouteMixin<A, T> {
         result: result,
       );
 
-  /// New [Navigator.restorablePushNamedAndRemoveUntil] with [T] type of result and [A] type of arguments.
+  ///
+  /// Map to [Navigator.restorablePushNamedAndRemoveUntil] with a result type of [T] and an argument type of [A].
   String restorablePushNamedAndRemoveUntil<T1 extends T?>(
     bool Function(Route<dynamic>) predicate, {
     A? args,
@@ -130,7 +140,8 @@ extension RouterExtension<A, T> on BuildableRouteMixin<A, T> {
         arguments: args,
       );
 
-  /// New [Navigator.restorablePopAndPushNamed] with [T] type of result and [A] type of arguments.
+  ///
+  /// Map to [Navigator.restorablePopAndPushNamed] with a result type of [T] and an argument type of [A].
   String restorablePopAndPushNamed<T1 extends T?, T0 extends Object?>({
     A? args,
     Map<String, dynamic>? params,

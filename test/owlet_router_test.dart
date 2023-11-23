@@ -6,6 +6,15 @@ import 'package:owlet_router/router.dart';
 import 'router.dart';
 
 void main() {
+  group('Route Test', () {
+    test('segment verify', () {
+      expect(RouteBase('/this-is-a-route').path, '/this-is-a-route');
+      expect(() => RouteBase('/this-is-a-route?id=123'), throwsAssertionError);
+      expect(() => RouteBase('/this-is-a-route#fragment'), throwsAssertionError);
+      expect(() => RouteBase('this-is-a-route'), throwsAssertionError);
+    });
+  });
+
   group('Navigation', () {
     final mainRoute = MainRoute();
 

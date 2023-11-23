@@ -6,9 +6,11 @@
 */
 part of route_builder;
 
-/// Convert a special [RouteBuilder] to [NoTransitionPageRoute]
+///
+/// Convert a [RouteBuilder] into a [NoTransitionPageRoute]
 mixin ConvertToNoTransitionBuilderMixin<A extends Object?, T extends Object?> on RouteBuilder<A, T>, PageRouteMixin {
-  /// Converts a special [RouteBuilder] to [NoTransitionPageRoute].
+  ///
+  /// Convert a [RouteBuilder] into a [NoTransitionPageRoute]
   NoTransitionPageRoute<T>? noAnimationBuilder([A? args]) => pageBuilder?.let(
         (it) => NoTransitionPageRoute<T>(
           builder: (context) => it(context, RouteSettings(name: path, arguments: args)),

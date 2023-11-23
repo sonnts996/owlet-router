@@ -4,21 +4,26 @@
 */
 part of route_builder;
 
-/// Return the page widget with a [settings].
-/// The [settings] contained the route and arguments.
+///
+/// Build a page with context and route settings.
 typedef PageBuilder = Widget Function(BuildContext context, RouteSettings settings);
 
+///
 /// To implement a [PageRoute] within [RouteBuilder], some fields are required. The [PageRouteMixin] provides the interface for this.
 mixin PageRouteMixin {
-  /// returns a page widget with [RouteSettings]
+  ///
+  /// Build a page with context and route settings.
   PageBuilder? get pageBuilder;
 
+  ///
   /// maps to [PageRoute.maintainState]
   bool get maintainState;
 
+  ///
   /// maps to [PageRoute.fullscreenDialog]
   bool get fullscreenDialog;
 
+  ///
   /// maps to [PageRoute.allowSnapshotting]
   bool get allowSnapshotting;
 }

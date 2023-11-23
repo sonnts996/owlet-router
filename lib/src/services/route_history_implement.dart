@@ -4,8 +4,10 @@
 */
 part of router_services;
 
-/// Implement [RouteHistoryImpl]. Logging the router history via using [RouteObserver] to watch when the router changes.
+///
+/// The [RouteHistory]'s implementation. It logging the router history via using [RouteObserver] to watch when the router changes.
 class RouteHistoryImpl extends RouteObserver with RouteHistory, ChangeNotifier {
+  ///
   /// [RouteHistoryImpl]'s constructor
   RouteHistoryImpl();
 

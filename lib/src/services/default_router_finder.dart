@@ -4,6 +4,7 @@
 */
 part of router_services;
 
+///
 /// The finder uses the A* search algorithm to find the route that matches the path.
 ///
 /// If [trailingSlash] is true and the URL has a trailing slash:
@@ -21,11 +22,13 @@ part of router_services;
 /// The [find] function will only return a launchable route. If no launchable route is found, null will be returned.
 /// If a route segment is found to be a LinkedServiceRoute, it will be returned immediately without further processing of subsequent segments.
 class DefaultRouteFinder extends RouteFinderDelegate {
+  ///
   /// The [DefaultRouteFinder]'s constructor
   DefaultRouteFinder({
     super.trailingSlash,
   });
 
+  ///
   /// In cache mode, the finder's result will be cached for the next time.
   factory DefaultRouteFinder.cache({
     bool trailingSlash,
@@ -48,7 +51,7 @@ class DefaultRouteFinder extends RouteFinderDelegate {
 
       for (final e in node.children) {
         if (firstPath.startsWith(e.path) || (trailingSlash && secondPath.startsWith(e.path))) {
-          if (e is NestedService) {
+          if (e is NestedRoute) {
             return e;
           }
           queue.insert(0, e);
@@ -62,8 +65,10 @@ class DefaultRouteFinder extends RouteFinderDelegate {
   void resetCache(RouteMixin root) {}
 }
 
+///
 /// In cache mode, the finder's result will be cached for the next time.
 class DefaultFinderWithCache extends DefaultRouteFinder {
+  ///
   /// The [DefaultFinderWithCache]'s constructor
   DefaultFinderWithCache({super.trailingSlash});
 

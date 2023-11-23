@@ -7,11 +7,14 @@
 
 part of route_builder;
 
-/// The function is called before pushing the [route].
-typedef RouteGuardFunction<R extends Object?> = FutureOr<Route?> Function(BuildContext pushContext, Route<R> route);
+///
+/// The pre-push function's return value determines the route pushing behavior.
+typedef RouteGuardFunction<R extends Object?> = FutureOr<Route?> Function(BuildContext context, Route<R> route);
 
-/// In the [OwletNavigator], when a new route is pushed, if the route has settings as [RouteGuardSettings],
+///
+/// Within the [OwletNavigator], when a route is pushed, the [RouteGuardSettings.routeGuard] function is invoked if the route has settings as [RouteGuardSettings] type.
 class RouteGuardSettings<T extends Object?> extends RouteSettings {
+  ///
   /// The [RouteGuardSettings]'s constructor
   RouteGuardSettings({
     super.arguments,
@@ -19,21 +22,27 @@ class RouteGuardSettings<T extends Object?> extends RouteSettings {
     this.routeGuard,
   });
 
-  /// the function will be called before pushing.
+  ///
+  /// The pre-push function's return value determines the route pushing behavior.
   final RouteGuardFunction<T>? routeGuard;
 }
 
+///
 /// In [RouteGuardFunction], returns [CancelledRoute] to cancel the pushing.
 class CancelledRoute<T extends Object?> extends Route<T> {
+  ///
   /// The [CancelledRoute]'s constructor
   CancelledRoute([this.value]);
 
+  ///
   /// The returned value when the pushing has been cancelled
   final T? value;
 }
 
+///
 /// In [RouteGuardFunction], returns [RedirectRoute] to redirect the pushing to another route's name
 class RedirectRoute<T extends Object?> extends Route<T> {
+  ///
   /// The [RouteSettings.name] is required to redirect
   RedirectRoute(String redirectTo, {Object? arguments})
       : super(
@@ -43,24 +52,25 @@ class RedirectRoute<T extends Object?> extends Route<T> {
         ));
 }
 
-/// In the [OwletNavigator], when a new route is pushed, if the route has settings as [RouteGuardSettings],
-/// the [RouteGuardSettings.routeGuard] will be called before pushing.
 ///
-/// The route guard function result has a bearing on the pushing.
-/// If the result is a [Route], that route will be pushed on.
-/// The route's setting also can be rewritten at this function.
-/// This can be seen as a redirection feature.
+/// Within the [OwletNavigator], when a route is pushed, the [RouteGuardSettings.routeGuard] function is invoked if the route has settings as [RouteGuardSettings] type.
+/// This function's returned value determines the pushing behavior.
 ///
-/// Another way to redirect is to return a [RedirectRoute] with a special [RouteSettings] name.
+/// If the result is a [Route], it will be pushed. Its settings can also be modified within the function, serving as a redirection mechanism.
 ///
-/// If the returned value is null, the origin route will be pushed.
+/// Alternatively, returning a [RedirectRoute] with a route's name can achieve redirection.
 ///
-/// To cancel pushing, let's return a [CancelledRoute] value. Then, if the [CancelledRoute.value] is special and matches the result type, it will be the resulting push result.
+/// A null return value results in pushing the original route.
 ///
-/// __Note:__ If returns [CancelledRoute] but the  [CancelledRoute.value] is not matched to the result type. The origin route will be pushed.
+/// To cancel pushing, return a [CancelledRoute] object. If its [CancelledRoute.value] matches the expected result type, it becomes the final push result.
 ///
-/// Note:
-/// This works only with these functions:
+/// **Note:** The [CancelledRoute.value] can be ignored if it does not match the route's result type.
+///
+///
+/// **Compatibility:**
+///
+/// This functionality applies to the following functions:
+///
 /// - [Navigator.push],
 /// - [Navigator.pushNamed],
 /// - [Navigator.popAndPushNamed],
@@ -68,34 +78,23 @@ class RedirectRoute<T extends Object?> extends Route<T> {
 /// - [Navigator.pushReplacementNamed],
 /// - [Navigator.pushAndRemoveUntil],
 /// - [Navigator.pushNamedAndRemoveUntil]
-class RouteGuard<A extends Object?, T extends Object?> extends NestedRoute<RouteBuilder<A, T>> {
+class RouteGuard<A extends Object?, T extends Object?> extends ProxyRoute<RouteBuilder<A, T>> {
   /// The [RouteGuard]'s constructor
   RouteGuard({
     this.routeGuard,
     required super.route,
   });
 
-  /// This route will be ignored by default if it already exists in the Navigator.
-  /// Override [onRouteExisted] to modify or to do something when it happened.
-  factory RouteGuard.awareExisted({
+  ///
+  /// This route will be automatically skipped if it already exists in the navigator.
+  /// Override [onRouteExists] to handle this scenario or perform custom actions.
+  factory RouteGuard.awareExists({
     required RouteBuilder<A, T> route,
-    RouteGuardFunction? onRouteExisted,
-  }) = _AwareExistedRoute;
+    RouteGuardFunction? onRouteExists,
+  }) = _AwareExistsRoute;
 
-  /// The function will be called before pushing.
   ///
-  /// The route guard function result has a bearing on the pushing.
-  /// If the result is a [Route], that route will be pushed on.
-  /// The route's setting also can be rewritten at this function.
-  /// This can be seen as a redirection feature.
-  ///
-  /// Another way to redirect is to return a [RedirectRoute] with a special [RouteSettings] name.
-  ///
-  /// If the returned value is null, the origin route will be pushed.
-  ///
-  /// To cancel pushing, let's return a [CancelledRoute] value. Then, if the [CancelledRoute.value] is special and matches the result type, it will be the resulting push result.
-  ///
-  /// __Note:__ If returns [CancelledRoute] but the  [CancelledRoute.value] is not matched to the result type. The origin route will be pushed.
+  /// The pre-push function's return value determines the route pushing behavior.
   final RouteGuardFunction? routeGuard;
 
   @override
@@ -108,15 +107,15 @@ class RouteGuard<A extends Object?, T extends Object?> extends NestedRoute<Route
       );
 }
 
-class _AwareExistedRoute<A extends Object?, T extends Object?> extends RouteGuard<A, T> {
-  _AwareExistedRoute({required super.route, this.onRouteExisted});
+class _AwareExistsRoute<A extends Object?, T extends Object?> extends RouteGuard<A, T> {
+  _AwareExistsRoute({required super.route, this.onRouteExists});
 
-  final RouteGuardFunction? onRouteExisted;
+  final RouteGuardFunction? onRouteExists;
 
   @override
-  RouteGuardFunction<Object?>? get routeGuard => (pushContext, route) async {
+  RouteGuardFunction<Object?>? get routeGuard => (context, route) async {
         if (service.history.contains(path)) {
-          final result = await onRouteExisted?.call(pushContext, route);
+          final result = await onRouteExists?.call(context, route);
           return result ?? CancelledRoute();
         }
         return null;

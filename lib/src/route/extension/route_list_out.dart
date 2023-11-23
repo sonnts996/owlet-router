@@ -4,10 +4,11 @@
 */
 part of route_base;
 
-/// List out this route and its children. It has no role except to allow Developers to preview router information.
+///
+/// The function lists all the routes and their children, which are solely intended for the developer preview of router information.
 @visibleForTesting
 extension RouteListOut on RouteMixin {
-  /// List out this route and its children. It has no role except to allow Developers to preview router information.
+  /// The function lists all the routes and their children, which are solely intended for the developer preview of router information.
   @visibleForTesting
   List<RouteMixin> listAll() {
     final list = <RouteMixin>[];

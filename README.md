@@ -277,9 +277,9 @@ class ListItemRoute extends RouteBase {
         return CancelledRoute(false);
       },
     ),
-    routeGuard: (pushContext, route) async {
+    routeGuard: (context, route) async {
       if (!navigatorServices.history.contains(list.path)) {
-        Navigator.push(pushContext, list.noAnimationBuilder()!);
+        Navigator.push(context, list.noAnimationBuilder()!);
       }
       return route;
     },
@@ -408,9 +408,9 @@ overriding the `RouteBuilder.builder` method.
           return CancelledRoute(false);
         },
       ),
-      routeGuard: (pushContext, route) async {
+      routeGuard: (context, route) async {
         if (!navigatorServices.history.contains(list.path)) {
-          Navigator.push(pushContext, list.noAnimationBuilder()!);
+          Navigator.push(context, list.noAnimationBuilder()!);
         }
         return route;
       },
@@ -439,7 +439,7 @@ overriding the `RouteBuilder.builder` method.
   ```dart
   final action = NamedFunctionRouteBuilder(
     '/action',
-    callback: (pushContext, route) => print('Hello World'),
+    callback: (context, route) => print('Hello World'),
   );
   ```
 

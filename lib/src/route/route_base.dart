@@ -15,31 +15,37 @@ import '../../router.dart';
 
 part 'extension/route_list_out.dart';
 part 'extension/router_extension.dart';
-part 'nested_route.dart';
+part 'proxy_route.dart';
 part 'route_builder.dart';
 
-/// Create a route wrapper with it's route path.
-/// The [parent] field is a lazy update after running.
-/// The parent is the object, which defines this in [RouteBase.children].
 ///
-/// __Note:__ A route can have only one parent,
-/// which means, an error will be thrown if update a non-null [RouteBase.parent] to a new value.
+/// A [RouteBase] class represents a path segment that must start with a slash (/).
+/// The parent field of a [RouteBase] instance is lazily updated at runtime when it has been defined in [RouteBase.children].
+/// A [RouteBase] instance can only have one parent; attempting to update an existing [RouteBase.parent] property to a new value will result in an error.
 class RouteBase extends RouteMixin {
-  /// Create new route segment with it's path.
   ///
-  /// __Note:__ The the path must be started with '/'.
+  /// Create a new route segment by defining its path. The path must begin with a slash (/).
   RouteBase(this.segment)
       : assert(segment.startsWith('/'), 'Segment must be start with / and without parameter or fragment') {
     children.forEach(_apply);
   }
 
-  /// The root route's path should be '/'.
+  ///
+  /// A root route should be represented by a single slash (/), and its constructor behaves the same as the standard constructor.
   RouteBase.root([this.segment = '/']) {
     children.forEach(_apply);
   }
 
-  /// Returns the [RouteMixin] if it have been injected in the Navigator.
-  /// It may take some time, the algorithm complexity is O(n) with n as the number of the route tree level.
+  ///
+  /// This function efficiently locates a [RouteMixin] instance based on its type within the context.
+  /// It systematically traverses the route tree and returns the first matching route.
+  /// Consequently, the algorithm's worst-case complexity is O(n), where n represents the depth of the route tree.
+  ///
+  /// If the target route is known to reside within the root route, setting the [useRoot] parameter to true will expedite the search process.
+  /// When the [deepSearch] flag is set to false, the search is restricted to the nearest [NavigationService].
+  /// Conversely, if [deepSearch] is set to true, the search encompasses all [NavigationService] instances within the context.
+  /// In this scenario, the worst-case algorithm complexity becomes O(n * k),
+  /// where n represents the average depth of the route tree and k represents the number of [NavigationService] layers.
   static R? maybeOf<R extends RouteMixin>(BuildContext context, {bool useRoot = false, bool deepSearch = false}) {
     final root = context.findRootAncestorStateOfType<NavigatorState>();
 
@@ -67,8 +73,16 @@ class RouteBase extends RouteMixin {
     return null;
   }
 
-  /// Returns the [RouteMixin] if it have been injected in the Navigator. But it will be thrown an error if the [NavigationService] not found.
-  /// It may take some time, the algorithm complexity is O(n) with n as the number of the route tree level.
+  ///
+  /// This function efficiently locates a [RouteMixin] instance based on its type within the context.
+  /// It systematically traverses the route tree and returns the first matching route.
+  /// Consequently, the algorithm's worst-case complexity is O(n), where n represents the depth of the route tree.
+  ///
+  /// If the target route is known to reside within the root route, setting the [useRoot] parameter to true will expedite the search process.
+  /// When the [deepSearch] flag is set to false, the search is restricted to the nearest [NavigationService].
+  /// Conversely, if [deepSearch] is set to true, the search encompasses all [NavigationService] instances within the context.
+  /// In this scenario, the worst-case algorithm complexity becomes O(n * k),
+  /// where n represents the average depth of the route tree and k represents the number of [NavigationService] layers.
   static R of<R extends RouteMixin>(BuildContext context, {bool useRoot = false, bool deepSearch = false}) {
     final result = maybeOf<R>(context, useRoot: useRoot, deepSearch: deepSearch);
     assert(result != null, 'No $R found, maybe it has not been injected in the Navigator');
@@ -83,9 +97,12 @@ class RouteBase extends RouteMixin {
   @override
   RouteMixin? get parent => _parent;
 
+  static final _segmentRegex = RegExp(r'^/[^?#]+$');
+
   @override
   String get path {
-    assert(segment.startsWith('/'), 'Segment must be start with / and without parameter or fragment');
+    assert(segment == '/' || _segmentRegex.hasMatch(segment),
+        '$segment: A route segment must begin with a slash (‘/’) and should not contain any parameters or fragment.');
     return parent.letOrNull(
       (it) {
         if (it.segment == '/') return segment;
@@ -97,17 +114,13 @@ class RouteBase extends RouteMixin {
 
   @override
   String argsPath(Map<String, Object?> args, {bool encode = false, String? fragment}) =>
-      '$path?${mapToQueryParameter(args, encode: encode, fragment: fragment)}';
+      '$path${mapToQueryParameter(args, encode: encode, fragment: fragment)}';
 
-  /// Set the parent for this route.
-  /// If the [parent] is this route's parent, nothing happens.
-  /// If this route's parent is null, the parent will be applied.
-  /// Otherwise, an exception will be thrown, cause the route had a parent.
   void _apply(RouteMixin child) {
     assert(
         child.parent == null || child.parent == this,
-        '${child.toString()} already has a parent (${child.parent.toString()}.'
-        "Can not use an instance route in more than a parent route. Let's create another instance of this.");
+        'The $child is already associated with the ${child.parent}.'
+        'A child component cannot be associated with multiple parent components.');
 
     child.castTo<RouteBase?>()?.let((it) {
       it._parent = this;

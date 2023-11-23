@@ -5,28 +5,32 @@
 
 part of router_services;
 
-/// Extension for [NavigationService] to shorter method push new page route with it's context.
+///
+/// Extension for [NavigationService] to push a route with its context.
 ///
 /// Example:
 /// ```
 /// Navigator.of(context).pushNamed(yourRoot.home.path); // Classic method
-/// yourRoot.home.pushNamed(context); // New method
+/// yourRoot.home.pushNamed(); // New method
 /// ```
 extension NavigationServiceExtension on NavigationService {
+  ///
   /// Return the [service.navigationKey.currentContext] if it has been injected into the Navigator
   BuildContext get context => navigationKey.currentContext.let((it) {
         assert(it != null, "Context not found, maybe this route's service was not injected in Navigator");
         return it!;
       });
 
-  /// Maps to [Navigator.pushNamed] with [T] type of result and the [NavigationService]'s context.
+  ///
+  /// Map to [Navigator.pushNamed] using the [NavigationService]'s context and a result type of [T].
   Future<T?> pushNamed<T extends Object?>(
     String path, {
     Object? args,
   }) =>
       Navigator.of(context).pushNamed<T>(path, arguments: args);
 
-  /// Map to [Navigator.pushReplacementNamed] with [T] type of result the [NavigationService]'s context.
+  ///
+  /// Map to [Navigator.pushReplacementNamed] using the [NavigationService]'s context and a result type of [T].
   Future<T?> pushReplacementNamed<T extends Object?, T0 extends Object?>(
     String path, {
     T0? result,
@@ -35,7 +39,8 @@ extension NavigationServiceExtension on NavigationService {
   }) =>
       Navigator.of(context).pushReplacementNamed<T, T0>(path, arguments: args, result: result);
 
-  /// New [Navigator.pushNamedAndRemoveUntil] with [T] type of result and the [NavigationService]'s context.
+  ///
+  /// Map to [Navigator.pushNamedAndRemoveUntil] using the [NavigationService]'s context and a result type of [T].
   Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
     bool Function(Route<dynamic>) predicate,
     String path, {
@@ -43,7 +48,8 @@ extension NavigationServiceExtension on NavigationService {
   }) =>
       Navigator.of(context).pushNamedAndRemoveUntil<T>(path, predicate, arguments: args);
 
-  /// New [Navigator.popAndPushNamed] with [T] type of result and the [NavigationService]'s context.
+  ///
+  /// Map to [Navigator.popAndPushNamed] using the [NavigationService]'s context and a result type of [T].
   Future<T?> popAndPushNamed<T extends Object?, T0 extends Object?>(
     String path, {
     Object? args,
@@ -51,7 +57,8 @@ extension NavigationServiceExtension on NavigationService {
   }) =>
       Navigator.of(context).popAndPushNamed<T, T0>(path, arguments: args, result: result);
 
-  /// New [Navigator.restorablePushNamed] with [T] type of result and the [NavigationService]'s context.
+  ///
+  /// Map to [Navigator.restorablePushNamed] using the [NavigationService]'s context and a result type of [T].
   String restorablePushNamed<T extends Object?>(
     String path, {
     Object? args,
@@ -59,7 +66,8 @@ extension NavigationServiceExtension on NavigationService {
   }) =>
       Navigator.of(context).restorablePushNamed<T>(path, arguments: args);
 
-  /// New [Navigator.restorablePushReplacementNamed] with [T] type of result and the [NavigationService]'s context.
+  ///
+  /// Map to [Navigator.restorablePushReplacementNamed] using the [NavigationService]'s context and a result type of [T].
   String restorablePushReplacementNamed<T extends Object?, T0 extends Object?>(
     String path, {
     T0? result,
@@ -67,7 +75,8 @@ extension NavigationServiceExtension on NavigationService {
   }) =>
       Navigator.of(context).restorablePushReplacementNamed<T, T0>(path, arguments: args, result: result);
 
-  /// New [Navigator.restorablePushNamedAndRemoveUntil] with [T] type of result and the [NavigationService]'s context.
+  ///
+  /// Map to [Navigator.restorablePushNamedAndRemoveUntil] using the [NavigationService]'s context and a result type of [T].
   String restorablePushNamedAndRemoveUntil<T extends Object?>(
     bool Function(Route<dynamic>) predicate,
     String path, {
@@ -75,7 +84,8 @@ extension NavigationServiceExtension on NavigationService {
   }) =>
       Navigator.of(context).restorablePushNamedAndRemoveUntil<T>(path, predicate, arguments: args);
 
-  /// New [Navigator.restorablePopAndPushNamed] with [T] type of result and the [NavigationService]'s context.
+  ///
+  /// Map to [Navigator.restorablePopAndPushNamed] using the [NavigationService]'s context and a result type of [T].
   String restorablePopAndPushNamed<T extends Object?, T0 extends Object?>(
     String path, {
     Object? args,

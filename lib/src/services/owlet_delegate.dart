@@ -5,15 +5,15 @@
 
 part of router_services;
 
-/// Create [RouterDelegate] with [RouteBuilder].
-/// If the route path is not found, a [NavigationServiceImpl.unknownRoute] will be returned.
-/// If the route is located or can not be built, an exception with the thrown.
+///
+/// Implementing a [RouterDelegate] using [RouteBuilder].
 class OwletDelegate<R extends RouteMixin> extends RouterDelegate<RouteBuilder>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
+  ///
   /// The [OwletDelegate]'s constructor.
   OwletDelegate({required this.service});
 
-  /// This provides for router owlet information.
+  /// The navigation service exposes Owlet Router information.
   final NavigationService<R> service;
 
   RouteBuilder? _currentConfiguration;

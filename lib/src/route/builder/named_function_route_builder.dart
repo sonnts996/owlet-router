@@ -6,12 +6,15 @@
 */
 part of route_builder;
 
-/// The function will be called when pushing a route with the settings as [NamedFunctionRouteSettings]
-typedef RouteCallback<R> = FutureOr<R?> Function(BuildContext pushContext, Route<R?> route);
+///
+/// The callback function for the push method receives the context of the push operation and the corresponding route.
+typedef RouteCallback<R> = FutureOr<R?> Function(BuildContext context, Route<R?> route);
 
-/// If using [OwletNavigator], everytime push a new route with the settings as [NamedFunctionRouteSettings],
-/// the [NamedFunctionRouteSettings.callback] will be called and the pushing will be ignored.
+///
+/// The [OwletNavigator] utilizes the [NamedFunctionRouteSettings] class to identify named function routes.
+/// Additionally, it relays the callback for the processed function
 class NamedFunctionRouteSettings<T extends Object?> extends RouteSettings {
+  ///
   /// Create a new [RouteSettings] with the [callback]
   NamedFunctionRouteSettings({
     super.arguments,
@@ -19,25 +22,27 @@ class NamedFunctionRouteSettings<T extends Object?> extends RouteSettings {
     required this.callback,
   });
 
-  /// Return the callback route. It is called and cancels the pushing.
+  ///
+  /// The callback function for the push method receives the context of the push operation and the corresponding route.
   final RouteCallback<T> callback;
 }
 
-/// The [OwletNavigator] provides a feature that can be used to name a function. And call it like a Route ([Navigator.pushNamed]).
-/// The function can also return the result.
 ///
+/// The [OwletNavigator] provides a feature that allows you to name a function and call it using [Navigator.pushNamed],
+/// returning the function's result as the push result.
 ///
-/// **Note: This works only with these functions:**
-/// - [Navigator.push],
-/// - [Navigator.pushNamed],
+/// **Note:** This feature only works with the following methods:
 ///
-/// __WARNING:__ The [Navigator.popAndPushNamed] may be bright an error
+/// - [Navigator.push]
+/// - [Navigator.pushNamed]
+///
+/// **WARNING:** Using [Navigator.popAndPushNamed] may cause an error.
 class NamedFunctionRouteBuilder<A extends Object?, T extends Object?> extends RouteBuilder<A, T> {
-  /// The [NamedFunctionRouteBuilder]'s constructor with the [segment] path and your [callback].
-  /// The result of the [callback] is also passed into the result of [Navigator.pushNamed]
+  /// The [NamedFunctionRouteBuilder]'s constructor
   NamedFunctionRouteBuilder(super.segment, {required this.callback});
 
-  /// The result of the [callback] is also passed into the result of [Navigator.pushNamed]
+  ///
+  /// The callback function for the push method receives the context of the push operation and the corresponding route.
   final RouteCallback<T> callback;
 
   @override

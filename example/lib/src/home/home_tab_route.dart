@@ -14,15 +14,15 @@ class HomeTabRoute extends RouteBase {
 
   final ValueNotifier<RouteSettings?> routeNotifier = ValueNotifier(null);
 
-  final homeTab = RouteGuard.awareExisted(
+  final homeTab = RouteGuard.awareExists(
     route: MaterialRouteBuilder(
       '/',
       pageBuilder: (context, settings) => const HomeTab(),
     ),
   );
 
-  late final navigationTab = RouteGuard.awareExisted(
-      onRouteExisted: (pushContext, route) {
+  late final navigationTab = RouteGuard.awareExists(
+      onRouteExists: (context, route) {
         routeNotifier.value = route.settings;
         return null;
       },
@@ -31,8 +31,8 @@ class HomeTabRoute extends RouteBase {
         pageBuilder: (context, settings) => const NavigationTab(),
       ));
 
-  late final routeTab = RouteGuard.awareExisted(
-      onRouteExisted: (pushContext, route) {
+  late final routeTab = RouteGuard.awareExists(
+      onRouteExists: (context, route) {
         routeNotifier.value = route.settings;
         return null;
       },

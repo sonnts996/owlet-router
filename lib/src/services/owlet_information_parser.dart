@@ -5,11 +5,14 @@
 
 part of router_services;
 
+///
 /// A [RouteInformationParser] to parse between [RouteBase] and [RouteInformation]
 class OwletInformationParser extends RouteInformationParser<RouteMixin> {
-  /// Create a [OwletInformationParser]. Which requires a NavigationService to find the route match [RouteInformation].
+  ///
+  /// Create a [OwletInformationParser]
   OwletInformationParser({required this.service});
 
+  ///
   /// Provide the finder to find [RouteBase] from [RouteInformation]
   final NavigationService service;
 

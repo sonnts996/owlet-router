@@ -57,11 +57,11 @@ class HomeRoute extends RouteBase {
 
   final action = NamedFunctionRouteBuilder(
     '/action',
-    callback: (pushContext, route) => print('Hello World'),
+    callback: (context, route) => print('Hello World'),
   );
 
   final guard = RouteGuard(
-      routeGuard: (pushContext, route) {
+      routeGuard: (context, route) {
         if (route.settings.arguments is String) {
           if (route.settings.arguments == 'cancelled') {
             print('cancelled');

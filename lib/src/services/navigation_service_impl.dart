@@ -4,9 +4,11 @@
 */
 part of router_services;
 
-/// A navigation service is provided for router owlet information.
+///
+/// The navigation service exposes Owlet Router information.
 class NavigationServiceImpl<R extends RouteMixin> extends NavigationService<R> {
-  /// Create a service, which is provided for router owlet information.
+  ///
+  /// Construct a [NavigationServiceImpl]
   NavigationServiceImpl({
     GlobalKey<NavigatorState>? navigationKey,
     this.routeObservers = const [],
@@ -21,6 +23,7 @@ class NavigationServiceImpl<R extends RouteMixin> extends NavigationService<R> {
         finder = finder ?? DefaultRouteFinder.cache(trailingSlash: true),
         super.create();
 
+  ///
   /// If the route is not defined, [unknownRoute] with be returned.
   final RouteBuilder unknownRoute;
 
@@ -49,8 +52,9 @@ class NavigationServiceImpl<R extends RouteMixin> extends NavigationService<R> {
     _routerConfig ??= RouterConfig(
       routerDelegate: OwletDelegate<R>(service: this),
       routeInformationParser: OwletInformationParser(service: this),
-      routeInformationProvider:
-          PlatformRouteInformationProvider(initialRouteInformation: RouteInformation(uri: Uri.tryParse(initialRoute))),
+      routeInformationProvider: PlatformRouteInformationProvider(
+        initialRouteInformation: RouteInformation(uri: Uri.tryParse(initialRoute)),
+      ),
     );
     return _routerConfig!;
   }
@@ -61,7 +65,7 @@ class NavigationServiceImpl<R extends RouteMixin> extends NavigationService<R> {
   @override
   Route? onGenerateRoute(RouteSettings settings) {
     final route = settings.name?.let(findRoute);
-    final routeBuilder = route?.let((it) => route is BuildableRouteMixin ? route : null);
+    final routeBuilder = route?.let((it) => route is RouteBuilderMixin ? route : null);
 
     final finalRoute = routeBuilder?.build(settings);
 

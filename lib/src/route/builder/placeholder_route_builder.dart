@@ -6,9 +6,11 @@
 */
 part of route_builder;
 
+///
 /// At times, the [RouteGuard] solely relies on the route within the [RouteGuard.routeGuard] result.
-/// For such cases, the [PlaceholderRouteBuilder] provides a way to map this situation when the routeBuilder doesn't need to specify anything else
+/// For such cases, the [PlaceholderRouteBuilder] provides a way to map this situation when the [RouteBuilder] doesn't need to specify anything else
 class PlaceholderRouteBuilder<A extends Object?, T extends Object?> extends NoTransitionRouteBuilder<A, T> {
+  ///
   /// The [NoTransitionRouteBuilder] without required [pageBuilder]
   PlaceholderRouteBuilder(
     super.segment, {
