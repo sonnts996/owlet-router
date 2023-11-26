@@ -4,34 +4,44 @@
 */
 part of owlet_router;
 
-/// The [RouteHistory.nearest]'s result contains a [route] and position of it. If [position] == 0, the [route] is current.
+/// The result of [RouteHistory.nearest] includes a route and its corresponding position.
+/// When the position is equal to 0, the route is the current route.
 class RouteIndex {
+  ///
   /// The [RouteIndex]'s constructor
   const RouteIndex(this.route, this.position);
 
+  ///
   /// The route which found.
   final Route route;
 
-  /// The position of [route] from the current, if [position] == 0, the [route] is current
+  ///
+  /// The position of the [route] relative to the current route. If the position is equal to 0, the route is the current route.
   final int position;
 }
 
-/// Logging the current routes as list.
-/// The last route in the list is the top route.
+///
+/// Log the current route stack as a list, with the last route in the list being the top-most route.
 mixin RouteHistory on NavigatorObserver implements Listenable {
-  /// Logging the current routes as list.
+  ///
+  /// The current routes.
   List<Route> get routes;
 
+  ///
   /// The top of routes.
   Route get current => routes.last;
 
-  /// Return true if any route in the list has a name which is [routeName]. It does not include the parameters.
+  /// Determine if any route in the list has a name matching [routeName]. This check excludes route parameters.
   bool contains(String routeName) =>
-      routes.any((element) => element.settings.name?.let((it) => Uri.tryParse(it)?.path == routeName) ?? false);
+      routes.any((element) =>
+      element.settings.name?.let((it) =>
+      Uri
+          .tryParse(it)
+          ?.path == routeName) ?? false);
 
-  /// Return the nearest route from the [current].
-  /// Return null if it can not be found.
-  /// [skipCurrent] will ignore the current route if it is a match.
+  ///
+  /// Find the route closest to the current route. If no matching route is found, return null.
+  /// The [skipCurrent] parameter, when set to true, will exclude the current route from the search, even if it matches the specified criteria.
   RouteIndex? nearest(bool Function(Route e) condition, {bool skipCurrent = false}) {
     var i = 0;
     for (var r in routes.reversed) {
