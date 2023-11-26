@@ -41,7 +41,9 @@ abstract class NavigationService<R extends RouteMixin> {
 
   ///
   /// Get the nearest NavigationService<R> in the [context]. It requires the [OwletNavigator] must be used.
-  static NavigationService<R>? maybeOf<R extends RouteMixin>(BuildContext context, {bool useRoot = false}) {
+  static NavigationService<R>? maybeOf<R extends RouteMixin>(
+      BuildContext context,
+      {bool useRoot = false}) {
     final root = context.findRootAncestorStateOfType<NavigatorState>();
 
     if (useRoot) {
@@ -51,7 +53,8 @@ abstract class NavigationService<R extends RouteMixin> {
     } else {
       var findContext = context;
       do {
-        final navigator = findContext.findAncestorStateOfType<OwletNavigatorState>();
+        final navigator =
+            findContext.findAncestorStateOfType<OwletNavigatorState>();
         if (navigator?.service is NavigationService<R>) {
           return navigator!.service.castTo<NavigationService<R>?>();
         } else if (navigator != null && navigator != root) {
@@ -66,7 +69,8 @@ abstract class NavigationService<R extends RouteMixin> {
 
   ///
   /// Get the nearest NavigationService<R> in the [context]. It requires the [OwletNavigator] must be used.
-  static NavigationService<R> of<R extends RouteMixin>(BuildContext context, {bool useRoot = false}) {
+  static NavigationService<R> of<R extends RouteMixin>(BuildContext context,
+      {bool useRoot = false}) {
     final result = maybeOf<R>(context, useRoot: useRoot);
     assert(result != null, 'No ${NavigationService<R>} found in context');
     return result!;

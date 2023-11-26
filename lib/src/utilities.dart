@@ -12,11 +12,10 @@ import '../router.dart';
 /// The default unknown route builder, which is used when the specified route cannot be found or the route builder returns a null route.
 final owletDefaultUnknownRoute = MaterialRouteBuilder(
   '/page-not-found',
-  pageBuilder: (context, settings) =>
-      Scaffold(
-        appBar: AppBar(title: const Text('Page Not Found:')),
-        body: Center(child: Text('Page Not Found: ${settings.name}')),
-      ),
+  pageBuilder: (context, settings) => Scaffold(
+    appBar: AppBar(title: const Text('Page Not Found:')),
+    body: Center(child: Text('Page Not Found: ${settings.name}')),
+  ),
 );
 
 ///
@@ -26,7 +25,8 @@ Widget owletDefaultPlaceholder(context, settings) => Material();
 ///
 /// Constructs the URI's query parameters from a Map<String, Object?>.
 /// When the encoding flag is set to true, the parameters are encoded using the URI encoder.
-String mapToQueryParameter(Map<String, Object?> args, {bool encode = false, String? fragment}) {
+String mapToQueryParameter(Map<String, Object?> args,
+    {bool encode = false, String? fragment}) {
   String encodeValue(Object a) {
     if (encode) {
       return Uri.encodeComponent(a.toString());
@@ -57,6 +57,7 @@ String routesToString(Iterable<RouteMixin> list) {
   if (list.isEmpty) return 'Empty routes.';
   final max = (maxBy(list, (p0) => p0.path.length)?.path.length ?? 0) + 1;
   return list
-      .map((e) => '${e.path.padRight(max)}: ${e.runtimeType}(canLaunch: ${e.canLaunch}, isCallback: ${e.isCallback})')
+      .map((e) =>
+          '${e.path.padRight(max)}: ${e.runtimeType}(canLaunch: ${e.canLaunch}, isCallback: ${e.isCallback})')
       .join('\n');
 }

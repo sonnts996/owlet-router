@@ -12,10 +12,13 @@ class UILayout extends StatelessWidget {
   });
 
   final Widget? child;
-  final Widget Function(BuildContext context, bool isOnDesktopMode, Widget? child) builder;
+  final Widget Function(
+      BuildContext context, bool isOnDesktopMode, Widget? child) builder;
 
   @override
-  Widget build(BuildContext context) => LayoutBuilder(builder: (context, constraints) {
-        return builder(context, constraints.maxHeight <= constraints.maxWidth, child);
+  Widget build(BuildContext context) =>
+      LayoutBuilder(builder: (context, constraints) {
+        return builder(
+            context, constraints.maxHeight <= constraints.maxWidth, child);
       });
 }

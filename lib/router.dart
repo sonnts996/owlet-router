@@ -16,7 +16,8 @@ import 'src/services/router_services.dart';
 
 export 'src/route/builder/builder.dart';
 export 'src/route/route_base.dart';
-export 'src/services/router_services.dart' hide NavigationServiceImpl, RouteHistoryImpl;
+export 'src/services/router_services.dart'
+    hide NavigationServiceImpl, RouteHistoryImpl;
 export 'src/utilities.dart';
 
 part 'navigation_service.dart';

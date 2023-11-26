@@ -26,7 +26,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey(debugLabel: 'HomeScaffold');
+  final GlobalKey<ScaffoldState> scaffoldKey =
+      GlobalKey(debugLabel: 'HomeScaffold');
 
   NavigationService<HomeTabRoute> get tabService => widget.service;
   int currentIndex = 1;
@@ -59,10 +60,14 @@ class _HomePageState extends State<HomePage> {
         child: OwletNavigator(tabService),
         builder: (context, isOnDesktopMode, child) => Scaffold(
               key: scaffoldKey,
-              drawer: isOnDesktopMode ? null : Drawer(child: Documents(onTab: onSectionTab)),
+              drawer: isOnDesktopMode
+                  ? null
+                  : Drawer(child: Documents(onTab: onSectionTab)),
               body: isOnDesktopMode
                   ? Row(children: [
-                      DesktopDrawerDocument(onDocumentTab: onSectionTab, onNavigateTab: onNavigateTab),
+                      DesktopDrawerDocument(
+                          onDocumentTab: onSectionTab,
+                          onNavigateTab: onNavigateTab),
                       Expanded(child: child!),
                     ])
                   : child!,
@@ -73,10 +78,17 @@ class _HomePageState extends State<HomePage> {
                       onTap: onNavigateTab,
                       type: BottomNavigationBarType.fixed,
                       items: const [
-                          BottomNavigationBarItem(icon: Icon(CupertinoIcons.line_horizontal_3), label: 'Menu'),
-                          BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: 'Home'),
-                          BottomNavigationBarItem(icon: Icon(CupertinoIcons.info_circle), label: 'About'),
-                          BottomNavigationBarItem(icon: Icon(CupertinoIcons.profile_circled), label: 'Author'),
+                          BottomNavigationBarItem(
+                              icon: Icon(CupertinoIcons.line_horizontal_3),
+                              label: 'Menu'),
+                          BottomNavigationBarItem(
+                              icon: Icon(CupertinoIcons.home), label: 'Home'),
+                          BottomNavigationBarItem(
+                              icon: Icon(CupertinoIcons.info_circle),
+                              label: 'About'),
+                          BottomNavigationBarItem(
+                              icon: Icon(CupertinoIcons.profile_circled),
+                              label: 'Author'),
                         ]),
             ));
   }

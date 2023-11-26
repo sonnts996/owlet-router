@@ -6,7 +6,8 @@ part of route_builder;
 
 ///
 /// Build a page with context and route settings.
-typedef PageBuilder = Widget Function(BuildContext context, RouteSettings settings);
+typedef PageBuilder = Widget Function(
+    BuildContext context, RouteSettings settings);
 
 ///
 /// To implement a [PageRoute] within [RouteBuilder], some fields are required. The [PageRouteMixin] provides the interface for this.

@@ -9,7 +9,8 @@ part of route_builder;
 
 ///
 /// The pre-push function's return value determines the route pushing behavior.
-typedef RouteGuardFunction<R extends Object?> = FutureOr<Route?> Function(BuildContext context, Route<R> route);
+typedef RouteGuardFunction<R extends Object?> = FutureOr<Route?> Function(
+    BuildContext context, Route<R> route);
 
 ///
 /// Within the [OwletNavigator], when a route is pushed, the [RouteGuardSettings.routeGuard] function is invoked if the route has settings as [RouteGuardSettings] type.
@@ -78,7 +79,8 @@ class RedirectRoute<T extends Object?> extends Route<T> {
 /// - [Navigator.pushReplacementNamed],
 /// - [Navigator.pushAndRemoveUntil],
 /// - [Navigator.pushNamedAndRemoveUntil]
-class RouteGuard<A extends Object?, T extends Object?> extends ProxyRoute<RouteBuilder<A, T>> {
+class RouteGuard<A extends Object?, T extends Object?>
+    extends ProxyRoute<RouteBuilder<A, T>> {
   /// The [RouteGuard]'s constructor
   RouteGuard({
     this.routeGuard,
@@ -107,7 +109,8 @@ class RouteGuard<A extends Object?, T extends Object?> extends ProxyRoute<RouteB
       );
 }
 
-class _AwareExistsRoute<A extends Object?, T extends Object?> extends RouteGuard<A, T> {
+class _AwareExistsRoute<A extends Object?, T extends Object?>
+    extends RouteGuard<A, T> {
   _AwareExistsRoute({required super.route, this.onRouteExists});
 
   final RouteGuardFunction? onRouteExists;

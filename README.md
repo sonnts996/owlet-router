@@ -412,7 +412,7 @@ overriding the `RouteBuilder.builder` method.
     );
     ```
 
-  > [!Warning]
+  > [!Note]
   >
   >   The `RouteGuard` works only with these functions:
   >   - `Navigator.push`,
@@ -438,7 +438,7 @@ overriding the `RouteBuilder.builder` method.
   );
   ```
 
-  > [!Warning]
+  > [!Note]
   >
   > The `NamedFunctionRouteBuilder` works only with these functions:
   > - `Navigator.pushNamed`,

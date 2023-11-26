@@ -53,7 +53,8 @@ class NavigationServiceImpl<R extends RouteMixin> extends NavigationService<R> {
       routerDelegate: OwletDelegate<R>(service: this),
       routeInformationParser: OwletInformationParser(service: this),
       routeInformationProvider: PlatformRouteInformationProvider(
-        initialRouteInformation: RouteInformation(uri: Uri.tryParse(initialRoute)),
+        initialRouteInformation:
+            RouteInformation(uri: Uri.tryParse(initialRoute)),
       ),
     );
     return _routerConfig!;
@@ -65,12 +66,14 @@ class NavigationServiceImpl<R extends RouteMixin> extends NavigationService<R> {
   @override
   Route? onGenerateRoute(RouteSettings settings) {
     final route = settings.name?.let(findRoute);
-    final routeBuilder = route?.let((it) => route is RouteBuilderMixin ? route : null);
+    final routeBuilder =
+        route?.let((it) => route is RouteBuilderMixin ? route : null);
 
     final finalRoute = routeBuilder?.build(settings);
 
     if (routeBuilder != null && finalRoute == null) {
-      debugPrint('"${settings.name}" is a launchable route, but a route cannot be found within it.');
+      debugPrint(
+          '"${settings.name}" is a launchable route, but a route cannot be found within it.');
     }
     return finalRoute;
   }

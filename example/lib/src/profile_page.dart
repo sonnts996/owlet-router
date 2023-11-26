@@ -22,24 +22,35 @@ class ProfilePage extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        icon: const Icon(CupertinoIcons.back, color: Colors.white)),
+                        icon: const Icon(CupertinoIcons.back,
+                            color: Colors.white)),
                     flexibleSpace: LayoutBuilder(
                       builder: (context, constraints) {
-                        final isExpanded = constraints.maxHeight > (kToolbarHeight + 100);
+                        final isExpanded =
+                            constraints.maxHeight > (kToolbarHeight + 100);
                         return FlexibleSpaceBar(
-                          titlePadding: isExpanded ? const EdgeInsets.fromLTRB(0, 0, 0, 16) : null,
+                          titlePadding: isExpanded
+                              ? const EdgeInsets.fromLTRB(0, 0, 0, 16)
+                              : null,
                           centerTitle: true,
                           background: DecoratedBox(
-                              decoration: const BoxDecoration(color: Colors.white),
+                              decoration:
+                                  const BoxDecoration(color: Colors.white),
                               child: Container(
                                   decoration: const BoxDecoration(
                                       color: Color(0xFFEDE0CD),
-                                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(24))),
+                                      borderRadius: BorderRadius.vertical(
+                                          bottom: Radius.circular(24))),
                                   alignment: Alignment.bottomCenter,
                                   child: ConstrainedBox(
-                                    constraints: const BoxConstraints(maxWidth: 300, minHeight: 100, maxHeight: 300),
-                                    child: Image.asset('assets/owlets_on_the_tree.jpg',
-                                        fit: BoxFit.fitWidth, alignment: Alignment.bottomCenter),
+                                    constraints: const BoxConstraints(
+                                        maxWidth: 300,
+                                        minHeight: 100,
+                                        maxHeight: 300),
+                                    child: Image.asset(
+                                        'assets/owlets_on_the_tree.jpg',
+                                        fit: BoxFit.fitWidth,
+                                        alignment: Alignment.bottomCenter),
                                   ))),
                           title: isExpanded
                               ? Column(
@@ -48,9 +59,13 @@ class ProfilePage extends StatelessWidget {
                                   children: [
                                       DecoratedBox(
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(20),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
                                             boxShadow: const [
-                                              BoxShadow(color: Colors.black12, spreadRadius: 2, blurRadius: 2)
+                                              BoxShadow(
+                                                  color: Colors.black12,
+                                                  spreadRadius: 2,
+                                                  blurRadius: 2)
                                             ]),
                                         child: CircleAvatar(
                                             radius: 20,
@@ -58,7 +73,10 @@ class ProfilePage extends StatelessWidget {
                                             child: ShaderMask(
                                               shaderCallback: (bounds) {
                                                 return const LinearGradient(
-                                                  colors: [Color(0xFF6C89EE), Color(0xFF012FC5)],
+                                                  colors: [
+                                                    Color(0xFF6C89EE),
+                                                    Color(0xFF012FC5)
+                                                  ],
                                                   begin: Alignment.topLeft,
                                                   end: Alignment.bottomRight,
                                                 ).createShader(bounds);
@@ -72,14 +90,23 @@ class ProfilePage extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 4),
                                       Text("I'm Owlet",
-                                          style: Theme.of(context).textTheme.titleMedium?.apply(
-                                              color: Colors.white,
-                                              shadows: [
-                                                const BoxShadow(color: Colors.black54, spreadRadius: 5, blurRadius: 5)
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.apply(
+                                                  color: Colors.white,
+                                                  shadows: [
+                                                const BoxShadow(
+                                                    color: Colors.black54,
+                                                    spreadRadius: 5,
+                                                    blurRadius: 5)
                                               ])),
                                     ])
                               : Text("I'm Owlet",
-                                  style: Theme.of(context).textTheme.titleMedium?.apply(color: Colors.white)),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.apply(color: Colors.white)),
                         );
                       },
                     ))
@@ -90,13 +117,17 @@ class ProfilePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('About me:', style: Theme.of(context).textTheme.titleLarge),
+                  Text('About me:',
+                      style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 8),
                   Text.rich(
                       TextSpan(text: 'The ', children: [
                         TextSpan(
                             text: 'owlet_router',
-                            style: Theme.of(context).textTheme.bodyMedium?.apply(fontWeightDelta: 2)),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.apply(fontWeightDelta: 2)),
                         const TextSpan(
                             text:
                                 ' is a route manager, not a route itself. It utilizes the route builder to construct the router.')

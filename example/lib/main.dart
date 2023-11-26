@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:owlet_router/router.dart';
 
 void main() {
-  final NavigationService<MainRoute> navigatorServices = NavigationService<MainRoute>(
+  final NavigationService<MainRoute> navigatorServices =
+      NavigationService<MainRoute>(
     navigationKey: GlobalKey<NavigatorState>(),
     routeObservers: [],
     route: MainRoute(),
@@ -39,7 +40,9 @@ class MyApp extends StatelessWidget {
               iconColor: const Color(0xFF626262),
               selectedColor: const Color(0xFF626262)),
           elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.indigoAccent, foregroundColor: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.indigoAccent,
+                  foregroundColor: Colors.white)),
           textTheme: Typography.material2021().black.apply(
                 bodyColor: const Color(0xFF424242),
                 displayColor: const Color(0xFF424242),

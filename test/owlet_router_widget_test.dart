@@ -82,7 +82,8 @@ void main() {
 
       await widgetTester.pumpAndSettle();
 
-      expect(() => mainRoute.home.guard.pushNamed(args: 'cancelled'), prints('cancelled\n'),
+      expect(() => mainRoute.home.guard.pushNamed(args: 'cancelled'),
+          prints('cancelled\n'),
           reason: 'Check the route guard is running');
 
       mainRoute.home.guard.pushNamed(args: 'cancelled');
@@ -96,7 +97,8 @@ void main() {
       expect(executor(() async {
         final text = find.byType(Text).evaluate().single.widget as Text;
         return text.data;
-      }), completion('Splash'), reason: 'The route is cancelled by route guard');
+      }), completion('Splash'),
+          reason: 'The route is cancelled by route guard');
 
       mainRoute.home.guard.pushNamed();
       verifyNever(mockObserver.didPush(
@@ -109,7 +111,8 @@ void main() {
       expect(executor(() async {
         final text = find.byType(Text).evaluate().single.widget as Text;
         return text.data;
-      }), completion('RouteGuard'), reason: 'The route is allowed by route guard');
+      }), completion('RouteGuard'),
+          reason: 'The route is allowed by route guard');
 
       mainRoute.home.guard.pushNamed(args: 'redirect_named');
       verifyNever(mockObserver.didPush(
@@ -122,7 +125,8 @@ void main() {
       expect(executor(() async {
         final text = find.byType(Text).evaluate().single.widget as Text;
         return text.data;
-      }), completion('Page 1'), reason: 'The route is redirected by route guard');
+      }), completion('Page 1'),
+          reason: 'The route is redirected by route guard');
 
       mainRoute.home.guard.pushNamed(args: 'redirect_itself');
       verifyNever(mockObserver.didPush(
@@ -135,7 +139,8 @@ void main() {
       expect(executor(() async {
         final text = find.byType(Text).evaluate().single.widget as Text;
         return text.data;
-      }), completion('RouteGuard'), reason: 'The route is redirected by route guard');
+      }), completion('RouteGuard'),
+          reason: 'The route is redirected by route guard');
 
       mainRoute.home.guard.pushNamed(args: 'redirect_route');
       verifyNever(mockObserver.didPush(
@@ -148,7 +153,8 @@ void main() {
       expect(executor(() async {
         final text = find.byType(Text).evaluate().single.widget as Text;
         return text.data;
-      }), completion('Redirected'), reason: 'The route is redirected by route guard');
+      }), completion('Redirected'),
+          reason: 'The route is redirected by route guard');
     });
   });
 }

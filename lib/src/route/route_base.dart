@@ -26,7 +26,8 @@ class RouteBase extends RouteMixin {
   ///
   /// Create a new route segment by defining its path. The path must begin with a slash (/).
   RouteBase(this.segment)
-      : assert(segment.startsWith('/'), 'Segment must be start with / and without parameter or fragment') {
+      : assert(segment.startsWith('/'),
+            'Segment must be start with / and without parameter or fragment') {
     children.forEach(_apply);
   }
 
@@ -46,7 +47,8 @@ class RouteBase extends RouteMixin {
   /// Conversely, if [deepSearch] is set to true, the search encompasses all [NavigationService] instances within the context.
   /// In this scenario, the worst-case algorithm complexity becomes O(n * k),
   /// where n represents the average depth of the route tree and k represents the number of [NavigationService] layers.
-  static R? maybeOf<R extends RouteMixin>(BuildContext context, {bool useRoot = false, bool deepSearch = false}) {
+  static R? maybeOf<R extends RouteMixin>(BuildContext context,
+      {bool useRoot = false, bool deepSearch = false}) {
     final root = context.findRootAncestorStateOfType<NavigatorState>();
 
     if (useRoot) {
@@ -59,7 +61,8 @@ class RouteBase extends RouteMixin {
     } else {
       var findContext = context;
       do {
-        final navigator = findContext.findAncestorStateOfType<OwletNavigatorState>();
+        final navigator =
+            findContext.findAncestorStateOfType<OwletNavigatorState>();
         final result = navigator?.service.route.findType<R>();
         if (result != null) {
           return result;
@@ -83,9 +86,12 @@ class RouteBase extends RouteMixin {
   /// Conversely, if [deepSearch] is set to true, the search encompasses all [NavigationService] instances within the context.
   /// In this scenario, the worst-case algorithm complexity becomes O(n * k),
   /// where n represents the average depth of the route tree and k represents the number of [NavigationService] layers.
-  static R of<R extends RouteMixin>(BuildContext context, {bool useRoot = false, bool deepSearch = false}) {
-    final result = maybeOf<R>(context, useRoot: useRoot, deepSearch: deepSearch);
-    assert(result != null, 'No $R found, maybe it has not been injected in the Navigator');
+  static R of<R extends RouteMixin>(BuildContext context,
+      {bool useRoot = false, bool deepSearch = false}) {
+    final result =
+        maybeOf<R>(context, useRoot: useRoot, deepSearch: deepSearch);
+    assert(result != null,
+        'No $R found, maybe it has not been injected in the Navigator');
     return result!;
   }
 
@@ -113,7 +119,8 @@ class RouteBase extends RouteMixin {
   }
 
   @override
-  String argsPath(Map<String, Object?> args, {bool encode = false, String? fragment}) =>
+  String argsPath(Map<String, Object?> args,
+          {bool encode = false, String? fragment}) =>
       '$path${mapToQueryParameter(args, encode: encode, fragment: fragment)}';
 
   void _apply(RouteMixin child) {
@@ -132,7 +139,8 @@ class RouteBase extends RouteMixin {
   List<RouteMixin> get children => [];
 
   @override
-  bool isRoute(Route route) => route.settings.name?.let(Uri.tryParse)?.path == path;
+  bool isRoute(Route route) =>
+      route.settings.name?.let(Uri.tryParse)?.path == path;
 
   @override
   Uri get uri => Uri.parse(path);

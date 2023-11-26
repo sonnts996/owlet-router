@@ -32,7 +32,8 @@ class NestedRoute<R extends RouteBuilder> extends ProxyRoute<R>
   RouteSettings? _settings;
 
   @override
-  Route<Object?>? build(RouteSettings settings) => route.build(RouteGuardSettings(
+  Route<Object?>? build(RouteSettings settings) =>
+      route.build(RouteGuardSettings(
         name: settings.name,
         arguments: settings.arguments,
         routeGuard: (context, route) async {

@@ -22,7 +22,8 @@ class Documents extends StatelessWidget {
       return ListView(children: [
         Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text('Documents', style: Theme.of(context).textTheme.labelMedium)),
+            child: Text('Documents',
+                style: Theme.of(context).textTheme.labelMedium)),
         ListTile(
             leading: const Icon(Icons.directions, size: 20),
             title: const Text('Navigation Service'),
@@ -167,7 +168,8 @@ class DesktopDrawerDocument extends StatelessWidget {
                   textColor: Colors.white,
                   iconColor: Colors.white,
                   selectedColor: Colors.white),
-              textTheme: it.textTheme.apply(bodyColor: Colors.white, displayColor: Colors.white),
+              textTheme: it.textTheme
+                  .apply(bodyColor: Colors.white, displayColor: Colors.white),
               iconTheme: it.iconTheme.copyWith(color: Colors.white),
               dividerTheme: const DividerThemeData(color: Colors.white12)),
         ),
@@ -183,8 +185,11 @@ class DesktopDrawerDocument extends StatelessWidget {
                   fit: BoxFit.fitHeight,
                   color: Colors.white,
                 ),
-                title:
-                    Text('Owlet Router', style: Theme.of(context).textTheme.titleMedium?.apply(color: Colors.white))),
+                title: Text('Owlet Router',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.apply(color: Colors.white))),
             const SizedBox(height: 16),
             Container(
                 color: currentIndex == 1 ? Colors.indigoAccent : null,
