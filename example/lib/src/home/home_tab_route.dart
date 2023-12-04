@@ -2,45 +2,60 @@
  Created by Thanh Son on 06/11/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-import 'package:example/src/home/tabs/navigation_tab.dart';
-import 'package:example/src/home/tabs/route_tab.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:objectx/objectx.dart';
 import 'package:owlet_router/router.dart';
 
-import 'tabs/home_tab.dart';
+import 'domain/interfaces/metadata_interface.dart';
+import 'presentations/tabs/tab_widget.dart';
+
+final homeTabService = NavigationService(
+  navigationKey: GlobalKey(),
+  route: HomeTabRoute('/'),
+  initialRoute: '/',
+);
+
+class BreadCrumbItem {
+  BreadCrumbItem({
+    required this.route,
+    required this.label,
+    required this.onTab,
+  });
+
+  final Route route;
+  final String label;
+  final VoidCallback onTab;
+}
 
 class HomeTabRoute extends RouteBase {
   HomeTabRoute(super.segment);
 
-  final ValueNotifier<RouteSettings?> routeNotifier = ValueNotifier(null);
+  final ValueNotifier<Set<BreadCrumbItem>> breadCrumbNotifier = ValueNotifier({});
 
-  final homeTab = RouteGuard.awareExists(
-    route: MaterialRouteBuilder(
+  late final homePage = RouteGuard.awareExists<PageInterface, Object?>(
+    route: NoTransitionRouteBuilder(
       '/',
-      pageBuilder: (context, settings) => const HomeTab(),
+      pageBuilder: (context, settings) => TabWidget(page: null),
     ),
   );
 
-  late final navigationTab = RouteGuard.awareExists(
-      onRouteExists: (context, route) {
-        routeNotifier.value = route.settings;
-        return null;
+  late final tabPage = NestedRoute(
+    awareExists: false,
+    route: RouteGuard<PageInterface, Object?>(
+      routeGuard: (context, it, route) {
+        if (!service.history.isCurrentByName(route.settings.name ?? '')) {
+          Navigator.popUntil(context, (route) => route.isFirst);
+          return route;
+        }
+        return CancelledRoute();
       },
       route: NoTransitionRouteBuilder(
-        '/navigation-service',
-        pageBuilder: (context, settings) => const NavigationTab(),
-      ));
-
-  late final routeTab = RouteGuard.awareExists(
-      onRouteExists: (context, route) {
-        routeNotifier.value = route.settings;
-        return null;
-      },
-      route: NoTransitionRouteBuilder(
-        '/route',
-        pageBuilder: (context, settings) => const RouteTab(),
-      ));
+        '/t',
+        pageBuilder: (context, settings) => TabWidget(page: settings.arguments.castTo<PageInterface?>()),
+      ),
+    ),
+  );
 
   @override
-  List<RouteBase> get children => [homeTab, navigationTab, routeTab];
+  List<RouteBase> get children => [homePage, tabPage];
 }

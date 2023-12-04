@@ -4,6 +4,8 @@
 */
 import 'dart:math';
 
+import 'package:objectx/objectx.dart';
+
 int rowLength = 2;
 final rand = Random();
 
@@ -28,8 +30,7 @@ class TreeNode {
 
   Iterable<TreeNode> find(String value) {
     if (path == value) return [this];
-    return children.fold([],
-        (previousValue, element) => [...previousValue, ...element.find(value)]);
+    return children.fold([], (previousValue, element) => [...previousValue, ...element.find(value)]);
   }
 
   String get path {
@@ -79,8 +80,7 @@ void find(String name, TreeNode? Function() finder) {
   final start = DateTime.now();
   final node = finder();
   final end = DateTime.now();
-  print(
-      '$name run in microseconds: ${end.microsecondsSinceEpoch - start.microsecondsSinceEpoch}: ${node?.path}');
+  '${end.microsecondsSinceEpoch - start.microsecondsSinceEpoch}: ${node?.path}'.print(tag: '$name run in microseconds');
 }
 
 TreeNode? find1(TreeNode node, String value) {

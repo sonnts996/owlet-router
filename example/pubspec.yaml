@@ -1,5 +1,5 @@
 name: example
-description: A new Flutter project.
+description: The owlet_router document and example.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -42,6 +42,22 @@ dependencies:
   flutter_svg: ^2.0.9
   objectx: ^1.0.1
   google_fonts: ^6.1.0
+  dio: ^5.3.4
+  url_launcher: ^6.2.1
+  built_value: ^8.8.0
+  built_collection: ^5.1.1
+  fluid_kit: ^3.0.0
+  json_annotation: ^4.8.1
+  flutter_markdown: ^0.6.18+2
+  http: ^1.1.0
+  xml: ^6.3.0
+  cached_network_image: ^3.3.0
+  path: ^1.8.3
+  flutter_highlighter: ^0.1.1
+  markdown: ^7.1.1
+  get_it: ^7.6.4
+  injectable: ^2.3.2
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +69,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  build_runner: ^2.4.6
+  built_value_generator: ^8.8.0
+  owlet_lints: ^3.0.0
+  json_serializable: ^6.7.1
+  injectable_generator: ^2.4.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -68,6 +89,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - documents/
+    - documents/author/
+    - documents/home/
+    - documents/home/docs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

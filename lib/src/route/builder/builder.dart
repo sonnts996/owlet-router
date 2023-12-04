@@ -11,28 +11,20 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 import 'package:objectx/objectx.dart';
 
 import '../../../router.dart';
 
 part 'convert_to_no_transition_builder_mixin.dart';
-
 part 'cupertino_route_builder.dart';
-
 part 'material_route_builder.dart';
-
 part 'named_function_route_builder.dart';
-
 part 'nested_route.dart';
-
 part 'nested_service.dart';
-
 part 'no_transition_page_route.dart';
-
 part 'no_transition_route_builder.dart';
-
 part 'page_route_mixin.dart';
-
 part 'placeholder_route_builder.dart';
-
 part 'route_guard.dart';
+part 'route_notifier.dart';

@@ -57,14 +57,14 @@ class HomeRoute extends RouteBase {
 
   final action = NamedFunctionRouteBuilder(
     '/action',
-    callback: (context, route) => print('Hello World'),
+    callback: (context, route) => 'Hello World'.print(),
   );
 
   final guard = RouteGuard(
-      routeGuard: (context, route) {
+      routeGuard: (context, it, route) {
         if (route.settings.arguments is String) {
           if (route.settings.arguments == 'cancelled') {
-            print('cancelled');
+            ('cancelled').print();
             return CancelledRoute();
           } else if (route.settings.arguments == 'redirect_named') {
             return RedirectRoute('/home/page1');
@@ -78,8 +78,7 @@ class HomeRoute extends RouteBase {
         }
         return route;
       },
-      route: MaterialRouteBuilder('/guard',
-          pageBuilder: (context, settings) => TestApp(content: 'RouteGuard')));
+      route: MaterialRouteBuilder('/guard', pageBuilder: (context, settings) => TestApp(content: 'RouteGuard')));
 
   @override
   List<RouteBase> get children => [home, page1, page2, action, guard];

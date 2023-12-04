@@ -1,0 +1,135 @@
+{
+  "name": "Owlet Router",
+  "package": "owlet_router",
+  "lang": "Flutter",
+  "icon": "",
+  "repo": [
+    {
+      "label": "github",
+      "url": "",
+      "icon": ""
+    }
+  ],
+  "doc-languages": [
+    {
+      "lang": "en",
+      "label": "English"
+    }
+  ],
+  "home-page": {
+    "cover-image": "",
+    "menu-item": {
+      "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+      "label": "Home",
+      "segment": "/"
+    },
+    "data": [
+      {
+        "fragment": "#intro",
+        "title": "Intro",
+        "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+        "file": "assets/documents/home-intro.md"
+      },
+      {
+        "fragment": "#about-this-example",
+        "title": "About this example",
+        "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+        "file": "assets/documents/home-intro.md"
+      },
+      {
+        "fragment": "#troubleshoot",
+        "title": "Troubleshoot",
+        "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+        "file": "assets/documents/home-intro.md"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "cover-image": "",
+      "menu-item": {
+        "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+        "label": "Navigation Service",
+        "segment": "/navigation-service"
+      },
+      "data": [
+        {
+          "fragment": "#",
+          "title": "",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": "assets/documents/home-intro.md"
+        },
+        {
+          "fragment": "#owlet-navigator",
+          "title": "Owlet Navigator",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": "assets/documents/home-intro.md"
+        },
+        {
+          "fragment": "#history",
+          "title": "History",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": "assets/documents/home-intro.md"
+        },
+        {
+          "fragment": "#nested-navigator",
+          "title": "Nested Navigator",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": "assets/documents/home-intro.md"
+        }
+      ]
+    },
+    {
+      "cover-image": "",
+      "menu-item": {
+        "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+        "label": "Route",
+        "segment": "/route"
+      },
+      "data": [
+        {
+          "fragment": "#route",
+          "title": "Route Base",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": "assets/documents/home-intro.md"
+        },
+        {
+          "fragment": "#intro",
+          "title": "Route Builder",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": "assets/documents/home-intro.md"
+        },
+        {
+          "fragment": "#intro",
+          "title": "Proxy Route",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": "assets/documents/home-intro.md"
+        },
+        {
+          "fragment": "#intro",
+          "title": "Route Guard",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": "assets/documents/home-intro.md"
+        },
+        {
+          "fragment": "#intro",
+          "title": "Nested Route",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": "assets/documents/home-intro.md"
+        },
+        {
+          "fragment": "#intro",
+          "title": "Service Route",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": "assets/documents/home-intro.md"
+        },
+        {
+          "fragment": "#intro",
+          "title": "Named Function Route",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": "assets/documents/home-intro.md"
+        }
+      ]
+    }
+  ]
+}

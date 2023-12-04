@@ -20,4 +20,8 @@ extension RouteListOut on RouteMixin {
     list.sorted((a, b) => a.path.compareTo(b.path));
     return list;
   }
+
+  /// The function lists all the routes and their children, which are solely intended for the developer preview of router information.
+  @visibleForTesting
+  void printAll() => routesToString(listAll()).print();
 }

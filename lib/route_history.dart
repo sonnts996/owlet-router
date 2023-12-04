@@ -31,16 +31,28 @@ mixin RouteHistory on NavigatorObserver implements Listenable {
   /// The top of routes.
   Route get current => routes.last;
 
+  /// Return true if the [current] route has the path which is [routeName]
+  bool isCurrentByName(String routeName) {
+    final uri = Uri.tryParse(routeName);
+    if (uri == null) {
+      return false;
+    }
+    return current.settings.name?.let((it) => Uri.tryParse(it)?.path == uri.path) ?? false;
+  }
+
   /// Determine if any route in the list has a name matching [routeName]. This check excludes route parameters.
-  bool contains(String routeName) => routes.any((element) =>
-      element.settings.name?.let((it) => Uri.tryParse(it)?.path == routeName) ??
-      false);
+  bool containsName(String routeName) {
+    final uri = Uri.tryParse(routeName);
+    if (uri == null) {
+      return false;
+    }
+    return routes.any((element) => element.settings.name?.let((it) => Uri.tryParse(it)?.path == uri.path) ?? false);
+  }
 
   ///
   /// Find the route closest to the current route. If no matching route is found, return null.
   /// The [skipCurrent] parameter, when set to true, will exclude the current route from the search, even if it matches the specified criteria.
-  RouteIndex? nearest(bool Function(Route e) condition,
-      {bool skipCurrent = false}) {
+  RouteIndex? nearest(bool Function(Route e) condition, {bool skipCurrent = false}) {
     var i = 0;
     for (var r in routes.reversed) {
       if (skipCurrent && r == current) break;
@@ -53,6 +65,5 @@ mixin RouteHistory on NavigatorObserver implements Listenable {
   }
 
   @override
-  String toString() =>
-      '$runtimeType: ${routes.length} \n${routes.map((e) => '- ${e.settings}').join('\n')}';
+  String toString() => '$runtimeType: ${routes.length} \n${routes.map((e) => '- ${e.settings}').join('\n')}';
 }

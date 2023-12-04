@@ -25,23 +25,19 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: Center(
-          child: ShaderMask(
-        shaderCallback: (bounds) {
-          return const LinearGradient(
+  Widget build(BuildContext context) => Material(
+        child: Center(
+            child: ShaderMask(
+          shaderCallback: (bounds) => const LinearGradient(
             colors: [Color(0xFF6C89EE), Color(0xFF012FC5)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-          ).createShader(bounds);
-        },
-        child: SvgPicture.asset(
-          "assets/logo_owlet.svg",
-          height: 300,
-          fit: BoxFit.fitHeight,
-        ),
-      )),
-    );
-  }
+          ).createShader(bounds),
+          child: SvgPicture.asset(
+            'assets/logo_owlet.svg',
+            height: 300,
+            fit: BoxFit.fitHeight,
+          ),
+        )),
+      );
 }
