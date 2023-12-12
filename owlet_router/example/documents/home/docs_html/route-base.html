@@ -1,0 +1,15 @@
+<h2>5.1. Route builder</h2>
+<p>Think of <code>RouteBase</code> as a folder; it doesn't create anything, making it a non-launchable route. To
+create a page route, we use <code>RouteBuilder</code>, which is a launchable route.</p>
+<pre><code class="language-dart">final page1 = RouteBuilder(
+  '/page1',
+  builder: (settings) =&gt;
+      MaterialPageRoute(
+        settings: settings,
+        builder: (context) =&gt; Page1(arguments: settings.arguments),
+      ),
+);
+</code></pre>
+<p>The <code>RouteBuilder</code> allows you to customize your <code>PageRoute</code>, and we have created
+some <a href="#53-custom-routebuilder">custom</a> <code>RouteBuilder</code>. You can also customize your <code>PageRoute</code> by
+overriding the <code>RouteBuilder.builder</code> method.</p>
