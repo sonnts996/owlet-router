@@ -38,7 +38,6 @@ dependencies:
   owlet_router:
     path: ../
   collection: ^1.17.2
-  lorem_ipsum: ^0.0.3
   flutter_svg: ^2.0.9
   objectx: ^1.0.1
   google_fonts: ^6.1.0
@@ -48,13 +47,11 @@ dependencies:
   built_collection: ^5.1.1
   fluid_kit: ^3.0.0
   json_annotation: ^4.8.1
-  flutter_markdown: ^0.6.18+2
   http: ^1.1.0
   xml: ^6.3.0
   cached_network_image: ^3.3.0
   path: ^1.8.3
   flutter_highlighter: ^0.1.1
-  markdown: ^7.1.1
   get_it: ^7.6.4
   injectable: ^2.3.2
   provider: ^6.1.1
@@ -95,7 +92,6 @@ flutter:
     - documents/
     - documents/author/
     - documents/home/
-    - documents/home/docs/
     - documents/home/docs_html/
 
   # An image asset can refer to one or more resolution-specific "variants", see

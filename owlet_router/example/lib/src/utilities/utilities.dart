@@ -12,7 +12,7 @@ final bool isDesktopMode = mPlatform.mIsDesktopMode;
 
 final textTheme = GoogleFonts.robotoTextTheme();
 
-final codeTextTheme = GoogleFonts.robotoMono(height: 20, fontSize: 14);
+final codeTextTheme = GoogleFonts.robotoMono(height: 1.5, fontSize: 14);
 
 final codeTheme = githubTheme;
 

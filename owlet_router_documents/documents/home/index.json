@@ -1,0 +1,240 @@
+{
+  "name": "Owlet Router",
+  "package": "owlet_router",
+  "lang": "Flutter",
+  "icon": "assets/logo_owlet.svg",
+  "repo": [
+    {
+      "label": "github",
+      "url": "https://github.com/sonnts996/owlet-router",
+      "icon": "assets/github-mark.svg"
+    },
+    {
+      "label": "pub",
+      "url": "https://pub.dev/packages/owlet_router",
+      "icon": "assets/pub-dev-logo.svg"
+    }
+  ],
+  "doc-languages": [
+    {
+      "lang": "en",
+      "label": "English"
+    }
+  ],
+  "home-page": {
+    "cover-image": "assets/owlets_on_the_tree.jpg",
+    "cover-background": "0xFFEDE0CD",
+    "menu-item": {
+      "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+      "label": "Home",
+      "segment": "/"
+    },
+    "data": []
+  },
+  "pages": [
+    {
+      "cover-image": null,
+      "cover-background": null,
+      "menu-item": {
+        "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+        "label": "Intro",
+        "segment": "/intro"
+      },
+      "data": [
+        {
+          "fragment": "#",
+          "title": "Owlet Router",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#about-this-example",
+          "title": "About this Example",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#document-and-references",
+          "title": "Document and References",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        }
+      ]
+    },
+    {
+      "cover-image": null,
+      "cover-background": null,
+      "menu-item": {
+        "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+        "label": "Getting Started",
+        "segment": "/getting-stared"
+      },
+      "data": [
+        {
+          "fragment": "#environment",
+          "title": "Environment",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#import",
+          "title": "Import",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#Usage",
+          "title": "Usage",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        }
+      ]
+    },
+    {
+      "cover-image": null,
+      "cover-background": null,
+      "menu-item": {
+        "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+        "label": "Navigation Service",
+        "segment": "/navigation-service"
+      },
+      "data": [
+        {
+          "fragment": "#setup",
+          "title": "Setup",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#owlet-navigator",
+          "title": "Owlet Navigator",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#nested-navigator",
+          "title": "Nested Navigator",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#history",
+          "title": "History",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#unknown-route",
+          "title": "Unknown Route",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        }
+      ]
+    },
+    {
+      "cover-image": null,
+      "cover-background": null,
+      "menu-item": {
+        "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+        "label": "Finder & Provider",
+        "segment": "/finder-and-provider"
+      },
+      "data": [
+        {
+          "fragment": "#",
+          "title": "Route Finder",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#owlet-navigator",
+          "title": "Provider",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        }
+      ]
+    },
+    {
+      "cover-image": null,
+      "cover-background": null,
+      "menu-item": {
+        "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+        "label": "Route",
+        "segment": "/route"
+      },
+      "data": [
+        {
+          "fragment": "#route-base",
+          "title": "Route Base",
+          "icon": "icondata://icon?fontFamily=MaterialIcons&codePoint=0xf0561",
+          "file": "documents/home/docs_html/route-base.html"
+        },
+        {
+          "fragment": "#how-does-it-work",
+          "title": "How does it work?",
+          "icon": "icondata://icon?fontFamily=MaterialIcons&codePoint=0xe0a5",
+          "file": ""
+        },
+        {
+          "fragment": "#route-builder",
+          "title": "Route Builder",
+          "icon": "icondata://icon?fontFamily=MaterialIcons&codePoint=0xe0a5",
+          "file": ""
+        },
+        {
+          "fragment": "#proxy-route",
+          "title": "Proxy Route",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#route-guard",
+          "title": "Route Guard",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#nested-route",
+          "title": "Nested Route",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#service-route",
+          "title": "Service Route",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#named-function-route",
+          "title": "Named Function Route",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        }
+      ]
+    },
+    {
+      "cover-image": null,
+      "cover-background": null,
+      "menu-item": {
+        "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+        "label": "Optimize and Troubleshoot",
+        "segment": "/optimize-and-troubleshoot"
+      },
+      "data": [
+        {
+          "fragment": "#optimize",
+          "title": "Optimize",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        },
+        {
+          "fragment": "#troubleshoot",
+          "title": "Troubleshoot",
+          "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+          "file": ""
+        }
+      ]
+    }
+  ]
+}

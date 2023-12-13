@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../gen/injections.dart';
 import '../../../widgets/image_widget.dart';
+import '../../../widgets/page_not_found.dart';
 import '../../../widgets/responsive_layout.dart';
 import '../../domain/interfaces/metadata_interface.dart';
 import '../../domain/usecases/content_usecase.dart';
@@ -31,6 +32,9 @@ class TabWidget extends StatefulWidget {
 class _TabWidgetState extends State<TabWidget> {
   final ContentUseCase contentUseCase = getIt.get<ContentUseCase>();
 
+  final ScrollController _scrollController = ScrollController();
+  late final DocumentScrollToFragment _scrollToFragment = DocumentScrollToFragment(_scrollController);
+
   PageInterface? page;
   late final RouteNotifier routeNotifier;
 
@@ -40,15 +44,16 @@ class _TabWidgetState extends State<TabWidget> {
     if (widget.page != null) {
       page = widget.page!;
       SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        routeNotifier = RouteBase.of<HomeTabRoute>(context).homePage..addListener(listenRouteChange);
+        routeNotifier = RouteBase.of<HomeTabRoute>(context).tabPage..addListener(listenRouteChange);
+        Future.delayed(Duration(seconds: 1), listenRouteChange);
       });
     } else {
       SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        routeNotifier = RouteBase.of<HomeTabRoute>(context).tabPage..addListener(listenRouteChange);
-
+        routeNotifier = RouteBase.of<HomeTabRoute>(context).homePage..addListener(listenRouteChange);
         setState(() {
           page = Provider.of<PageInterface>(context, listen: false);
         });
+        Future.delayed(Duration(seconds: 1), listenRouteChange);
       });
     }
   }
@@ -59,28 +64,38 @@ class _TabWidgetState extends State<TabWidget> {
     super.dispose();
   }
 
-  void listenRouteChange() {}
+  void listenRouteChange() {
+    final fragment = routeNotifier.settings?.fragment;
+    if (fragment != null) {
+      _scrollToFragment.scrollTo('#$fragment');
+    }
+  }
 
   @override
   Widget build(BuildContext context) => ResponsiveLayout(
-        builder: (context, mode, child) => Scaffold(
-            body: NestedScrollView(
-                headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                      HomeAppBar(
-                        coverImage: page?.coverImage,
-                        coverBackground: page?.coverBackground,
-                      )
-                    ],
-                body: child!)),
-        child: Document(
-          docs: page?.data.toList() ?? [],
-          getContent: contentUseCase,
-        ),
-      );
+      builder: (context, mode, child) => Scaffold(
+          body: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                    TabAppBar(
+                      coverImage: page?.coverImage,
+                      coverBackground: page?.coverBackground,
+                    )
+                  ],
+              body: child!)),
+      child: page?.file?.let(
+            (it) => Document(
+              file: it,
+              label: page?.label.label ?? '',
+              getContent: contentUseCase,
+              controller: _scrollController,
+              documentScrollToFragment: _scrollToFragment,
+            ),
+          ) ??
+          PageNotFound());
 }
 
-class HomeAppBar extends StatelessWidget {
-  const HomeAppBar({
+class TabAppBar extends StatelessWidget {
+  const TabAppBar({
     super.key,
     this.coverImage,
     this.coverBackground,

@@ -8,15 +8,13 @@ part of 'metadata_model.dart';
 
 Serializers _$_serializers = (new Serializers().toBuilder()
       ..add(DocLanguageModel.serializer)
-      ..add(DocumentMetaDataModel.serializer)
       ..add(MenuItemModel.serializer)
       ..add(MetaDataModel.serializer)
       ..add(PageModel.serializer)
       ..add(RepoMetaDataModel.serializer)
       ..addBuilderFactory(
-          const FullType(
-              BuiltList, const [const FullType(DocumentMetaDataModel)]),
-          () => new ListBuilder<DocumentMetaDataModel>())
+          const FullType(BuiltList, const [const FullType(MenuItemModel)]),
+          () => new ListBuilder<MenuItemModel>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(RepoMetaDataModel)]),
           () => new ListBuilder<RepoMetaDataModel>())
@@ -36,8 +34,6 @@ Serializer<DocLanguageModel> _$docLanguageModelSerializer =
 Serializer<PageModel> _$pageModelSerializer = new _$PageModelSerializer();
 Serializer<MenuItemModel> _$menuItemModelSerializer =
     new _$MenuItemModelSerializer();
-Serializer<DocumentMetaDataModel> _$documentMetaDataModelSerializer =
-    new _$DocumentMetaDataModelSerializer();
 
 class _$MetaDataModelSerializer implements StructuredSerializer<MetaDataModel> {
   @override
@@ -247,13 +243,13 @@ class _$PageModelSerializer implements StructuredSerializer<PageModel> {
   Iterable<Object?> serialize(Serializers serializers, PageModel object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object?>[
-      'menu-item',
-      serializers.serialize(object.menuItem,
+      'menu-label',
+      serializers.serialize(object.label,
           specifiedType: const FullType(MenuItemModel)),
-      'data',
-      serializers.serialize(object.data,
-          specifiedType: const FullType(
-              BuiltList, const [const FullType(DocumentMetaDataModel)])),
+      'menu-items',
+      serializers.serialize(object.items,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(MenuItemModel)])),
     ];
     Object? value;
     value = object.coverImage;
@@ -267,6 +263,13 @@ class _$PageModelSerializer implements StructuredSerializer<PageModel> {
     if (value != null) {
       result
         ..add('cover-background')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.file;
+    if (value != null) {
+      result
+        ..add('file')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
@@ -292,15 +295,19 @@ class _$PageModelSerializer implements StructuredSerializer<PageModel> {
           result.coverBackground = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
-        case 'menu-item':
-          result.menuItem.replace(serializers.deserialize(value,
+        case 'menu-label':
+          result.label.replace(serializers.deserialize(value,
               specifiedType: const FullType(MenuItemModel))! as MenuItemModel);
           break;
-        case 'data':
-          result.data.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BuiltList, const [
-                const FullType(DocumentMetaDataModel)
-              ]))! as BuiltList<Object?>);
+        case 'menu-items':
+          result.items.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(MenuItemModel)]))!
+              as BuiltList<Object?>);
+          break;
+        case 'file':
+          result.file = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
           break;
       }
     }
@@ -326,6 +333,9 @@ class _$MenuItemModelSerializer implements StructuredSerializer<MenuItemModel> {
           specifiedType: const FullType(String)),
       'segment',
       serializers.serialize(object.segment,
+          specifiedType: const FullType(String)),
+      'fragment',
+      serializers.serialize(object.fragment,
           specifiedType: const FullType(String)),
     ];
 
@@ -356,69 +366,8 @@ class _$MenuItemModelSerializer implements StructuredSerializer<MenuItemModel> {
           result.segment = serializers.deserialize(value,
               specifiedType: const FullType(String))! as String;
           break;
-      }
-    }
-
-    return result.build();
-  }
-}
-
-class _$DocumentMetaDataModelSerializer
-    implements StructuredSerializer<DocumentMetaDataModel> {
-  @override
-  final Iterable<Type> types = const [
-    DocumentMetaDataModel,
-    _$DocumentMetaDataModel
-  ];
-  @override
-  final String wireName = 'DocumentMetaDataModel';
-
-  @override
-  Iterable<Object?> serialize(
-      Serializers serializers, DocumentMetaDataModel object,
-      {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object?>[
-      'fragment',
-      serializers.serialize(object.fragment,
-          specifiedType: const FullType(String)),
-      'title',
-      serializers.serialize(object.title,
-          specifiedType: const FullType(String)),
-      'icon',
-      serializers.serialize(object.icon, specifiedType: const FullType(String)),
-      'file',
-      serializers.serialize(object.file, specifiedType: const FullType(String)),
-    ];
-
-    return result;
-  }
-
-  @override
-  DocumentMetaDataModel deserialize(
-      Serializers serializers, Iterable<Object?> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    final result = new DocumentMetaDataModelBuilder();
-
-    final iterator = serialized.iterator;
-    while (iterator.moveNext()) {
-      final key = iterator.current! as String;
-      iterator.moveNext();
-      final Object? value = iterator.current;
-      switch (key) {
         case 'fragment':
           result.fragment = serializers.deserialize(value,
-              specifiedType: const FullType(String))! as String;
-          break;
-        case 'title':
-          result.title = serializers.deserialize(value,
-              specifiedType: const FullType(String))! as String;
-          break;
-        case 'icon':
-          result.icon = serializers.deserialize(value,
-              specifiedType: const FullType(String))! as String;
-          break;
-        case 'file':
-          result.file = serializers.deserialize(value,
               specifiedType: const FullType(String))! as String;
           break;
       }
@@ -852,9 +801,11 @@ class _$PageModel extends PageModel {
   @override
   final String? coverBackground;
   @override
-  final MenuItemModel menuItem;
+  final MenuItemModel label;
   @override
-  final BuiltList<DocumentMetaDataModel> data;
+  final BuiltList<MenuItemModel> items;
+  @override
+  final String? file;
 
   factory _$PageModel([void Function(PageModelBuilder)? updates]) =>
       (new PageModelBuilder()..update(updates))._build();
@@ -862,11 +813,12 @@ class _$PageModel extends PageModel {
   _$PageModel._(
       {this.coverImage,
       this.coverBackground,
-      required this.menuItem,
-      required this.data})
+      required this.label,
+      required this.items,
+      this.file})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(menuItem, r'PageModel', 'menuItem');
-    BuiltValueNullFieldError.checkNotNull(data, r'PageModel', 'data');
+    BuiltValueNullFieldError.checkNotNull(label, r'PageModel', 'label');
+    BuiltValueNullFieldError.checkNotNull(items, r'PageModel', 'items');
   }
 
   @override
@@ -882,8 +834,9 @@ class _$PageModel extends PageModel {
     return other is PageModel &&
         coverImage == other.coverImage &&
         coverBackground == other.coverBackground &&
-        menuItem == other.menuItem &&
-        data == other.data;
+        label == other.label &&
+        items == other.items &&
+        file == other.file;
   }
 
   @override
@@ -891,8 +844,9 @@ class _$PageModel extends PageModel {
     var _$hash = 0;
     _$hash = $jc(_$hash, coverImage.hashCode);
     _$hash = $jc(_$hash, coverBackground.hashCode);
-    _$hash = $jc(_$hash, menuItem.hashCode);
-    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jc(_$hash, label.hashCode);
+    _$hash = $jc(_$hash, items.hashCode);
+    _$hash = $jc(_$hash, file.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -902,8 +856,9 @@ class _$PageModel extends PageModel {
     return (newBuiltValueToStringHelper(r'PageModel')
           ..add('coverImage', coverImage)
           ..add('coverBackground', coverBackground)
-          ..add('menuItem', menuItem)
-          ..add('data', data))
+          ..add('label', label)
+          ..add('items', items)
+          ..add('file', file))
         .toString();
   }
 }
@@ -920,25 +875,32 @@ class PageModelBuilder implements Builder<PageModel, PageModelBuilder> {
   set coverBackground(String? coverBackground) =>
       _$this._coverBackground = coverBackground;
 
-  MenuItemModelBuilder? _menuItem;
-  MenuItemModelBuilder get menuItem =>
-      _$this._menuItem ??= new MenuItemModelBuilder();
-  set menuItem(MenuItemModelBuilder? menuItem) => _$this._menuItem = menuItem;
+  MenuItemModelBuilder? _label;
+  MenuItemModelBuilder get label =>
+      _$this._label ??= new MenuItemModelBuilder();
+  set label(MenuItemModelBuilder? label) => _$this._label = label;
 
-  ListBuilder<DocumentMetaDataModel>? _data;
-  ListBuilder<DocumentMetaDataModel> get data =>
-      _$this._data ??= new ListBuilder<DocumentMetaDataModel>();
-  set data(ListBuilder<DocumentMetaDataModel>? data) => _$this._data = data;
+  ListBuilder<MenuItemModel>? _items;
+  ListBuilder<MenuItemModel> get items =>
+      _$this._items ??= new ListBuilder<MenuItemModel>();
+  set items(ListBuilder<MenuItemModel>? items) => _$this._items = items;
 
-  PageModelBuilder();
+  String? _file;
+  String? get file => _$this._file;
+  set file(String? file) => _$this._file = file;
+
+  PageModelBuilder() {
+    PageModel._defaultValue(this);
+  }
 
   PageModelBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
       _coverImage = $v.coverImage;
       _coverBackground = $v.coverBackground;
-      _menuItem = $v.menuItem.toBuilder();
-      _data = $v.data.toBuilder();
+      _label = $v.label.toBuilder();
+      _items = $v.items.toBuilder();
+      _file = $v.file;
       _$v = null;
     }
     return this;
@@ -965,15 +927,16 @@ class PageModelBuilder implements Builder<PageModel, PageModelBuilder> {
           new _$PageModel._(
               coverImage: coverImage,
               coverBackground: coverBackground,
-              menuItem: menuItem.build(),
-              data: data.build());
+              label: label.build(),
+              items: items.build(),
+              file: file);
     } catch (_) {
       late String _$failedField;
       try {
-        _$failedField = 'menuItem';
-        menuItem.build();
-        _$failedField = 'data';
-        data.build();
+        _$failedField = 'label';
+        label.build();
+        _$failedField = 'items';
+        items.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'PageModel', _$failedField, e.toString());
@@ -992,16 +955,23 @@ class _$MenuItemModel extends MenuItemModel {
   final String label;
   @override
   final String segment;
+  @override
+  final String fragment;
 
   factory _$MenuItemModel([void Function(MenuItemModelBuilder)? updates]) =>
       (new MenuItemModelBuilder()..update(updates))._build();
 
   _$MenuItemModel._(
-      {required this.icon, required this.label, required this.segment})
+      {required this.icon,
+      required this.label,
+      required this.segment,
+      required this.fragment})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(icon, r'MenuItemModel', 'icon');
     BuiltValueNullFieldError.checkNotNull(label, r'MenuItemModel', 'label');
     BuiltValueNullFieldError.checkNotNull(segment, r'MenuItemModel', 'segment');
+    BuiltValueNullFieldError.checkNotNull(
+        fragment, r'MenuItemModel', 'fragment');
   }
 
   @override
@@ -1017,7 +987,8 @@ class _$MenuItemModel extends MenuItemModel {
     return other is MenuItemModel &&
         icon == other.icon &&
         label == other.label &&
-        segment == other.segment;
+        segment == other.segment &&
+        fragment == other.fragment;
   }
 
   @override
@@ -1026,6 +997,7 @@ class _$MenuItemModel extends MenuItemModel {
     _$hash = $jc(_$hash, icon.hashCode);
     _$hash = $jc(_$hash, label.hashCode);
     _$hash = $jc(_$hash, segment.hashCode);
+    _$hash = $jc(_$hash, fragment.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -1035,7 +1007,8 @@ class _$MenuItemModel extends MenuItemModel {
     return (newBuiltValueToStringHelper(r'MenuItemModel')
           ..add('icon', icon)
           ..add('label', label)
-          ..add('segment', segment))
+          ..add('segment', segment)
+          ..add('fragment', fragment))
         .toString();
   }
 }
@@ -1056,7 +1029,13 @@ class MenuItemModelBuilder
   String? get segment => _$this._segment;
   set segment(String? segment) => _$this._segment = segment;
 
-  MenuItemModelBuilder();
+  String? _fragment;
+  String? get fragment => _$this._fragment;
+  set fragment(String? fragment) => _$this._fragment = fragment;
+
+  MenuItemModelBuilder() {
+    MenuItemModel._defaultValue(this);
+  }
 
   MenuItemModelBuilder get _$this {
     final $v = _$v;
@@ -1064,6 +1043,7 @@ class MenuItemModelBuilder
       _icon = $v.icon;
       _label = $v.label;
       _segment = $v.segment;
+      _fragment = $v.fragment;
       _$v = null;
     }
     return this;
@@ -1091,142 +1071,9 @@ class MenuItemModelBuilder
             label: BuiltValueNullFieldError.checkNotNull(
                 label, r'MenuItemModel', 'label'),
             segment: BuiltValueNullFieldError.checkNotNull(
-                segment, r'MenuItemModel', 'segment'));
-    replace(_$result);
-    return _$result;
-  }
-}
-
-class _$DocumentMetaDataModel extends DocumentMetaDataModel {
-  @override
-  final String fragment;
-  @override
-  final String title;
-  @override
-  final String icon;
-  @override
-  final String file;
-
-  factory _$DocumentMetaDataModel(
-          [void Function(DocumentMetaDataModelBuilder)? updates]) =>
-      (new DocumentMetaDataModelBuilder()..update(updates))._build();
-
-  _$DocumentMetaDataModel._(
-      {required this.fragment,
-      required this.title,
-      required this.icon,
-      required this.file})
-      : super._() {
-    BuiltValueNullFieldError.checkNotNull(
-        fragment, r'DocumentMetaDataModel', 'fragment');
-    BuiltValueNullFieldError.checkNotNull(
-        title, r'DocumentMetaDataModel', 'title');
-    BuiltValueNullFieldError.checkNotNull(
-        icon, r'DocumentMetaDataModel', 'icon');
-    BuiltValueNullFieldError.checkNotNull(
-        file, r'DocumentMetaDataModel', 'file');
-  }
-
-  @override
-  DocumentMetaDataModel rebuild(
-          void Function(DocumentMetaDataModelBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
-
-  @override
-  DocumentMetaDataModelBuilder toBuilder() =>
-      new DocumentMetaDataModelBuilder()..replace(this);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    return other is DocumentMetaDataModel &&
-        fragment == other.fragment &&
-        title == other.title &&
-        icon == other.icon &&
-        file == other.file;
-  }
-
-  @override
-  int get hashCode {
-    var _$hash = 0;
-    _$hash = $jc(_$hash, fragment.hashCode);
-    _$hash = $jc(_$hash, title.hashCode);
-    _$hash = $jc(_$hash, icon.hashCode);
-    _$hash = $jc(_$hash, file.hashCode);
-    _$hash = $jf(_$hash);
-    return _$hash;
-  }
-
-  @override
-  String toString() {
-    return (newBuiltValueToStringHelper(r'DocumentMetaDataModel')
-          ..add('fragment', fragment)
-          ..add('title', title)
-          ..add('icon', icon)
-          ..add('file', file))
-        .toString();
-  }
-}
-
-class DocumentMetaDataModelBuilder
-    implements Builder<DocumentMetaDataModel, DocumentMetaDataModelBuilder> {
-  _$DocumentMetaDataModel? _$v;
-
-  String? _fragment;
-  String? get fragment => _$this._fragment;
-  set fragment(String? fragment) => _$this._fragment = fragment;
-
-  String? _title;
-  String? get title => _$this._title;
-  set title(String? title) => _$this._title = title;
-
-  String? _icon;
-  String? get icon => _$this._icon;
-  set icon(String? icon) => _$this._icon = icon;
-
-  String? _file;
-  String? get file => _$this._file;
-  set file(String? file) => _$this._file = file;
-
-  DocumentMetaDataModelBuilder();
-
-  DocumentMetaDataModelBuilder get _$this {
-    final $v = _$v;
-    if ($v != null) {
-      _fragment = $v.fragment;
-      _title = $v.title;
-      _icon = $v.icon;
-      _file = $v.file;
-      _$v = null;
-    }
-    return this;
-  }
-
-  @override
-  void replace(DocumentMetaDataModel other) {
-    ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$DocumentMetaDataModel;
-  }
-
-  @override
-  void update(void Function(DocumentMetaDataModelBuilder)? updates) {
-    if (updates != null) updates(this);
-  }
-
-  @override
-  DocumentMetaDataModel build() => _build();
-
-  _$DocumentMetaDataModel _build() {
-    final _$result = _$v ??
-        new _$DocumentMetaDataModel._(
+                segment, r'MenuItemModel', 'segment'),
             fragment: BuiltValueNullFieldError.checkNotNull(
-                fragment, r'DocumentMetaDataModel', 'fragment'),
-            title: BuiltValueNullFieldError.checkNotNull(
-                title, r'DocumentMetaDataModel', 'title'),
-            icon: BuiltValueNullFieldError.checkNotNull(
-                icon, r'DocumentMetaDataModel', 'icon'),
-            file: BuiltValueNullFieldError.checkNotNull(
-                file, r'DocumentMetaDataModel', 'file'));
+                fragment, r'MenuItemModel', 'fragment'));
     replace(_$result);
     return _$result;
   }

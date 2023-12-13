@@ -24,25 +24,25 @@ class ContentList extends StatelessWidget {
         ...metaData.pages.fold([], (previousValue, element) {
           final list = [
             ListTile(
-                leading: IconWidget(iconUrl: element.menuItem.icon, size: 20),
-                title: Text(element.menuItem.label),
+                leading: IconWidget(iconUrl: element.label.icon, size: 20),
+                title: Text(element.label.label),
                 onTap: () {
-                  onTab(element.menuItem.segment, element);
+                  onTab(element.label.segment, element);
                 }),
-            ...element.data.where((e) => e.title.isNotEmpty).map(
+            ...element.items.where((e) => e.label.isNotEmpty).map(
                   (e) => Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: ListTile(
                       leading: SizedBox(width: 20, child: Icon(Icons.circle_outlined, size: 6)),
                       minLeadingWidth: 10,
-                      title: Text(e.title),
+                      title: Text(e.label),
                       onTap: () {
-                        onTab('${element.menuItem.segment}${e.fragment}', element);
+                        onTab('${element.label.segment}${e.fragment}', element);
                       },
                     ),
                   ),
                 ),
-            if (element.data.isNotEmpty) const Divider(),
+            if (element.items.isNotEmpty) const Divider(),
           ];
           return [...previousValue, ...list];
         }).toList(),

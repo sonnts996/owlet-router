@@ -39,9 +39,11 @@ abstract class PageInterface {
 
   String? get coverBackground;
 
-  MenuItemInterface get menuItem;
+  MenuItemInterface get label;
 
-  Iterable<DocumentMetaDataInterface> get data;
+  Iterable<MenuItemInterface> get items;
+
+  String? get file;
 }
 
 abstract class MenuItemInterface {
@@ -50,14 +52,6 @@ abstract class MenuItemInterface {
   String get label;
 
   String get segment;
-}
 
-abstract class DocumentMetaDataInterface {
   String get fragment;
-
-  String get title;
-
-  String get icon;
-
-  String get file;
 }

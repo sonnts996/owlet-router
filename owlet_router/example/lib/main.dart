@@ -5,19 +5,22 @@ import 'package:owlet_router/router.dart';
 import 'gen/injections.dart';
 import 'main_routes.dart';
 import 'src/utilities/utilities.dart';
+import 'src/widgets/page_not_found.dart';
 import 'src/widgets/responsive_layout.dart';
 
 void main() {
   configureDependencies();
 
   final navigatorServices = NavigationService<MainRoute>(
-    navigationKey: GlobalKey<NavigatorState>(),
-    routeObservers: [],
-    route: MainRoute(),
-    initialRoute: '/',
-    finder: DefaultRouteFinder.cache(trailingSlash: true),
-    unknownRoute: owletDefaultUnknownRoute,
-  );
+      navigationKey: GlobalKey<NavigatorState>(),
+      routeObservers: [],
+      route: MainRoute(),
+      initialRoute: '/',
+      finder: DefaultRouteFinder.cache(trailingSlash: true),
+      unknownRoute: RouteBuilder('/page-route-found',
+          builder: (settings) => MaterialPageRoute(
+                builder: (context) => PageNotFound(),
+              )));
 
   if (kDebugMode) {
     /// Print all routes in your service.

@@ -51,21 +51,15 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     routeNamedMap['/'] = 'Home';
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      tabService.history.addListener(onTabChanged);
       tabService.route.tabPage.addListener(onUrlChanged);
     });
   }
 
   @override
   void dispose() {
-    tabService.history.removeListener(onTabChanged);
     tabService.route.tabPage.removeListener(onUrlChanged);
 
     super.dispose();
-  }
-
-  void onTabChanged() {
-    (tabService.history).print(tag: 'history');
   }
 
   void onUrlChanged() {
@@ -190,7 +184,7 @@ class _HomePageState extends State<HomePage> {
     scaffoldKey.currentState?.closeDrawer();
     Navigator.of(context, rootNavigator: true).pushNamed('/home/t$name', arguments: page);
     setState(() {
-      routeNamedMap['/t${Uri.parse(name).path}'] = page.menuItem.label;
+      routeNamedMap['/t${Uri.parse(name).path}'] = page.label.label;
     });
   }
 }

@@ -3,84 +3,212 @@
  Copyright (c) 2023 . All rights reserved.
 */
 
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_highlighter/flutter_highlighter.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../utilities/utilities.dart';
-import '../../domain/interfaces/metadata_interface.dart';
+import '../../../widgets/image_widget.dart';
 
-class Document extends StatelessWidget {
+class DocumentScrollToFragment {
+  DocumentScrollToFragment(this.scrollController);
+
+  final ScrollController scrollController;
+  final HashMap<String, GlobalKey> _keys = HashMap();
+
+  void appendKey(String fragment, GlobalKey key) {
+    _keys[fragment] = key;
+  }
+
+  void scrollTo(String fragment) {
+    assert(fragment.startsWith('#'), 'Fragment must be start with "#". Example: #fragment-to-widget');
+    final key = _keys[fragment];
+    if (key != null) {
+      scrollController.animateTo(widgetPositionOnViewport(key),
+          duration: Duration(seconds: 1), curve: Curves.easeInOut);
+    }
+  }
+
+  double widgetPositionOnViewport(GlobalKey key) {
+    var box = key.currentContext?.findRenderObject() as RenderBox?;
+    final gPos = box?.localToGlobal(Offset.zero) ?? Offset.zero;
+    return scrollController.position.pixels + gPos.dy - (8 + kToolbarHeight);
+  }
+}
+
+class Document extends StatefulWidget {
   Document({
     super.key,
-    this.docs = const [],
+    required this.file,
+    this.label = '',
     required this.getContent,
+    required this.documentScrollToFragment,
+    required this.controller,
   });
 
-  final List<DocumentMetaDataInterface> docs;
+  final String file;
+  final String label;
   final Future<String> Function(String file) getContent;
+  final DocumentScrollToFragment documentScrollToFragment;
+  final ScrollController controller;
 
   @override
-  Widget build(BuildContext context) => ListView.separated(
-        separatorBuilder: (context, index) => SizedBox(height: 8),
-        itemCount: docs.length,
-        itemBuilder: (context, index) {
-          final doc = docs[index];
-          return FutureBuilder<String>(
-              future: getContent(doc.file),
-              builder: (context, snapshot) => Html(
-                    data: snapshot.data ?? doc.title,
-                    shrinkWrap: true,
-                    onLinkTap: (url, attributes, element) {
-                      if (url != null) {
-                        launchUrlString(url);
-                      }
+  State<Document> createState() => _DocumentState();
+}
+
+class _DocumentState extends State<Document> {
+  void onClickedLink(String? value) {
+    if (value != null && (value.startsWith('http://') || value.startsWith('https://'))) {
+      launchUrlString(value);
+    } else if (value != null && value.startsWith('#')) {
+      widget.documentScrollToFragment.scrollTo(value);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<String>(
+      future: widget.getContent(widget.file),
+      builder: (context, snapshot) => SingleChildScrollView(
+            controller: widget.controller,
+            physics: ClampingScrollPhysics(),
+            child: Html(
+              data: snapshot.data ?? widget.label,
+              shrinkWrap: true,
+              style: {
+                'p > code': Style(backgroundColor: Color(0xFFe1e1e1)),
+                'p': Style.fromTextStyle(Theme.of(context).textTheme.bodyMedium!.apply(heightDelta: 0.8)),
+              },
+              extensions: [
+                TagExtension(
+                  tagsToExtend: {'h1'},
+                  builder: (extensionContext) => AnchorWidget(
+                    onClickedLink: onClickedLink,
+                    text: extensionContext.element?.text.trim() ?? '',
+                    level: 'h1',
+                    onGenerateKey: widget.documentScrollToFragment.appendKey,
+                  ),
+                ),
+                TagExtension(
+                  tagsToExtend: {'h2'},
+                  builder: (extensionContext) => AnchorWidget(
+                    onClickedLink: onClickedLink,
+                    text: extensionContext.element?.text.trim() ?? '',
+                    level: 'h2',
+                    onGenerateKey: widget.documentScrollToFragment.appendKey,
+                  ),
+                ),
+                TagExtension(
+                  tagsToExtend: {'h3'},
+                  builder: (extensionContext) => AnchorWidget(
+                    onClickedLink: onClickedLink,
+                    text: extensionContext.element?.text.trim() ?? '',
+                    level: 'h3',
+                    onGenerateKey: widget.documentScrollToFragment.appendKey,
+                  ),
+                ),
+                TagExtension(
+                  tagsToExtend: {'a'},
+                  builder: (extensionContext) => TextButton(
+                    child: Text(extensionContext.element?.text.trim() ?? ''),
+                    onPressed: () {
+                      onClickedLink(extensionContext.attributes['href']);
                     },
-                    extensions: [
-                      ImageExtension(),
-                      TagExtension(
-                          tagsToExtend: {'pre'},
-                          builder: (extensionContext) => Container(
-                                clipBehavior: Clip.antiAlias,
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  ),
+                ),
+                TagExtension(
+                  tagsToExtend: {'img'},
+                  builder: (extensionContext) =>
+                      ImageWidget(imageUrl: extensionContext.attributes['src'] ?? '', width: 300),
+                ),
+                TagExtension(
+                    tagsToExtend: {'pre'},
+                    builder: (extensionContext) => Container(
+                          clipBehavior: Clip.antiAlias,
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Color(0xfff8f8f8),
+                              border: Border.all(color: Theme.of(context).dividerColor)),
+                          child: HighlightView(
+                            extensionContext.element?.text.trim() ?? '',
+                            language: 'dart',
+                            theme: codeTheme,
+                            textStyle: codeTextTheme,
+                          ),
+                        )),
+                TagExtension(
+                    tagsToExtend: {'code'},
+                    builder: (extensionContext) => Transform.translate(
+                          offset: Offset(0, 1),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 4),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
-                                    color: Color(0xfff8f8f8),
-                                    border: Border.all(color: Theme.of(context).dividerColor)),
-                                child: HighlightView(
-                                  extensionContext.element?.text.trim() ?? '',
-                                  language: 'dart',
-                                  theme: codeTheme,
-                                  textStyle: codeTextTheme,
-                                ),
+                                    color: extensionContext.style?.backgroundColor),
+                                child: Text(extensionContext.element?.text.trim() ?? '',
+                                    style: Theme.of(context).textTheme.bodyMedium),
                               )),
-                      TagExtension(
-                          tagsToExtend: {'code'},
-                          builder: (extensionContext) => Transform.translate(
-                                offset: Offset(0, 1),
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 4),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(8),
-                                          color: extensionContext.style?.backgroundColor),
-                                      child: Text(extensionContext.element?.text.trim() ?? '',
-                                          style: Theme.of(context).textTheme.bodyMedium),
-                                    )),
-                              )),
-                    ],
-                    style: {
-                      'a': Style.fromTextStyle(TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        decoration: TextDecoration.none,
-                      )),
-                      'p > code': Style(backgroundColor: Color(0xFFe1e1e1)),
-                      'p': Style.fromTextStyle(Theme.of(context).textTheme.bodyMedium!.apply(heightDelta: 0.8)),
-                    },
-                  ));
-        },
-      );
+                        )),
+              ],
+            ),
+          ));
+}
+
+class AnchorWidget extends StatelessWidget {
+  const AnchorWidget({
+    super.key,
+    required this.onClickedLink,
+    this.text = '',
+    this.level = '',
+    required this.onGenerateKey,
+  });
+
+  final String text;
+  final String level;
+  final ValueChanged<String?> onClickedLink;
+  final void Function(String value, GlobalKey key) onGenerateKey;
+
+  String get anchorText =>
+      '#${text.replaceAll(RegExp(r'[^\w\d ]+'), '').replaceAll(RegExp(r"\s+"), "-").toLowerCase()}';
+
+  TextStyle? style(BuildContext context) {
+    switch (level) {
+      case 'h1':
+        return Theme.of(context).textTheme.headlineMedium;
+      case 'h2':
+        return Theme.of(context).textTheme.headlineSmall;
+      case 'h3':
+        return Theme.of(context).textTheme.titleLarge;
+    }
+    return Theme.of(context).textTheme.headlineMedium;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final key = GlobalKey();
+    onGenerateKey(anchorText, key);
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          key: key,
+          children: [
+            TextButton(
+              child: Text('#', style: style(context)?.apply(color: Theme.of(context).dividerColor)),
+              onPressed: () {
+                onClickedLink(anchorText);
+              },
+            ),
+            Expanded(child: Text(text, style: style(context))),
+          ]),
+    );
+  }
 }

@@ -11,15 +11,7 @@ import '../../domain/interfaces/metadata_interface.dart';
 
 part 'metadata_model.g.dart';
 
-@SerializersFor([
-  MetaDataModel,
-  RepoMetaDataModel,
-  DocLanguageModel,
-  PageModel,
-  MenuItemModel,
-  DocumentMetaDataModel,
-  MenuItemInterface
-])
+@SerializersFor([MetaDataModel, RepoMetaDataModel, DocLanguageModel, PageModel, MenuItemModel, MenuItemInterface])
 final Serializers _serializers = (_$_serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
 
 abstract class MetaDataModel implements MetaDataInterface, Built<MetaDataModel, MetaDataModelBuilder> {
@@ -82,6 +74,9 @@ abstract class PageModel implements PageInterface, Built<PageModel, PageModelBui
 
   const PageModel._();
 
+  @BuiltValueHook(initializeBuilder: true)
+  static void _defaultValue(PageModelBuilder update) => update.items = ListBuilder();
+
   @BuiltValueField(wireName: 'cover-image')
   @override
   String? get coverImage;
@@ -90,12 +85,13 @@ abstract class PageModel implements PageInterface, Built<PageModel, PageModelBui
   @override
   String? get coverBackground;
 
-  @BuiltValueField(wireName: 'menu-item')
+  @BuiltValueField(wireName: 'menu-label')
   @override
-  MenuItemModel get menuItem;
+  MenuItemModel get label;
 
+  @BuiltValueField(wireName: 'menu-items')
   @override
-  BuiltList<DocumentMetaDataModel> get data;
+  BuiltList<MenuItemModel> get items;
 
   static PageModel fromJson(Map<String, dynamic> json) => _serializers.deserializeWith(PageModel.serializer, json)!;
 
@@ -109,25 +105,15 @@ abstract class MenuItemModel implements MenuItemInterface, Built<MenuItemModel, 
 
   const MenuItemModel._();
 
+  @BuiltValueHook(initializeBuilder: true)
+  static void _defaultValue(MenuItemModelBuilder update) => update
+    ..fragment = ''
+    ..segment = '';
+
   static MenuItemModel fromJson(Map<String, dynamic> json) =>
       _serializers.deserializeWith(MenuItemModel.serializer, json)!;
 
   Map<String, dynamic> toJson() => _serializers.serializeWith(MenuItemModel.serializer, this) as Map<String, dynamic>;
 
   static Serializer<MenuItemModel> get serializer => _$menuItemModelSerializer;
-}
-
-abstract class DocumentMetaDataModel
-    implements DocumentMetaDataInterface, Built<DocumentMetaDataModel, DocumentMetaDataModelBuilder> {
-  factory DocumentMetaDataModel([void Function(DocumentMetaDataModelBuilder) updates]) = _$DocumentMetaDataModel;
-
-  const DocumentMetaDataModel._();
-
-  static DocumentMetaDataModel fromJson(Map<String, dynamic> json) =>
-      _serializers.deserializeWith(DocumentMetaDataModel.serializer, json)!;
-
-  Map<String, dynamic> toJson() =>
-      _serializers.serializeWith(DocumentMetaDataModel.serializer, this) as Map<String, dynamic>;
-
-  static Serializer<DocumentMetaDataModel> get serializer => _$documentMetaDataModelSerializer;
 }
