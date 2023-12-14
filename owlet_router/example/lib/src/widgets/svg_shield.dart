@@ -10,8 +10,8 @@ import 'package:xml/xml.dart';
 
 class SvgShield extends StatefulWidget {
   const SvgShield({
-    super.key,
     required this.shieldUrl,
+    super.key,
     this.newFontSize = '12',
     this.onTab,
   });
@@ -55,10 +55,9 @@ class _SvgShieldState extends State<SvgShield> {
         future: _repairSvg(),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
-            return GestureDetector(
-                onTap: widget.onTab, child: SvgPicture.string(snapshot.data!));
+            return GestureDetector(onTap: widget.onTab, child: SvgPicture.string(snapshot.data!));
           }
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         },
       );
 }

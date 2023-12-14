@@ -4,14 +4,13 @@
  Created by Thanh Son on 03/11/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-part of route_builder;
+part of 'builder.dart';
 
 ///
 /// Construct a route with the [CupertinoPageRoute].
 /// The [RouteBuilder] class also defines the parameter type ([A]) and the result type ([T]) of the route.
 /// However, in certain scenarios, the parameter verification mechanism may fail to function properly.
-class CupertinoRouteBuilder<A extends Object?, T extends Object?>
-    extends RouteBuilder<A, T>
+class CupertinoRouteBuilder<A extends Object?, T extends Object?> extends RouteBuilder<A, T>
     with PageRouteMixin, ConvertToNoTransitionBuilderMixin<A, T> {
   ///
   /// Create the [CupertinoRouteBuilder] with [CupertinoPageRoute] options.
@@ -41,13 +40,14 @@ class CupertinoRouteBuilder<A extends Object?, T extends Object?>
   final String? title;
 
   @override
-  Route<T>? build(RouteSettings settings) =>
-      pageBuilder?.let((it) => CupertinoPageRoute<T>(
-            builder: (context) => it(context, settings),
-            allowSnapshotting: allowSnapshotting,
-            maintainState: maintainState,
-            fullscreenDialog: fullscreenDialog,
-            settings: settings,
-            title: title,
-          ));
+  Route<T>? build(RouteSettings settings) => pageBuilder?.let(
+        (it) => CupertinoPageRoute<T>(
+          builder: (context) => it(context, settings),
+          allowSnapshotting: allowSnapshotting,
+          maintainState: maintainState,
+          fullscreenDialog: fullscreenDialog,
+          settings: settings,
+          title: title,
+        ),
+      );
 }

@@ -11,7 +11,9 @@ void main() {
       expect(RouteBase('/this-is-a-route').path, '/this-is-a-route');
       expect(() => RouteBase('/this-is-a-route?id=123'), throwsAssertionError);
       expect(
-          () => RouteBase('/this-is-a-route#fragment'), throwsAssertionError);
+        () => RouteBase('/this-is-a-route#fragment'),
+        throwsAssertionError,
+      );
       expect(() => RouteBase('this-is-a-route'), throwsAssertionError);
     });
   });
@@ -27,11 +29,12 @@ void main() {
     });
 
     final navigationService = NavigationService(
-        navigationKey: GlobalKey(),
-        routeObservers: [],
-        initialRoute: '/',
-        route: mainRoute,
-        unknownRoute: mainRoute.routeNotFound);
+      navigationKey: GlobalKey(),
+      routeObservers: [],
+      initialRoute: '/',
+      route: mainRoute,
+      unknownRoute: mainRoute.routeNotFound,
+    );
 
     /// Print all accepted routes
     navigationService.route.listAll().print();
@@ -60,12 +63,13 @@ void main() {
   group('Navigation without trailing splash', () {
     final mainRoute = MainRoute();
     final navigationService = NavigationService(
-        navigationKey: GlobalKey(),
-        routeObservers: [],
-        initialRoute: '/',
-        finder: DefaultRouteFinder(trailingSlash: false),
-        route: mainRoute,
-        unknownRoute: mainRoute.routeNotFound);
+      navigationKey: GlobalKey(),
+      routeObservers: [],
+      initialRoute: '/',
+      finder: DefaultRouteFinder(trailingSlash: false),
+      route: mainRoute,
+      unknownRoute: mainRoute.routeNotFound,
+    );
 
     test('find route', () {
       expect(navigationService.findRoute('/'), mainRoute.splash);

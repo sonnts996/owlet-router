@@ -3,7 +3,7 @@
  Copyright (c) 2023 . All rights reserved.
 */
 
-part of router_services;
+part of 'router_services.dart';
 
 ///
 /// Implementation of advanced navigation features for the [Navigator], including route guards and named route builders.
@@ -40,10 +40,7 @@ class OwletNavigator extends Navigator {
   }) : super(
           key: service.navigationKey,
           initialRoute: service.initialRoute,
-          observers: <NavigatorObserver>[
-            service.history,
-            ...service.routeObservers
-          ],
+          observers: <NavigatorObserver>[service.history, ...service.routeObservers],
           onGenerateRoute: service.onGenerateRoute,
           onPopPage: service.onPopPage,
           onUnknownRoute: service.onUnknownRoute,
@@ -56,6 +53,12 @@ class OwletNavigator extends Navigator {
 
   @override
   NavigatorState createState() => OwletNavigatorState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<NavigationService<RouteMixin>>('service', service));
+  }
 }
 
 ///
@@ -66,23 +69,19 @@ class OwletNavigatorState extends NavigatorState {
   NavigationService get service => (widget as OwletNavigator).service;
 
   Future<T?> _namedFunction<T extends Object?>(Route<T> route) async =>
-      route.settings
-          .castTo<NamedFunctionRouteSettings<T>?>()
-          ?.callback
-          .call(context, route);
+      route.settings.castTo<NamedFunctionRouteSettings<T>?>()?.callback.call(context, route);
 
   Future<T?> _routeGuard<T extends Object?>(
-      Route<T> route,
-      Future<Object?> Function(Route<Object?> finalRoute) callback,
-      Future<Object?> Function(RouteSettings settings) redirect) async {
+    Route<T> route,
+    Future<Object?> Function(Route<Object?> finalRoute) callback,
+    Future<Object?> Function(RouteSettings settings) redirect,
+  ) async {
     final setting = route.settings.castTo<RouteGuardSettings?>();
     if (setting?.routeGuard != null) {
-      final finalRoute =
-          await setting?.routeGuard?.call(context, route) ?? route;
+      final finalRoute = await setting?.routeGuard?.call(context, route) ?? route;
       if (finalRoute is CancelledRoute<T>) {
         return finalRoute.value;
-      } else if (finalRoute is RedirectRoute &&
-          finalRoute.settings.name != null) {
+      } else if (finalRoute is RedirectRoute && finalRoute.settings.name != null) {
         final result = await redirect(finalRoute.settings);
         return result.castTo<T?>();
       } else {
@@ -95,12 +94,9 @@ class OwletNavigatorState extends NavigatorState {
   }
 
   bool _isSameRoute(Route originRoute, Route finalRoute) =>
-      finalRoute == originRoute ||
-      (finalRoute.settings.name?.let((it) => it == originRoute.settings.name) ??
-          false);
+      finalRoute == originRoute || (finalRoute.settings.name?.let((it) => it == originRoute.settings.name) ?? false);
 
-  bool _isSameName(Route originRoute, String name) =>
-      originRoute.settings.name?.let((it) => it == name) ?? false;
+  bool _isSameName(Route originRoute, String name) => originRoute.settings.name?.let((it) => it == name) ?? false;
 
   ///
   /// This function also works with [pushNamed], [popAndPushNamed].
@@ -130,28 +126,22 @@ class OwletNavigatorState extends NavigatorState {
   ///
   /// This function also works with [pushReplacementNamed].
   @override
-  Future<T?> pushReplacement<T extends Object?, TO extends Object?>(
-      Route<T> newRoute,
-      {TO? result}) async {
+  Future<T?> pushReplacement<T extends Object?, TO extends Object?>(Route<T> newRoute, {TO? result}) async {
     if (newRoute.settings is RouteGuardSettings) {
       return _routeGuard(
         newRoute,
         (finalRoute) {
           if (_isSameRoute(newRoute, finalRoute)) {
-            return super
-                .pushReplacement<Object?, Object?>(finalRoute, result: result);
+            return super.pushReplacement<Object?, Object?>(finalRoute, result: result);
           } else {
-            return pushReplacement<Object?, Object?>(finalRoute,
-                result: result);
+            return pushReplacement<Object?, Object?>(finalRoute, result: result);
           }
         },
         (settings) {
           if (_isSameName(newRoute, settings.name!)) {
-            return super.pushReplacementNamed(settings.name!,
-                arguments: settings.arguments, result: result);
+            return super.pushReplacementNamed(settings.name!, arguments: settings.arguments, result: result);
           } else {
-            return pushReplacementNamed(settings.name!,
-                arguments: settings.arguments, result: result);
+            return pushReplacementNamed(settings.name!, arguments: settings.arguments, result: result);
           }
         },
       );
@@ -162,8 +152,7 @@ class OwletNavigatorState extends NavigatorState {
   ///
   /// This function also works with [pushNamedAndRemoveUntil].
   @override
-  Future<T?> pushAndRemoveUntil<T extends Object?>(
-      Route<T> newRoute, RoutePredicate predicate) async {
+  Future<T?> pushAndRemoveUntil<T extends Object?>(Route<T> newRoute, RoutePredicate predicate) async {
     if (newRoute.settings is RouteGuardSettings) {
       return _routeGuard(
         newRoute,
@@ -184,5 +173,11 @@ class OwletNavigatorState extends NavigatorState {
       );
     }
     return super.pushAndRemoveUntil(newRoute, predicate);
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<NavigationService<RouteMixin>>('service', service));
   }
 }

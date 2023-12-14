@@ -11,9 +11,9 @@ import '../../domain/interfaces/metadata_interface.dart';
 
 class ContentList extends StatelessWidget {
   const ContentList({
-    super.key,
     required this.onTab,
     required this.metaData,
+    super.key,
     this.currentPath,
     this.currentFragment,
   });
@@ -38,13 +38,10 @@ class ContentList extends StatelessWidget {
                   (e) => Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: ListTile(
-                      leading: SizedBox(
-                          width: 20,
-                          child: Icon(Icons.circle_outlined, size: 6)),
+                      leading: const SizedBox(width: 20, child: Icon(Icons.circle_outlined, size: 6)),
                       minLeadingWidth: 10,
                       title: Text(e.label),
-                      selected: '/t${element.label.segment}' == currentPath &&
-                          e.fragment == currentFragment,
+                      selected: '/t${element.label.segment}' == currentPath && e.fragment == currentFragment,
                       onTap: () {
                         onTab('${element.label.segment}${e.fragment}', element);
                       },
@@ -54,18 +51,18 @@ class ContentList extends StatelessWidget {
             if (element.items.isNotEmpty) const Divider(),
           ];
           return [...previousValue, ...list];
-        }).toList(),
+        }),
       ]);
 }
 
 class DesktopDrawer extends StatelessWidget {
   const DesktopDrawer({
-    super.key,
     required this.onDocumentTab,
     required this.onNavigateTab,
+    required this.metaData,
+    super.key,
     this.currentPath,
     this.currentFragment,
-    required this.metaData,
   });
 
   final void Function(String name, PageInterface page) onDocumentTab;
@@ -78,7 +75,7 @@ class DesktopDrawer extends StatelessWidget {
   Widget build(BuildContext context) => SafeArea(
         child: Container(
           width: 300,
-          padding: EdgeInsets.only(left: 8, right: 16),
+          padding: const EdgeInsets.only(left: 8, right: 16),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -96,10 +93,8 @@ class DesktopDrawer extends StatelessWidget {
                   title: const Text('Author'),
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8, bottom: 0, right: 16, top: 16),
-                    child: Text('Documents',
-                        style: Theme.of(context).textTheme.labelMedium)),
+                    padding: const EdgeInsets.only(left: 8, bottom: 0, right: 16, top: 16),
+                    child: Text('Documents', style: Theme.of(context).textTheme.labelMedium)),
                 const Divider(),
                 Expanded(
                     child: ContentList(
@@ -108,7 +103,7 @@ class DesktopDrawer extends StatelessWidget {
                   currentFragment: currentFragment,
                   currentPath: currentPath,
                 )),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
               ]),
         ),
       );

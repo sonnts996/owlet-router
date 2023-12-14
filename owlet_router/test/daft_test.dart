@@ -2,12 +2,9 @@
  Created by Thanh Son on 13/11/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-import 'dart:math';
-
 import 'package:objectx/objectx.dart';
 
 int rowLength = 2;
-final rand = Random();
 
 TreeNode generate(int depth, int index) {
   if (depth == 0) {
@@ -30,8 +27,10 @@ class TreeNode {
 
   Iterable<TreeNode> find(String value) {
     if (path == value) return [this];
-    return children.fold([],
-        (previousValue, element) => [...previousValue, ...element.find(value)]);
+    return children.fold(
+      [],
+      (previousValue, element) => [...previousValue, ...element.find(value)],
+    );
   }
 
   String get path {
@@ -60,16 +59,15 @@ class TreeNode {
       str = '$spacing└── $value\n';
     }
     final buffer = StringBuffer(str);
-    for (var e in children) {
-      buffer.write(e.toString());
-    }
+    children.forEach(buffer.write);
+
     return buffer.toString();
   }
 }
 
 void main() {
   final tree = generate(10, 1);
-  final value = '/10-1/9-1/8-1/7-1/6-1/5-1/4-1/3-1/2-1/1-0/0-1';
+  const value = '/10-1/9-1/8-1/7-1/6-1/5-1/4-1/3-1/2-1/1-0/0-1';
   find('recursive', () => find1(tree, value));
   find('BFS', () => find2(tree, value));
   find('DFS', () => find3(tree, value));
@@ -81,15 +79,14 @@ void find(String name, TreeNode? Function() finder) {
   final start = DateTime.now();
   final node = finder();
   final end = DateTime.now();
-  '${end.microsecondsSinceEpoch - start.microsecondsSinceEpoch}: ${node?.path}'
-      .print(tag: '$name run in microseconds');
+  '${end.microsecondsSinceEpoch - start.microsecondsSinceEpoch}: ${node?.path}'.print(tag: '$name run in microseconds');
 }
 
 TreeNode? find1(TreeNode node, String value) {
   if (node.path == value) {
     return node;
   } else {
-    for (var e in node.children) {
+    for (final e in node.children) {
       final result = find1(e, value);
       if (result != null) return result;
     }
@@ -104,9 +101,7 @@ TreeNode? find2(TreeNode root, String value) {
     if (node.path == value) {
       return node;
     }
-    for (var child in node.children) {
-      queue.add(child);
-    }
+    node.children.forEach(queue.add);
   }
   return null;
 }
@@ -118,9 +113,7 @@ TreeNode? find3(TreeNode root, String value) {
     if (node.path == value) {
       return node;
     }
-    for (var child in node.children) {
-      queue.add(child);
-    }
+    node.children.forEach(queue.add);
   }
   return null;
 }
@@ -132,7 +125,7 @@ TreeNode? find4(TreeNode root, String value) {
     if (node.path == value) {
       return node;
     }
-    for (var child in node.children) {
+    for (final child in node.children) {
       if (value.startsWith(child.path)) {
         queue.add(child);
       }

@@ -19,7 +19,7 @@ void main() {
       finder: DefaultRouteFinder.cache(trailingSlash: true),
       unknownRoute: RouteBuilder('/page-route-found',
           builder: (settings) => MaterialPageRoute(
-                builder: (context) => PageNotFound(),
+                builder: (context) => const PageNotFound(),
               )));
 
   if (kDebugMode) {
@@ -30,7 +30,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.service});
+  const MyApp({required this.service, super.key});
 
   final NavigationService service;
 
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
             useMaterial3: true,
             scaffoldBackgroundColor: const Color(0xFFf5f5f5),
-            dividerColor: Color(0xFFaaaaaa),
+            dividerColor: const Color(0xFFaaaaaa),
             appBarTheme: AppBarTheme(
                 elevation: 0,
                 shadowColor: Colors.black54,
@@ -56,19 +56,14 @@ class MyApp extends StatelessWidget {
                 iconColor: const Color(0xFF626262),
                 selectedColor: Colors.indigoAccent,
                 selectedTileColor: Colors.indigo.shade50,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8))),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
             elevatedButtonTheme: ElevatedButtonThemeData(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigoAccent,
-                    foregroundColor: Colors.white)),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.indigoAccent, foregroundColor: Colors.white)),
             textButtonTheme: TextButtonThemeData(
                 style: TextButton.styleFrom(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     minimumSize: const Size(50, 20),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(2)))),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)))),
             textTheme: textTheme.apply(
               bodyColor: const Color(0xFF424242),
               displayColor: const Color(0xFF424242),
@@ -76,8 +71,7 @@ class MyApp extends StatelessWidget {
             iconTheme: const IconThemeData(color: Color(0xFF424242))),
 
         /// Inject the service config into your app
-        routerConfig:
-            service.buildRouterConfig(reportsRouteUpdateToEngine: true),
+        routerConfig: service.buildRouterConfig(reportsRouteUpdateToEngine: true),
         builder: (context, child) => ResponsiveLayoutWatcher(child: child!),
       );
 }

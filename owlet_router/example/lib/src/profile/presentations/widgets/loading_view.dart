@@ -11,8 +11,7 @@ class LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar:
-            AppBar(title: const Text('Author'), leading: const LeadingIcon()),
-        body: Center(child: CircularProgressIndicator()),
+        appBar: AppBar(title: const Text('Author'), leading: const LeadingIcon()),
+        body: const Center(child: CircularProgressIndicator()),
       );
 }

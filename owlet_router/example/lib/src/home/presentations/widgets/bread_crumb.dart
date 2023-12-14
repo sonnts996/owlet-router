@@ -22,9 +22,9 @@ class BreadCrumbItem {
 
 class BreadCrumbWidget extends StatefulWidget {
   const BreadCrumbWidget({
-    super.key,
     required this.service,
     required this.routeNamedMap,
+    super.key,
   });
 
   final NavigationService service;
@@ -54,13 +54,11 @@ class _BreadCrumbWidgetState extends State<BreadCrumbWidget> {
     final history = widget.service.history;
     setState(() {
       breadCrumb.clear();
-      for (var e in history.routes) {
+      for (final e in history.routes) {
         breadCrumb.add(
           BreadCrumbItem(
               route: e,
-              label:
-                  widget.routeNamedMap[Uri.parse(e.settings.name ?? '').path] ??
-                      '.',
+              label: widget.routeNamedMap[Uri.parse(e.settings.name ?? '').path] ?? '.',
               onTab: () {
                 widget.service.popUntil((route) => compareRouteName(route, e));
               }),
@@ -73,14 +71,13 @@ class _BreadCrumbWidgetState extends State<BreadCrumbWidget> {
   Widget build(BuildContext context) => ListView.separated(
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final item = breadCrumb.elementAt(index);
         return itemBuilder(item.onTab, item.label);
       },
-      separatorBuilder: (context, index) => Icon(Icons.chevron_right),
+      separatorBuilder: (context, index) => const Icon(Icons.chevron_right),
       itemCount: breadCrumb.length);
 
-  Widget itemBuilder(VoidCallback onPressed, String title) =>
-      TextButton(onPressed: onPressed, child: Text(title));
+  Widget itemBuilder(VoidCallback onPressed, String title) => TextButton(onPressed: onPressed, child: Text(title));
 }

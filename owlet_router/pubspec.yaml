@@ -17,7 +17,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  owlet_lints: ^3.0.0
+  owlet_lints: ^4.0.0
   mockito: ^5.4.2
   built_value_generator: ^8.6.3
   build_runner: ^2.4.6

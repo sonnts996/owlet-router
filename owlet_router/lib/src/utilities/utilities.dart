@@ -20,13 +20,12 @@ final owletDefaultUnknownRoute = MaterialRouteBuilder(
 
 ///
 /// Build a blank page.
-Widget owletDefaultPlaceholder(context, settings) => Material();
+Widget owletDefaultPlaceholder(BuildContext context, RouteSettings settings) => const Material();
 
 ///
 /// Constructs the URI's query parameters from a Map<String, Object?>.
 /// When the encoding flag is set to true, the parameters are encoded using the URI encoder.
-String mapToQueryParameter(Map<String, Object?> args,
-    {bool encode = false, String? fragment}) {
+String mapToQueryParameter(Map<String, Object?> args, {bool encode = false, String? fragment}) {
   String encodeValue(Object a) {
     if (encode) {
       return Uri.encodeComponent(a.toString());
@@ -40,7 +39,7 @@ String mapToQueryParameter(Map<String, Object?> args,
     query.write('#${encodeValue(it)}');
   });
   query.write('?');
-  for (var i in args.keys) {
+  for (final i in args.keys) {
     final obj = args[i];
     if (obj == null) continue;
     if (query.isNotEmpty) {
@@ -57,7 +56,6 @@ String routesToString(Iterable<RouteMixin> list) {
   if (list.isEmpty) return 'Empty routes.';
   final max = (maxBy(list, (p0) => p0.path.length)?.path.length ?? 0) + 1;
   return list
-      .map((e) =>
-          '${e.path.padRight(max)}: ${e.runtimeType}(canLaunch: ${e.canLaunch}, isCallback: ${e.isCallback})')
+      .map((e) => '${e.path.padRight(max)}: ${e.runtimeType}(canLaunch: ${e.canLaunch}, isCallback: ${e.isCallback})')
       .join('\n');
 }

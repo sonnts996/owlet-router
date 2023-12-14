@@ -2,7 +2,7 @@
  Created by Thanh Son on 31/10/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-part of router_services;
+part of 'router_services.dart';
 
 ///
 /// The finder uses the A* search algorithm to find the route that matches the path.
@@ -38,23 +38,19 @@ class DefaultRouteFinder extends RouteFinderDelegate {
   RouteMixin? find(RouteMixin root, String path) {
     final uri = Uri.parse(path);
     final firstPath = uri.path;
-    final secondPath = firstPath.endsWith('/')
-        ? firstPath.substring(0, uri.path.length - 1)
-        : '$firstPath/';
+    final secondPath = firstPath.endsWith('/') ? firstPath.substring(0, uri.path.length - 1) : '$firstPath/';
 
     final queue = <RouteMixin>[root];
     while (queue.isNotEmpty) {
       final node = queue.removeAt(0);
       if (node.canLaunch) {
-        if (node.path == firstPath ||
-            (trailingSlash && node.path == secondPath)) {
+        if (node.path == firstPath || (trailingSlash && node.path == secondPath)) {
           return node;
         }
       }
 
       for (final e in node.children) {
-        if (firstPath.startsWith(e.path) ||
-            (trailingSlash && secondPath.startsWith(e.path))) {
+        if (firstPath.startsWith(e.path) || (trailingSlash && secondPath.startsWith(e.path))) {
           if (e is NestedRoute) {
             return e;
           }

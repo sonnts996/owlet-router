@@ -26,30 +26,29 @@ class DocumentScrollToFragment {
   }
 
   void scrollTo(String fragment) {
-    assert(fragment.startsWith('#'),
-        'Fragment must be start with "#". Example: #fragment-to-widget');
+    assert(fragment.startsWith('#'), 'Fragment must be start with "#". Example: #fragment-to-widget');
     final key = _keys[fragment];
     if (key != null) {
       scrollController.animateTo(widgetPositionOnViewport(key),
-          duration: Duration(seconds: 1), curve: Curves.easeInOut);
+          duration: const Duration(seconds: 1), curve: Curves.easeInOut);
     }
   }
 
   double widgetPositionOnViewport(GlobalKey key) {
-    var box = key.currentContext?.findRenderObject() as RenderBox?;
+    final box = key.currentContext?.findRenderObject() as RenderBox?;
     final gPos = box?.localToGlobal(Offset.zero) ?? Offset.zero;
     return scrollController.position.pixels + gPos.dy - (8 + kToolbarHeight);
   }
 }
 
 class Document extends StatefulWidget {
-  Document({
-    super.key,
+  const Document({
     required this.file,
-    this.label = '',
     required this.getContent,
     required this.documentScrollToFragment,
     required this.controller,
+    super.key,
+    this.label = '',
   });
 
   final String file;
@@ -64,8 +63,7 @@ class Document extends StatefulWidget {
 
 class _DocumentState extends State<Document> {
   void onClickedLink(String? value) {
-    if (value != null &&
-        (value.startsWith('http://') || value.startsWith('https://'))) {
+    if (value != null && (value.startsWith('http://') || value.startsWith('https://'))) {
       launchUrlString(value);
     } else if (value != null && value.startsWith('#')) {
       widget.documentScrollToFragment.scrollTo(value);
@@ -77,16 +75,13 @@ class _DocumentState extends State<Document> {
       future: widget.getContent(widget.file),
       builder: (context, snapshot) => SingleChildScrollView(
             controller: widget.controller,
-            physics: ClampingScrollPhysics(),
+            physics: const ClampingScrollPhysics(),
             child: Html(
               data: snapshot.data ?? widget.label,
               shrinkWrap: true,
               style: {
-                'p > code': Style(backgroundColor: Color(0xFFe1e1e1)),
-                'p': Style.fromTextStyle(Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .apply(heightDelta: 0.8)),
+                'p > code': Style(backgroundColor: const Color(0xFFe1e1e1)),
+                'p': Style.fromTextStyle(Theme.of(context).textTheme.bodyMedium!.apply(heightDelta: 0.8)),
               },
               extensions: [
                 TagExtension(
@@ -130,14 +125,10 @@ class _DocumentState extends State<Document> {
                           padding: const EdgeInsets.symmetric(horizontal: 2),
                           child: GestureDetector(
                               onTap: () => onClickedLink(href),
-                              child: (url?.startsWith(
-                                          'https://img.shields.io') ==
-                                      true)
+                              child: (url?.startsWith('https://img.shields.io') ?? false)
                                   ? SvgShield(shieldUrl: url!)
                                   : ImageWidget(
-                                      imageUrl:
-                                          extensionContext.attributes['src'] ??
-                                              '',
+                                      imageUrl: extensionContext.attributes['src'] ?? '',
                                       width: width,
                                       height: height)),
                         );
@@ -146,8 +137,7 @@ class _DocumentState extends State<Document> {
                     return Text.rich(
                       WidgetSpan(
                           child: TextButton(
-                        child:
-                            Text(extensionContext.element?.text.trim() ?? ''),
+                        child: Text(extensionContext.element?.text.trim() ?? ''),
                         onPressed: () => onClickedLink(href),
                       )),
                     );
@@ -159,12 +149,8 @@ class _DocumentState extends State<Document> {
                     decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.primaryContainer,
                         border: Border(
-                            left: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer,
-                                width: 5))),
-                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+                            left: BorderSide(color: Theme.of(context).colorScheme.onPrimaryContainer, width: 5))),
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
                     child: child,
                   ),
                 ),
@@ -181,13 +167,11 @@ class _DocumentState extends State<Document> {
                     builder: (extensionContext) => Container(
                           clipBehavior: Clip.antiAlias,
                           alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
-                              color: Color(0xfff8f8f8),
-                              border: Border.all(
-                                  color: Theme.of(context).dividerColor)),
+                              color: const Color(0xfff8f8f8),
+                              border: Border.all(color: Theme.of(context).dividerColor)),
                           child: HighlightView(
                             extensionContext.element?.text.trim() ?? '',
                             language: 'dart',
@@ -198,19 +182,16 @@ class _DocumentState extends State<Document> {
                 TagExtension(
                     tagsToExtend: {'code'},
                     builder: (extensionContext) => Transform.translate(
-                          offset: Offset(0, 1),
+                          offset: const Offset(0, 1),
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 4),
+                                padding: const EdgeInsets.symmetric(horizontal: 4),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
-                                    color: extensionContext
-                                        .style?.backgroundColor),
-                                child: Text(
-                                    extensionContext.element?.text.trim() ?? '',
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium),
+                                    color: extensionContext.style?.backgroundColor),
+                                child: Text(extensionContext.element?.text.trim() ?? '',
+                                    style: Theme.of(context).textTheme.bodyMedium),
                               )),
                         )),
               ],
@@ -220,11 +201,11 @@ class _DocumentState extends State<Document> {
 
 class AnchorWidget extends StatelessWidget {
   const AnchorWidget({
-    super.key,
     required this.onClickedLink,
+    required this.onGenerateKey,
+    super.key,
     this.text = '',
     this.level = '',
-    required this.onGenerateKey,
   });
 
   final String text;
@@ -260,9 +241,7 @@ class AnchorWidget extends StatelessWidget {
           key: key,
           children: [
             TextButton(
-              child: Text('#',
-                  style: style(context)
-                      ?.apply(color: Theme.of(context).dividerColor)),
+              child: Text('#', style: style(context)?.apply(color: Theme.of(context).dividerColor)),
               onPressed: () {
                 onClickedLink(anchorText);
               },

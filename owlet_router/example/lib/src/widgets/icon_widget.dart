@@ -25,9 +25,9 @@ class IconDataFromUri extends IconData {
 
   const IconDataFromUri._(
     super.codePoint, {
+    required this.iconUrl,
     super.fontFamily,
     super.fontPackage,
-    required this.iconUrl,
   });
 
   final String iconUrl;
@@ -36,6 +36,7 @@ class IconDataFromUri extends IconData {
 class IconWidget extends StatelessWidget {
   const IconWidget({
     required this.iconUrl,
+    super.key,
     this.size = 24,
   });
 
@@ -56,18 +57,15 @@ class IconWidget extends StatelessWidget {
             uri.toString(),
             height: size,
             width: size,
-            placeholderBuilder: (context) =>
-                Placeholder(fallbackHeight: size, fallbackWidth: size),
+            placeholderBuilder: (context) => Placeholder(fallbackHeight: size, fallbackWidth: size),
           );
         } else {
           return CachedNetworkImage(
             imageUrl: uri.toString(),
             width: size,
             height: size,
-            placeholder: (context, url) =>
-                Placeholder(fallbackHeight: size, fallbackWidth: size),
-            errorWidget: (context, url, error) =>
-                Placeholder(fallbackHeight: size, fallbackWidth: size),
+            placeholder: (context, url) => Placeholder(fallbackHeight: size, fallbackWidth: size),
+            errorWidget: (context, url, error) => Placeholder(fallbackHeight: size, fallbackWidth: size),
           );
         }
       } else {
@@ -76,16 +74,14 @@ class IconWidget extends StatelessWidget {
             uri.toString(),
             height: size,
             width: size,
-            placeholderBuilder: (context) =>
-                Placeholder(fallbackHeight: size, fallbackWidth: size),
+            placeholderBuilder: (context) => Placeholder(fallbackHeight: size, fallbackWidth: size),
           );
         } else {
           return Image.asset(
             uri.toString(),
             width: size,
             height: size,
-            errorBuilder: (context, error, stackTrace) =>
-                Placeholder(fallbackHeight: size, fallbackWidth: size),
+            errorBuilder: (context, error, stackTrace) => Placeholder(fallbackHeight: size, fallbackWidth: size),
           );
         }
       }

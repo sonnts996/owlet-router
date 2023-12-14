@@ -2,7 +2,7 @@
  Created by Thanh Son on 26/09/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-part of router_services;
+part of 'router_services.dart';
 
 ///
 /// The [RouteHistory]'s implementation. It logging the router history via using [RouteObserver] to watch when the router changes.
@@ -38,7 +38,7 @@ class RouteHistoryImpl extends RouteObserver with RouteHistory, ChangeNotifier {
   void didReplace({Route? newRoute, Route? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     if (newRoute != null && oldRoute != null) {
-      var index = _history.indexOf(oldRoute);
+      final index = _history.indexOf(oldRoute);
       _history.replaceRange(index, index + 1, [newRoute]);
       notifyListeners();
     }

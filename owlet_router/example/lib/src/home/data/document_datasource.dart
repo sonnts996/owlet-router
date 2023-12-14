@@ -17,6 +17,5 @@ class DocumentDatasource {
     return MetaDataModel.fromJson(jsonDecode(result));
   }
 
-  Future<String> getContent(String file) async =>
-      await rootBundle.loadString(file);
+  Future<String> getContent(String file) async => rootBundle.loadString(file);
 }

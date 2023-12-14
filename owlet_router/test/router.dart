@@ -16,7 +16,7 @@ class MainRoute extends RouteBase {
   final home = HomeRoute('/home');
   final splash = MaterialRouteBuilder(
     '/',
-    pageBuilder: (context, settings) => TestApp(content: 'Splash'),
+    pageBuilder: (context, settings) => const TestApp(content: 'Splash'),
   );
 
   @override
@@ -29,7 +29,7 @@ class HomeRoute extends RouteBase {
   late final home = RouteBuilder(
     '/',
     builder: (settings) => MaterialPageRoute(
-      builder: (context) => TestApp(content: 'Home Page'),
+      builder: (context) => const TestApp(content: 'Home Page'),
     ),
   );
 
@@ -61,25 +61,25 @@ class HomeRoute extends RouteBase {
   );
 
   final guard = RouteGuard(
-      routeGuard: (context, it, route) {
-        if (route.settings.arguments is String) {
-          if (route.settings.arguments == 'cancelled') {
-            ('cancelled').print();
-            return CancelledRoute();
-          } else if (route.settings.arguments == 'redirect_named') {
-            return RedirectRoute('/home/page1');
-          } else if (route.settings.arguments == 'redirect_itself') {
-            return RedirectRoute('/home/guard');
-          } else if (route.settings.arguments == 'redirect_route') {
-            return MaterialPageRoute(
-              builder: (context) => TestApp(content: 'Redirected'),
-            );
-          }
+    routeGuard: (context, it, route) {
+      if (route.settings.arguments is String) {
+        if (route.settings.arguments == 'cancelled') {
+          'cancelled'.print();
+          return CancelledRoute();
+        } else if (route.settings.arguments == 'redirect_named') {
+          return RedirectRoute('/home/page1');
+        } else if (route.settings.arguments == 'redirect_itself') {
+          return RedirectRoute('/home/guard');
+        } else if (route.settings.arguments == 'redirect_route') {
+          return MaterialPageRoute(
+            builder: (context) => const TestApp(content: 'Redirected'),
+          );
         }
-        return route;
-      },
-      route: MaterialRouteBuilder('/guard',
-          pageBuilder: (context, settings) => TestApp(content: 'RouteGuard')));
+      }
+      return route;
+    },
+    route: MaterialRouteBuilder('/guard', pageBuilder: (context, settings) => const TestApp(content: 'RouteGuard')),
+  );
 
   @override
   List<RouteBase> get children => [home, page1, page2, action, guard];

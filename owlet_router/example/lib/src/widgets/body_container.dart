@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../utilities/utilities.dart';
 
 class BodyContainer extends StatelessWidget {
-  const BodyContainer({super.key, required this.child});
+  const BodyContainer({required this.child, super.key});
 
   final Widget child;
 
@@ -18,8 +18,7 @@ class BodyContainer extends StatelessWidget {
           ? Align(
               alignment: Alignment.topCenter,
               child: ConstrainedBox(
-                constraints:
-                    const BoxConstraints(minWidth: 300, maxWidth: 1000),
+                constraints: const BoxConstraints(minWidth: 300, maxWidth: 1000),
                 child: child,
               ))
           : child);

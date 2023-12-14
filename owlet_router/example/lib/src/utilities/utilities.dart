@@ -5,29 +5,28 @@
 import 'package:flutter_highlighter/themes/github.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'web_utilities.dart'
-    if (dart.library.html) 'web_utilities.dart'
-    if (dart.library.io) 'io_utilities.dart' as mPlatform;
+import 'web_utilities.dart' if (dart.library.html) 'web_utilities.dart' if (dart.library.io) 'io_utilities.dart'
+    as platform;
 
-final bool isDesktopMode = mPlatform.mIsDesktopMode;
+final bool isDesktopMode = platform.mIsDesktopMode;
 
 final textTheme = GoogleFonts.robotoTextTheme();
 
 final codeTextTheme = GoogleFonts.robotoMono(height: 1.5, fontSize: 14);
 
-final codeTheme = githubTheme;
+const codeTheme = githubTheme;
 
 String replace(String source, Map<String, String> replacements) {
   var result = source;
-  for (var i in replacements.keys) {
+  for (final i in replacements.keys) {
     result = result.replaceAll('{$i}', replacements[i]!);
   }
   return result;
 }
 
 String getUriExtension(Uri uri) {
-  var path = uri.path;
-  var dotIndex = path.lastIndexOf('.');
+  final path = uri.path;
+  final dotIndex = path.lastIndexOf('.');
   if (dotIndex >= 0) {
     return path.substring(dotIndex + 1);
   } else {
@@ -36,5 +35,5 @@ String getUriExtension(Uri uri) {
 }
 
 void updateUrlBar(String title, String url) {
-  mPlatform.updateUrlBar(title, url);
+  platform.updateUrlBar(title, url);
 }

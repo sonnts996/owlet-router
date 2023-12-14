@@ -21,5 +21,5 @@ class LeadingIcon extends StatelessWidget {
             Navigator.pop(context);
           },
           icon: Icon(CupertinoIcons.back, color: iconColor))
-      : SizedBox.shrink();
+      : const SizedBox.shrink();
 }

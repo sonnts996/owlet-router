@@ -3,20 +3,20 @@
  Copyright (c) 2023 . All rights reserved.
 */
 
-part of route_builder;
+part of 'builder.dart';
 
 ///
 /// Construct a [PageRoute] without effects when pushing.
-class NoTransitionPageRoute<T> extends PageRoute<T>
-    with MaterialRouteTransitionMixin {
+class NoTransitionPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin {
   ///
   /// The [NoTransitionPageRoute]'s constructor.
-  NoTransitionPageRoute(
-      {super.allowSnapshotting,
-      super.fullscreenDialog,
-      super.settings,
-      this.maintainState = true,
-      required this.builder});
+  NoTransitionPageRoute({
+    required this.builder,
+    super.allowSnapshotting,
+    super.fullscreenDialog,
+    super.settings,
+    this.maintainState = true,
+  });
 
   @override
   final bool maintainState;

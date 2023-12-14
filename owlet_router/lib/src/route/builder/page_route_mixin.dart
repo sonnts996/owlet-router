@@ -2,12 +2,14 @@
  Created by Thanh Son on 03/11/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-part of route_builder;
+part of 'builder.dart';
 
 ///
 /// Build a page with context and route settings.
 typedef PageBuilder = Widget Function(
-    BuildContext context, RouteSettings settings);
+  BuildContext context,
+  RouteSettings settings,
+);
 
 ///
 /// To implement a [PageRoute] within [RouteBuilder], some fields are required. The [PageRouteMixin] provides the interface for this.

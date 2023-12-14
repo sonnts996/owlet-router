@@ -4,14 +4,13 @@
  Created by Thanh Son on 03/11/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-part of route_builder;
+part of 'builder.dart';
 
 ///
 /// Construct a route with the [NoTransitionPageRoute].
 /// The [RouteBuilder] class also defines the parameter type ([A]) and the result type ([T]) of the route.
 /// However, in certain scenarios, the parameter verification mechanism may fail to function properly.
-class NoTransitionRouteBuilder<A extends Object?, T extends Object?>
-    extends RouteBuilder<A, T> with PageRouteMixin {
+class NoTransitionRouteBuilder<A extends Object?, T extends Object?> extends RouteBuilder<A, T> with PageRouteMixin {
   /// Create the [NoTransitionRouteBuilder] with [PageRoute] options.
   NoTransitionRouteBuilder(
     super.segment, {

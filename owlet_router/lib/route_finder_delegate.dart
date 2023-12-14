@@ -2,7 +2,7 @@
  Created by Thanh Son on 31/10/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-part of owlet_router;
+part of 'router.dart';
 
 ///
 /// Provides the method to find a route in the router that matches to path.

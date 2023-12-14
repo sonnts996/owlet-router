@@ -3,7 +3,7 @@
  Copyright (c) 2023 . All rights reserved.
 */
 
-part of router_services;
+part of 'router_services.dart';
 
 ///
 /// Implementing a [RouterDelegate] using [RouteBuilder].

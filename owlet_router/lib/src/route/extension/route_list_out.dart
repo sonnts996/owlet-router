@@ -2,7 +2,7 @@
  Created by Thanh Son on 31/10/2023.
  Copyright (c) 2023 . All rights reserved.
 */
-part of route_base;
+part of '../route_base.dart';
 
 ///
 /// The function lists all the routes and their children, which are solely intended for the developer preview of router information.
@@ -14,7 +14,7 @@ extension RouteListOut on RouteMixin {
     final list = <RouteMixin>[];
 
     list.add(this);
-    for (var i in children) {
+    for (final i in children) {
       list.addAll(i.listAll());
     }
     list.sorted((a, b) => a.path.compareTo(b.path));

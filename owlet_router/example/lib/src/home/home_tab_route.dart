@@ -21,7 +21,7 @@ class HomeTabRoute extends RouteBase {
   final homePage = RouteGuard.awareExists<PageInterface, Object?>(
     route: NoTransitionRouteBuilder(
       '/',
-      pageBuilder: (context, settings) => TabWidget(page: null),
+      pageBuilder: (context, settings) => const TabWidget(page: null),
     ),
   );
 
@@ -37,8 +37,7 @@ class HomeTabRoute extends RouteBase {
         },
         route: NoTransitionRouteBuilder(
           '/t',
-          pageBuilder: (context, settings) =>
-              TabWidget(page: settings.arguments.castTo<PageInterface?>()),
+          pageBuilder: (context, settings) => TabWidget(page: settings.arguments.castTo<PageInterface?>()),
         )),
   );
 
