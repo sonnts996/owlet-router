@@ -1,0 +1,73 @@
+{
+  "name": "Owlet Router",
+  "package": "owlet_router",
+  "lang": "Flutter",
+  "icon": "assets/logo_owlet.svg",
+  "repo": [
+    {
+      "label": "github",
+      "url": "https://github.com/sonnts996/owlet-router",
+      "icon": "assets/github-mark.svg"
+    },
+    {
+      "label": "pub",
+      "url": "https://pub.dev/packages/owlet_router",
+      "icon": "assets/pub-dev-logo.svg"
+    }
+  ],
+  "doc-languages": [
+    {
+      "lang": "en",
+      "label": "English"
+    }
+  ],
+  "home-page": {
+    "cover-image": "assets/owlets_on_the_tree.jpg",
+    "cover-background": "0xFFEDE0CD",
+    "file": "documents/home/docs_html/home_page.html",
+    "menu-label": {
+      "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+      "label": "Home",
+      "segment": "/"
+    }
+  },
+  "pages": [
+    {
+      "cover-image": null,
+      "cover-background": null,
+      "file": "documents/home/docs_html/documents.html",
+      "menu-label": {
+        "icon": "icondata://icon?fontFamily=CupertinoIcons&fontPackage=cupertino_icons&codePoint=0xf447",
+        "label": "Documents",
+        "segment": "/documents"
+      },
+      "menu-items": [
+        {
+          "fragment": "#getting-started",
+          "label": "Getting Started",
+          "icon": ""
+        },
+        {
+          "fragment": "#usage",
+          "label": "Usage",
+          "icon": ""
+        },
+        {
+          "fragment": "#features",
+          "label": "Features",
+          "icon": ""
+        },
+        {
+          "fragment": "#inspiration-and-references",
+          "label": "Inspiration and References",
+          "icon": ""
+        },
+        {
+          "fragment": "#features-and-bugs",
+          "label": "Features and Bugs",
+          "icon": ""
+        }
+      ]
+    }
+  ]
+}

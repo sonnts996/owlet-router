@@ -1,4 +1,4 @@
-# Owlet Router Project
+# Owlet Router Example
 
 [![version](https://img.shields.io/pub/v/owlet_router)](https://pub.dev/packages/owlet_router) [![like](https://img.shields.io/pub/likes/owlet_router)](https://pub.dev/packages/owlet_router) [![issues](https://img.shields.io/github/issues/sonnts996/owlet-router)](https://github.com/sonnts996/owlet-router) [![license](https://img.shields.io/github/license/sonnts996/owlet-router)](https://github.com/sonnts996/owlet-router)
 
@@ -15,6 +15,7 @@ It is designed with several purposes in mind:
   routes.
 - Offering the capability to check, prevent, or redirect routes before they are pushed.
 
-> Detailed documentation for the owlet router is under development. See more
+> The information on the example is for reference only and may not be suitable for the latest
+> version. See more
 > about [API documents](https://pub.dev/documentation/owlet_router/latest/) or refer to
-> the [examples](https://github.com/sonnts996/owlet-router/tree/refactor/owlet_router/example) .
+> the [pub package](https://pub.dev/packages/owlet_router).

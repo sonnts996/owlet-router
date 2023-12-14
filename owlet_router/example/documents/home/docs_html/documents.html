@@ -1,0 +1,500 @@
+<h1>Owlet Router</h1>
+<img src="assets/owlets_on_the_tree.jpg" alt="owlets_on_the_tree" width="300"/>
+<p><a href="https://pub.dev/packages/owlet_router"><img src="https://img.shields.io/pub/v/owlet_router" alt="version" /></a> <a href="https://pub.dev/packages/owlet_router"><img src="https://img.shields.io/pub/likes/owlet_router" alt="like" /></a> <a href="https://github.com/sonnts996/owlet-router"><img src="https://img.shields.io/github/issues/sonnts996/owlet-router" alt="issues" /></a> <a href="https://github.com/sonnts996/owlet-router"><img src="https://img.shields.io/github/license/sonnts996/owlet-router" alt="license" /></a></p>
+<p>The <code>owlet_router</code> is a route manager. It utilizes the route builder to
+construct the router.</p>
+<p>It is designed with several purposes in mind:</p>
+<ul>
+<li>Providing a clear and easily definable route manager that is simple to read and use.</li>
+<li>Built upon the base Flutter Router, allowing for integration with various page route types and the
+ability to customize and extend the router.</li>
+<li>Enabling modularization of the router, making it easy to segment routes and create independent
+routes.</li>
+<li>Offering the capability to check, prevent, or redirect routes before they are pushed.</li>
+</ul>
+<h1>Table of content</h1>
+<ul>
+<li><a href="#getting-started">Getting started</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#features">Features</a>
+<ul>
+<li><a href="#1-navigationservice">1. NavigationService</a></li>
+<li><a href="#owlet-navigator">1.1. Owlet Navigator</a></li>
+<li><a href="#2-provider">2. Provider</a></li>
+<li><a href="#3-route-history">3. Route history</a></li>
+<li><a href="#4-unknown-route">4. Unknown Route</a></li>
+<li><a href="#5-route">5. Route</a>
+<ul>
+<li><a href="#51-route-builder">5.1. Route builder</a></li>
+<li><a href="#52-how-does-it-work">5.2. Route usage</a></li>
+<li><a href="#53-custom-routebuilder">5.3. Custom RouteBuilder</a></li>
+<li><a href="#54-troubleshoot">5.4. Troubleshoot</a></li>
+</ul>
+</li>
+<li><a href="#6-nested-navigator">6. Nested Navigator</a></li>
+</ul>
+</li>
+<li><a href="#inspiration-and-references">Inspiration and References</a></li>
+<li><a href="#features-and-bugs">Features and bugs</a></li>
+</ul>
+<h1>Getting started</h1>
+<p>Add this line to your dependencies:</p>
+<pre><code class="language-yaml">dependencies:
+  rowlet_router: '0.0.1'
+</code></pre>
+<ul>
+<li>import the package:</li>
+</ul>
+<pre><code class="language-dart">import 'package:rowlet_router/router.dart';
+</code></pre>
+<h1>Usage</h1>
+<ul>
+<li>Create your <code>AppRoute</code> class for the top-level route (the root route). This route has 2 direct
+children <code>splash</code> and <code>home</code>.</li>
+</ul>
+<pre><code class="language-dart">class AppRoute extends RouteBase {
+  class AppRoute():super.root(); // The default to set the root segments is '/'
+  
+  final splash = MaterialRouteBuilder(
+      '/', pageBuilder: (context, settings) =&gt; const SplashPage());
+  
+  final home = MaterialRouteBuilder(
+      '/home', pageBuilder: (context, settings) =&gt; const HomePage());
+  
+  final profiles = ProfileRoute('/profile');
+
+  List&lt;RouteBase&gt; get children =&gt; [splash, home, profiles];
+}
+</code></pre>
+<ul>
+<li>The <code>ProfileRoute</code> is a child route module of <code>AppRoute</code>. It has 2 children, the details
+page (<code>/profile/</code>) and the update profile page (<code>/profile/update-profile</code>).</li>
+</ul>
+<pre><code class="language-dart">class ProfileRoute extends RouteBase {
+  class ProfileRoute(super.segment);
+  
+  final details = MaterialRouteBuilder(
+      '/', pageBuilder: (context, settings) =&gt; const DetailsPage());
+      
+
+  final update = MaterialRouteBuilder(
+      '/update-profile', pageBuilder: (context, settings) =&gt; const UpdateProfilePage());
+
+  List&lt;RouteBase&gt; get children =&gt; [details, update];
+}
+</code></pre>
+<ul>
+<li>To utilize this route, you must inject the top-level route (AppRoute) into your navigator using
+the <code>NavigationService</code>.</li>
+</ul>
+<pre><code class="language-dart">final appRoute = AppRoute(); // The root route
+
+final service = NavigationService(
+    navigationKey: GlobalKey(),
+    routeObservers: [ /* your observers */],
+    initialRoute: '/',
+    root: appRoute,
+    unknownRoute: owletDefaultUnknownRoute);
+
+// ...
+// Use in root navigator
+
+Widget build(BuildContext context) {
+  return MaterialApp.router(
+    routerConfig: service.routerConfig,
+
+    /// ...
+  );
+}
+
+// *************************************************
+// Use in nested navigator                       
+
+Widget build(BuildContext context) {
+  return OwletNavigator(service);
+}
+</code></pre>
+<ul>
+<li>To push the <code>profile</code> route, you can use the normal push method of Navigator:</li>
+</ul>
+<pre><code class="language-dart">final result = await Navigator.of(context).pushNamed('/profile/');
+</code></pre>
+<ul>
+<li>... or call from the route field.</li>
+</ul>
+<pre><code class="language-dart">final result = await appRoute.profiles.pushNamed(
+                            args: //..., 
+                            params: // ... query parameters
+                            fragment: // #route-fragment,
+                        );
+</code></pre>
+<h1>Features</h1>
+<h2>1. NavigationService</h2>
+<p>The <code>NavigationService</code> provides the necessary method for a new <code>Navigator</code>:</p>
+<pre><code class="language-dart">Navigator(
+    key: service.navigationKey,
+    initialRoute: service.initialRoute,
+    observers: &lt;NavigatorObserver&gt;[service.history, ...service.routeObservers],
+    onGenerateRoute: service.onGenerateRoute,
+    onPopPage: service.onPopPage,
+    onUnknownRoute: service.onUnknownRoute,
+  );
+</code></pre>
+<h3>Owlet Navigator</h3>
+<p>The <code>OwletNavigator</code> is a custom implementation of <code>Navigator</code> designed to offer advanced features
+like route guards and named functions. By default, the <code>RouterDelegate</code> utilizes
+the <code>OwletNavigator</code>.</p>
+<pre><code class="language-dart">Widget build(BuildContext context) {
+  return OwletNavigator(service);
+}
+</code></pre>
+<h2>2. Provider</h2>
+<p>To optimize performance, consider making the NavigationService a singleton within the Navigator.
+This can be achieved by creating a singleton variable or utilizing dependency injection, such as
+GetIt.</p>
+<p>The <code>NavigationServiceProvider</code> allows you to access the <code>NavigationService</code> within the context.</p>
+<pre><code class="language-dart">final service = NavigationService.of(context);
+</code></pre>
+<p>Additionally, creating routes as static fields can enhance performance. However, keep in mind that
+static routes cannot dynamically change their parent routes. It's not necessary to create every
+route as a static field, the module manager features can still operate with individual routes,
+allowing you to create representative routes for each part of the application.</p>
+<p>To locate the corresponding <code>RouteBase</code> object within the current context, traverse the route tree.</p>
+<pre><code class="language-dart">final route = RouteBase.of&lt;ROUTE_TYPE&gt;(context);
+</code></pre>
+<p>However, this approach may result in a worst-case time complexity of O(n * k), where 'n' represents
+the average depth of the route tree and 'k' represents the number of <code>NavigationService</code> layers. As
+mentioned earlier, an alternative approach is to determine the route type directly from the part
+route.</p>
+<pre><code class="language-dart">final route = profiles.findType&lt;ROUTE_TYPE&gt;();
+</code></pre>
+<h2>3. Route history</h2>
+<p>The <code>NavigationService</code> offers a route history observer that logs the current routes.</p>
+<pre><code class="language-dart">void listenHistory() {
+  final history = service.history;
+  history.addListener(() {
+    /// Listen when routes change.
+    if (kDebugMode) {
+      print(history.current);
+    }
+  });
+  final currentRoute = history.current; // Get the current route which is displayed on the top.
+
+  bool isAppeared = history.contains('/home'); // check if the /home route is showing on display 
+
+  // find a route that matches the condition, if you need to do something with it such as the Navigator.replacement.
+  final route = history.nearest(/* condition */);
+}
+</code></pre>
+<h2>4. Unknown route</h2>
+<p>If your route cannot be found or if an error occurs during its construction, the unknown route will
+be used as a replacement.</p>
+<pre><code class="language-dart">final service = NavigationService(
+  // ...
+    unknownRoute: yourRoute
+);
+</code></pre>
+<h2>5. Route</h2>
+<p>The <code>owlet_router</code> utilizes a module architecture for routing. To define a route, create a class
+that extends <code>RouteBase</code>. Inside this class, you can specify the children of the route. Repeat this
+process for child routes to expand the route tree</p>
+<pre><code class="language-dart">final appRoute = AppRoute();
+
+// ..
+
+class AppRoute extends RouteBase {
+  MainRoute() : super.root(); // if this route is the root route
+
+  final splash = MaterialRouteBuilder(
+      '/', pageBuilder: (context, settings) =&gt; const SplashPage());
+
+  final home = MaterialRouteBuilder(
+      '/home', pageBuilder: (context, settings) =&gt; const HomePage());
+
+  final items = ListItemRoute('/item');
+
+  @override
+  List&lt;RouteBase&gt; get children =&gt; [splash, home, items];
+}
+
+
+class ListItemRoute extends RouteBase {
+  ListItemRoute(super.segment);
+
+  final list = MaterialRouteBuilder(
+      '/list', pageBuilder: (context, settings) =&gt; const ListItemPage());
+
+  late final detail = RouteGuard(
+    routeBuilder: RouteBuilder&lt;String, dynamic&gt;(
+      '/detail',
+      builder: (settings) {
+        if (settings.arguments is String) {
+          return MaterialPageRoute(
+            settings: settings,
+            builder: (context) =&gt;
+                DetailPage(item: settings.arguments as String),
+          );
+        }
+        return CancelledRoute(false);
+      },
+    ),
+    routeGuard: (context, route) async {
+      if (!navigatorServices.history.contains(list.path)) {
+        Navigator.push(context, list.noAnimationBuilder()!);
+      }
+      return route;
+    },
+  );
+
+  @override
+  List&lt;RouteBase&gt; get children =&gt; [detail, list];
+}
+</code></pre>
+<blockquote>
+<p>[!Warning]</p>
+<p>Don't forget to add your route to the <code>List&lt;RouteBase&gt; get children</code> getter. If it's not
+registered there, the route will not be found.</p>
+</blockquote>
+<h3>5.1. Route builder</h3>
+<p>Think of <code>RouteBase</code> as a folder; it doesn't create anything, making it a non-launchable route. To
+create a page route, we use <code>RouteBuilder</code>, which is a launchable route.</p>
+<pre><code class="language-dart">final page1 = RouteBuilder(
+  '/page1',
+  builder: (settings) =&gt;
+      MaterialPageRoute(
+        settings: settings,
+        builder: (context) =&gt; Page1(arguments: settings.arguments),
+      ),
+);
+</code></pre>
+<p>The <code>RouteBuilder</code> allows you to customize your <code>PageRoute</code>, and we have created
+some <a href="#53-custom-routebuilder">custom</a> <code>RouteBuilder</code>. You can also customize your <code>PageRoute</code> by
+overriding the <code>RouteBuilder.builder</code> method.</p>
+<h3>5.2. How does it work?</h3>
+<ol>
+<li>
+<p>What is the route path?</p>
+<p>To obtain the path of the <code>splash</code>, you can use the <code>splash.path</code> method. The <code>splash</code> path is
+generated by concatenating its parent path with its own path. If the result contains duplicate
+slashes (<code>//</code>), they will be merged into one. Therefore, if you wish for the segment to have the
+same route as its parent, simply use a single slash (<code>/</code>) as its segment.</p>
+</li>
+<li>
+<p>Push a new route</p>
+<p>If you know the path, a simplified approach is to use <code>Navigator.pushNamed</code> to push it onto the
+Navigator.</p>
+<pre><code class="language-dart">Navigator.of(context).pushNamed('/home');
+
+// or
+
+Navigator.of(context).pushNamed(appRoute.home.path);
+</code></pre>
+<p>The <code>RouteBuilder</code>'s extension provides an other method to push it</p>
+<pre><code class="language-dart">appRoute.home.pushNamed(context);
+</code></pre>
+</li>
+<li>
+<p>Argument and result</p>
+<p>The RouteBuilder&lt;A, T&gt;.pushNamed method provides information about the route's argument type
+and result type</p>
+<pre><code class="language-dart">final page2 = RouteBuilder&lt;String, bool&gt;(
+ '/page2',
+ builder: (settings) {
+   final greeting = settings.arguments as String?;
+   return MaterialPageRoute(
+     builder: (context) =&gt; TestApp(content: greeting),
+   );
+ },
+);
+   
+// ...
+final bool result = await page2.pushName(context, args: /* String type is required*/);
+</code></pre>
+</li>
+<li>
+<p>In a module:</p>
+<p>If <code>ListItemRoute</code> is located within a module package, you cannot access the <code>appRoute</code> because
+it is
+defined in the main package. Instead, you can use <code>RouteBase.of&lt;ListItemRoute&gt;()</code> to specifically
+retrieve your items route. This approach promotes greater independence of your code between
+different packages.</p>
+</li>
+</ol>
+<h3>5.3. Custom RouteBuilder</h3>
+<ul>
+<li>
+<p><code>MaterialRouteBuilder</code>: It will create a MaterialPageRoute.</p>
+</li>
+<li>
+<p><code>CupertinoRouteBuilder</code>:  It will create a CupertinoPageRoute.</p>
+</li>
+<li>
+<p><code>NoTransitionRouteBuilder</code>:  It will create a PageRoute without any transition when appears.</p>
+<pre><code class="language-dart">final splash = MaterialRouteBuilder('/', pageBuilder: (context, settings) =&gt; const SplashPage());
+</code></pre>
+</li>
+<li>
+<p><code>RouteGuard</code>:</p>
+<ul>
+<li>
+<p>It exclusively operates with the <code>OwletNavigator</code>. The <code>RouteGuard</code> offers
+a <code>routeGuard</code> method that is invoked before pushing the route. This method allows you to
+modify the route before pushing it.</p>
+</li>
+<li>
+<p>To prevent the route from being pushed, return a <code>CancelledRoute</code>. To redirect it, return
+another route or use a <code>RedirectRoute('redirect-path')</code> within the <code>routeGuard</code> method.&quot;</p>
+</li>
+</ul>
+<pre><code class="language-dart">final detail = RouteGuard(
+  route: RouteBuilder&lt;String, dynamic&gt;(
+    '/detail',
+    builder: (settings) {
+      if (settings.arguments is String) {
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (context) =&gt; DetailPage(item: settings.arguments as String));
+      }
+      return CancelledRoute(false);
+    },
+  ),
+  routeGuard: (context, route) async {
+    if (!navigatorServices.history.contains(list.path)) {
+      Navigator.push(context, list.noAnimationBuilder()!);
+    }
+    return route;
+  },
+);
+</code></pre>
+<blockquote>
+<p>[!Note]</p>
+<p>The <code>RouteGuard</code> works only with these functions:</p>
+<ul>
+<li><code>Navigator.push</code>,</li>
+<li><code>Navigator.pushNamed</code>,</li>
+<li><code>Navigator.popAndPushNamed</code>,</li>
+<li><code>Navigator.pushReplacement</code>,</li>
+<li><code>Navigator.pushReplacementNamed</code>,</li>
+<li><code>Navigator.pushAndRemoveUntil</code>,</li>
+<li><code>Navigator.pushNamedAndRemoveUntil</code></li>
+</ul>
+</blockquote>
+</li>
+<li>
+<p><code>NamedFunctionRoute</code>:</p>
+<p>An ideal approach is to name a function and call it using the Navigator. When pushing a
+NamedFunctionRoute, no route is added; instead, the defined function is invoked, and its result
+will be returned.</p>
+<p>Similar to the RouteGuard, it also functions exclusively with the OwletNavigator.</p>
+<pre><code class="language-dart">final action = NamedFunctionRouteBuilder(
+  '/action',
+  callback: (context, route) =&gt; print('Hello World'),
+);
+</code></pre>
+<blockquote>
+<p>[!Note]</p>
+<p>The <code>NamedFunctionRouteBuilder</code> works only with these functions:</p>
+<ul>
+<li><code>Navigator.pushNamed</code>,</li>
+<li><code>Navigator.popAndPushNamed</code>,</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h3>5.4. Troubleshoot</h3>
+<ol>
+<li>When using the <code>appRoute.profiles.update.path</code> method to obtain a route, and you expect the path
+to be <code>/home/profiles/update</code>, but the result is <code>/update</code>, ensure that you have included this
+route within the <code>children</code> getter of the <code>profile</code> route.</li>
+<li>When updating the route's children and encountering <a href="#54-troubleshoot">Troubleshoot#1</a>, even if
+it
+already exists in the children list, make sure you have called the <code>repair</code> method after making
+the route changes.</li>
+<li>For optimal performance, the router should be more stable and undergo fewer changes. Therefore,
+if you encounter issues when changing the route and performing a hot reload, consider utilizing
+the 'hot restart' method to resolve this issue. While the repair method can be effective, it
+demands additional resources, so it is advisable to avoid using it in release mode.</li>
+</ol>
+<h1>6. Nested Navigator</h1>
+<p>To use a nested navigator. Create a <code>NestedPage</code> with the <code>OwletNavigator</code>:</p>
+<pre><code class="language-dart">static final nestedService = NavigatorSerivce( /*...*/ );
+
+class NestedPage extends StatefullWidget {
+
+    /// ...
+}
+
+class NestedPageState extends State&lt;NestedPage&gt; {
+
+    /// ...
+    Widget build(BuildContext context) {
+      return OwletNavigator(nestedService);
+    }
+}
+</code></pre>
+<p>In the root route, create a field with <code>NestedService</code>:</p>
+<pre><code class="language-dart">class AppRoute extends RouteBase {
+    // ...
+    final nestedPage = NestedService(
+        service: nestedService,
+        route: MaterialRouteBuilder('/nested', pageBuilder: (context, settings) =&gt; const NestedPage());
+    );
+}
+</code></pre>
+<p>Whenever you push a route as <code>/nested/sub-path/**</code>, if the <code>NestedPage</code> already exists in the
+Navigator, the <code>nestedService</code> will be pushed with the path <code>/sub-path/**</code>. Otherwise, a new
+<code>NestedPage</code> will be pushed onto the Navigator.</p>
+<pre><code class="language-dart">Navigator.of(context, rootNavigator: true).pushNamed('/nested/sub-path/**');
+</code></pre>
+<h3>NestedRoute</h3>
+<p>Similar to a nested navigator, nested routes facilitate the division of a route into two components.
+The actual route gets injected into the navigation service, while the remaining segment serves as an
+argument for the page widget.</p>
+<pre><code class="language-dart">
+class ItemDetailPageState extends State&lt;ItemDetailPage&gt; {
+    
+  late final NestedRoute nestedRoute;
+
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      nestedRoute = RouteBase.of&lt;NestedRoute&gt;(context);
+
+      nestedRoute.addListener(onRouteNotifier);
+    });
+  }
+
+  @override
+  void dispose() {
+    nestedRoute.removeListener(onRouteNotifier);
+    super.dispose();
+  }
+
+  void onRouteNotifier() {
+    print(nestedRoute.value as RouteSettings?);
+  }
+}
+
+//....
+
+class AppRoute extends RouteBase {
+    // ...
+    final itemDetail = NestedRoute(
+        route: MaterialRouteBuilder('/item-detail', pageBuilder: (context, settings) =&gt; const ItemDetailPage());
+    );
+}
+</code></pre>
+<h1>Inspiration and References</h1>
+<p>This package draws inspiration from the <a href="https://pub.dev/packages/flutter_modular">flutter_modular</a>
+package and incorporates concepts from the following resources:</p>
+<ul>
+<li><a href="https://api.flutter.dev/flutter/widgets/Navigator-class.html">Navigator</a>,</li>
+<li><a href="https://pub.dev/packages/provider">Provider</a>.</li>
+<li><a href="https://pub.dev/packages/navigation_history_observer">navigation_history_observer</a>,</li>
+</ul>
+<p>Additional resources from various forums have also been consulted during the development of this
+package.</p>
+<h1>Features and bugs</h1>
+<p>Please file feature requests and bugs at
+the <a href="https://github.com/sonnts996/owlet-router/issues">issue tracker</a>.</p>
