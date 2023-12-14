@@ -29,14 +29,10 @@ class MainRoute extends RouteBase {
           final data = await metaDataUseCase();
           return MaterialPageRoute(
               settings: route.settings,
-              builder: (context) {
-                final initialRoute = route.settings.arguments as Map<String, dynamic>?;
-                return HomePage(
-                  initialRoute: initialRoute?['initialRoute'] ?? '/',
-                  service: homeTabService,
-                  metaData: data,
-                );
-              });
+              builder: (context) => HomePage(
+                    service: homeTabService,
+                    metaData: data,
+                  ));
         },
       ));
 

@@ -8,10 +8,12 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_highlighter/flutter_highlighter.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:objectx/objectx.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../utilities/utilities.dart';
 import '../../../widgets/image_widget.dart';
+import '../../../widgets/svg_shield.dart';
 
 class DocumentScrollToFragment {
   DocumentScrollToFragment(this.scrollController);
@@ -111,17 +113,54 @@ class _DocumentState extends State<Document> {
                 ),
                 TagExtension(
                   tagsToExtend: {'a'},
-                  builder: (extensionContext) => TextButton(
-                    child: Text(extensionContext.element?.text.trim() ?? ''),
-                    onPressed: () {
-                      onClickedLink(extensionContext.attributes['href']);
-                    },
+                  builder: (extensionContext) {
+                    final href = extensionContext.attributes['href'];
+                    if (extensionContext.elementChildren.isNotEmpty) {
+                      final element = extensionContext.elementChildren.first;
+                      if (element.localName == 'img') {
+                        final url = element.attributes['src'];
+                        final width = element.attributes['width']?.toDouble();
+                        final height = element.attributes['height']?.toDouble();
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          child: GestureDetector(
+                              onTap: () => onClickedLink(href),
+                              child: (url?.startsWith('https://img.shields.io') == true)
+                                  ? SvgShield(shieldUrl: url!)
+                                  : ImageWidget(
+                                      imageUrl: extensionContext.attributes['src'] ?? '',
+                                      width: width,
+                                      height: height)),
+                        );
+                      }
+                    }
+                    return Text.rich(
+                      WidgetSpan(
+                          child: TextButton(
+                        child: Text(extensionContext.element?.text.trim() ?? ''),
+                        onPressed: () => onClickedLink(href),
+                      )),
+                    );
+                  },
+                ),
+                TagWrapExtension(
+                  tagsToWrap: {'blockquote'},
+                  builder: (child) => Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                        border: Border(
+                            left: BorderSide(color: Theme.of(context).colorScheme.onPrimaryContainer, width: 5))),
+                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+                    child: child,
                   ),
                 ),
                 TagExtension(
                   tagsToExtend: {'img'},
-                  builder: (extensionContext) =>
-                      ImageWidget(imageUrl: extensionContext.attributes['src'] ?? '', width: 300),
+                  builder: (extensionContext) => ImageWidget(
+                    imageUrl: extensionContext.attributes['src'] ?? '',
+                    width: extensionContext.attributes['width']?.toDouble(),
+                    height: extensionContext.attributes['height']?.toDouble(),
+                  ),
                 ),
                 TagExtension(
                     tagsToExtend: {'pre'},
@@ -197,7 +236,7 @@ class AnchorWidget extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8),
       child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           key: key,
           children: [

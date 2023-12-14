@@ -1,8 +1,10 @@
 # Owlet Router
 
-<img src="assets/owlets_on_the_tree.jpg?raw=true" alt="owlets_on_the_tree" width="300"/>
+<img src="assets/owlets_on_the_tree.jpg" alt="owlets_on_the_tree" width="300"/>
 
-The `owlet_router` is a route manager, not a route itself. It utilizes the route builder to
+[![version](https://img.shields.io/pub/v/owlet_router)](https://pub.dev/packages/owlet_router) [![like](https://img.shields.io/pub/likes/owlet_router)](https://pub.dev/packages/owlet_router) [![issues](https://img.shields.io/github/issues/sonnts996/owlet-router)](https://github.com/sonnts996/owlet-router) [![license](https://img.shields.io/github/license/sonnts996/owlet-router)](https://github.com/sonnts996/owlet-router)
+
+The `owlet_router` is a route manager. It utilizes the route builder to
 construct the router.
 
 It is designed with several purposes in mind:

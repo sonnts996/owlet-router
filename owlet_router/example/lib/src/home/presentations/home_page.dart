@@ -25,12 +25,10 @@ import 'widgets/content_list.dart';
 class HomePage extends StatefulWidget {
   const HomePage({
     super.key,
-    required this.initialRoute,
     required this.service,
     required this.metaData,
   });
 
-  final String initialRoute;
   final NavigationService<HomeTabRoute> service;
   final MetaDataInterface metaData;
 
@@ -44,21 +42,24 @@ class _HomePageState extends State<HomePage> {
   final HashMap<String, String> routeNamedMap = HashMap();
 
   NavigationService<HomeTabRoute> get tabService => widget.service;
-  int currentIndex = 1;
+  String? currentPath;
+  String? currentFragment;
 
   @override
   void initState() {
     super.initState();
     routeNamedMap['/'] = 'Home';
+    currentPath = '/';
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       tabService.route.tabPage.addListener(onUrlChanged);
+      widget.service.history.addListener(onHistoryChanged);
     });
   }
 
   @override
   void dispose() {
     tabService.route.tabPage.removeListener(onUrlChanged);
-
+    widget.service.history.addListener(onHistoryChanged);
     super.dispose();
   }
 
@@ -66,6 +67,17 @@ class _HomePageState extends State<HomePage> {
     final path = tabService.route.tabPage.settings?.path;
     final url = tabService.route.tabPage.settings?.name;
     url?.let((it) => updateUrlBar(routeNamedMap[path ?? ''] ?? widget.metaData.name, it));
+    setState(() {
+      currentPath = tabService.route.tabPage.settings?.path;
+      currentFragment = '#${tabService.route.tabPage.settings?.fragment}';
+    });
+  }
+
+  void onHistoryChanged() {
+    setState(() {
+      currentPath = widget.service.history.current.settings.path;
+      currentFragment = '#${widget.service.history.current.settings.fragment}';
+    });
   }
 
   Offset breadCrumbPosition() {
@@ -140,7 +152,12 @@ class _HomePageState extends State<HomePage> {
                     child: SafeArea(
                     child: Padding(
                       padding: EdgeInsets.only(left: 8, right: 16, top: 16, bottom: 16),
-                      child: ContentList(onTab: onSectionTab, metaData: widget.metaData),
+                      child: ContentList(
+                        onTab: onSectionTab,
+                        metaData: widget.metaData,
+                        currentPath: currentPath,
+                        currentFragment: currentFragment,
+                      ),
                     ),
                   )),
             body: mode.isNormal
@@ -149,8 +166,9 @@ class _HomePageState extends State<HomePage> {
                     DesktopDrawer(
                       onDocumentTab: onSectionTab,
                       onNavigateTab: onNavigateTab,
-                      currentIndex: currentIndex,
                       metaData: widget.metaData,
+                      currentPath: currentPath,
+                      currentFragment: currentFragment,
                     ),
                     Expanded(child: child!),
                   ]))
@@ -172,6 +190,9 @@ class _HomePageState extends State<HomePage> {
     switch (index) {
       case 0:
         scaffoldKey.currentState?.openDrawer();
+        break;
+      case 1:
+        tabService.popUntil((route) => route.isFirst);
         break;
       case 2:
         RouteBase.of<MainRoute>(context).profile.pushNamed();

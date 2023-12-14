@@ -19,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       Future.delayed(const Duration(seconds: 1), () {
-        Navigator.of(context).pushNamed('/home');
+        Navigator.of(context).pushReplacementNamed('/home');
       });
     });
   }

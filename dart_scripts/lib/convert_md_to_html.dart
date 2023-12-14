@@ -12,6 +12,7 @@ String convertMd2Html(String contents) {
 }
 
 String loadMarkdownContent(File file) {
+  print('Load contents from ${file.path}');
   final contents = file.readAsStringSync();
   return contents;
 }
@@ -21,14 +22,16 @@ void writeMarkdownContent(File file, String contents) {
     file.createSync(recursive: true);
   }
   file.writeAsStringSync(contents);
+  print('Write contents to ${file.path}');
 }
 
 void generateHtml(String directory) {
-  final originDir = Directory(path.join(path.absolute(directory), 'docs'));
+  final originDir = Directory(path.join(directory, 'docs'));
   assert(originDir.existsSync(), '');
-  final resultDir = Directory(path.join(path.absolute(directory), 'docs_html'));
-  for (var e in originDir.listSync(recursive: true)) {
-    if (path.extension(e.path) == 'md') {
+  final resultDir = Directory(path.join(directory, 'docs_html'));
+  final listFile = originDir.listSync(recursive: true);
+  for (var e in listFile) {
+    if (path.extension(e.path) == '.md') {
       final contents = loadMarkdownContent(File(e.path));
       final htmlContents = convertMd2Html(contents);
       writeMarkdownContent(

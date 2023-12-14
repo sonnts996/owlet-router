@@ -14,10 +14,14 @@ class ContentList extends StatelessWidget {
     super.key,
     required this.onTab,
     required this.metaData,
+    this.currentPath,
+    this.currentFragment,
   });
 
   final void Function(String name, PageInterface page) onTab;
   final MetaDataInterface metaData;
+  final String? currentPath;
+  final String? currentFragment;
 
   @override
   Widget build(BuildContext context) => ListView(children: [
@@ -26,6 +30,7 @@ class ContentList extends StatelessWidget {
             ListTile(
                 leading: IconWidget(iconUrl: element.label.icon, size: 20),
                 title: Text(element.label.label),
+                selected: '/t${element.label.segment}' == currentPath,
                 onTap: () {
                   onTab(element.label.segment, element);
                 }),
@@ -36,6 +41,7 @@ class ContentList extends StatelessWidget {
                       leading: SizedBox(width: 20, child: Icon(Icons.circle_outlined, size: 6)),
                       minLeadingWidth: 10,
                       title: Text(e.label),
+                      selected: '/t${element.label.segment}' == currentPath && e.fragment == currentFragment,
                       onTap: () {
                         onTab('${element.label.segment}${e.fragment}', element);
                       },
@@ -54,14 +60,16 @@ class DesktopDrawer extends StatelessWidget {
     super.key,
     required this.onDocumentTab,
     required this.onNavigateTab,
-    this.currentIndex = 0,
+    this.currentPath,
+    this.currentFragment,
     required this.metaData,
   });
 
-  final int currentIndex;
   final void Function(String name, PageInterface page) onDocumentTab;
   final ValueChanged<int> onNavigateTab;
   final MetaDataInterface metaData;
+  final String? currentPath;
+  final String? currentFragment;
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -77,19 +85,24 @@ class DesktopDrawer extends StatelessWidget {
                   leading: const Icon(CupertinoIcons.home, size: 20),
                   onTap: () => onNavigateTab(1),
                   title: const Text('Home'),
-                  selected: currentIndex == 1,
+                  selected: currentPath == '/',
                 ),
                 ListTile(
                   leading: const Icon(CupertinoIcons.profile_circled, size: 20),
                   onTap: () => onNavigateTab(2),
                   title: const Text('Author'),
-                  selected: currentIndex == 2,
                 ),
                 Padding(
                     padding: const EdgeInsets.only(left: 8, bottom: 0, right: 16, top: 16),
                     child: Text('Documents', style: Theme.of(context).textTheme.labelMedium)),
                 const Divider(),
-                Expanded(child: ContentList(onTab: onDocumentTab, metaData: metaData)),
+                Expanded(
+                    child: ContentList(
+                  onTab: onDocumentTab,
+                  metaData: metaData,
+                  currentFragment: currentFragment,
+                  currentPath: currentPath,
+                )),
                 SizedBox(height: 16),
               ]),
         ),
