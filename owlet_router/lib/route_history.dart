@@ -32,15 +32,18 @@ mixin RouteHistory on NavigatorObserver implements Listenable {
   Route get current => routes.last;
 
   /// Return true if the [current] route has the path which is [routeName]
-  bool isCurrentByName(String routeName) => compareName(current.settings.name, routeName);
+  bool isCurrentByName(String routeName) =>
+      compareName(current.settings.name, routeName);
 
   /// Determine if any route in the list has a name matching [routeName]. This check excludes route parameters.
-  bool containsName(String routeName) => routes.any((element) => compareName(element.settings.name, routeName));
+  bool containsName(String routeName) =>
+      routes.any((element) => compareName(element.settings.name, routeName));
 
   ///
   /// Find the route closest to the current route. If no matching route is found, return null.
   /// The [skipCurrent] parameter, when set to true, will exclude the current route from the search, even if it matches the specified criteria.
-  RouteIndex? nearest(bool Function(Route e) condition, {bool skipCurrent = false}) {
+  RouteIndex? nearest(bool Function(Route e) condition,
+      {bool skipCurrent = false}) {
     var i = 0;
     for (var r in routes.reversed) {
       if (skipCurrent && r == current) break;
@@ -53,5 +56,6 @@ mixin RouteHistory on NavigatorObserver implements Listenable {
   }
 
   @override
-  String toString() => '$runtimeType: ${routes.length} \n${routes.map((e) => '- ${e.settings}').join('\n')}';
+  String toString() =>
+      '$runtimeType: ${routes.length} \n${routes.map((e) => '- ${e.settings}').join('\n')}';
 }

@@ -10,8 +10,10 @@ import '../../domain/intefaces/profile_interface.dart';
 
 part 'profile_model.g.dart';
 
-abstract class ProfileModel implements ProfileInterface, Built<ProfileModel, ProfileModelBuilder> {
-  factory ProfileModel([void Function(ProfileModelBuilder) updates]) = _$ProfileModel;
+abstract class ProfileModel
+    implements ProfileInterface, Built<ProfileModel, ProfileModelBuilder> {
+  factory ProfileModel([void Function(ProfileModelBuilder) updates]) =
+      _$ProfileModel;
 
   const ProfileModel._();
 

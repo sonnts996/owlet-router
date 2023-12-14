@@ -50,13 +50,16 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           ProfileHeader(data: data),
                           const SizedBox(height: 24),
-                          Text('Suggest Flutter packages:', style: Theme.of(context).textTheme.titleMedium),
+                          Text('Suggest Flutter packages:',
+                              style: Theme.of(context).textTheme.titleMedium),
                           const SizedBox(height: 8),
                           Fluid(
                             spacing: 8,
                             lineSpacing: 8,
-                            children:
-                                data.repos.map((e) => Fluidable(minWidth: 300, child: PackageCard(data: e))).toList(),
+                            children: data.repos
+                                .map((e) => Fluidable(
+                                    minWidth: 300, child: PackageCard(data: e)))
+                                .toList(),
                           )
                         ]),
                   ));

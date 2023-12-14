@@ -30,7 +30,8 @@ class MainRoute extends RouteBase {
           return MaterialPageRoute(
               settings: route.settings,
               builder: (context) {
-                final initialRoute = route.settings.arguments as Map<String, dynamic>?;
+                final initialRoute =
+                    route.settings.arguments as Map<String, dynamic>?;
                 return HomePage(
                   initialRoute: initialRoute?['initialRoute'] ?? '/',
                   service: homeTabService,

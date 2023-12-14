@@ -56,15 +56,18 @@ class IconWidget extends StatelessWidget {
             uri.toString(),
             height: size,
             width: size,
-            placeholderBuilder: (context) => Placeholder(fallbackHeight: size, fallbackWidth: size),
+            placeholderBuilder: (context) =>
+                Placeholder(fallbackHeight: size, fallbackWidth: size),
           );
         } else {
           return CachedNetworkImage(
             imageUrl: uri.toString(),
             width: size,
             height: size,
-            placeholder: (context, url) => Placeholder(fallbackHeight: size, fallbackWidth: size),
-            errorWidget: (context, url, error) => Placeholder(fallbackHeight: size, fallbackWidth: size),
+            placeholder: (context, url) =>
+                Placeholder(fallbackHeight: size, fallbackWidth: size),
+            errorWidget: (context, url, error) =>
+                Placeholder(fallbackHeight: size, fallbackWidth: size),
           );
         }
       } else {
@@ -73,14 +76,16 @@ class IconWidget extends StatelessWidget {
             uri.toString(),
             height: size,
             width: size,
-            placeholderBuilder: (context) => Placeholder(fallbackHeight: size, fallbackWidth: size),
+            placeholderBuilder: (context) =>
+                Placeholder(fallbackHeight: size, fallbackWidth: size),
           );
         } else {
           return Image.asset(
             uri.toString(),
             width: size,
             height: size,
-            errorBuilder: (context, error, stackTrace) => Placeholder(fallbackHeight: size, fallbackWidth: size),
+            errorBuilder: (context, error, stackTrace) =>
+                Placeholder(fallbackHeight: size, fallbackWidth: size),
           );
         }
       }

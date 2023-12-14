@@ -5,8 +5,9 @@
 import 'package:flutter_highlighter/themes/github.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'web_utilities.dart' if (dart.library.html) 'web_utilities.dart' if (dart.library.io) 'io_utilities.dart'
-    as mPlatform;
+import 'web_utilities.dart'
+    if (dart.library.html) 'web_utilities.dart'
+    if (dart.library.io) 'io_utilities.dart' as mPlatform;
 
 final bool isDesktopMode = mPlatform.mIsDesktopMode;
 
@@ -14,7 +15,7 @@ final textTheme = GoogleFonts.robotoTextTheme();
 
 final codeTextTheme = GoogleFonts.robotoMono(height: 20, fontSize: 14);
 
-final codeTheme = githubTheme;
+const codeTheme = githubTheme;
 
 String replace(String source, Map<String, String> replacements) {
   var result = source;

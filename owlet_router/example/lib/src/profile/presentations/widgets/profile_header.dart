@@ -20,7 +20,8 @@ class ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SizedBox(
       height: 100,
-      child: Stack(fit: StackFit.expand, alignment: Alignment.topLeft, children: [
+      child:
+          Stack(fit: StackFit.expand, alignment: Alignment.topLeft, children: [
         Positioned(
           left: 116,
           right: 8,
@@ -29,31 +30,45 @@ class ProfileHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Row(crossAxisAlignment: CrossAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: [
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+              Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(data.name.toUpperCase(),
-                        style: Theme.of(context).textTheme.headlineSmall, overflow: TextOverflow.ellipsis),
-                    Text.rich(TextSpan(
-                        text: data.username,
-                        children: [const TextSpan(text: ' · '), TextSpan(text: data.location)],
-                        style: Theme.of(context).textTheme.labelMedium?.apply(color: Colors.black54))),
-                  ],
-                )),
-                IconButton(
-                    onPressed: () {
-                      launchUrlString(data.githubUrl);
-                    },
-                    icon: SvgPicture.asset('assets/github-mark.svg', height: 24, width: 24)),
-              ]),
+                    Expanded(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(data.name.toUpperCase(),
+                            style: Theme.of(context).textTheme.headlineSmall,
+                            overflow: TextOverflow.ellipsis),
+                        Text.rich(TextSpan(
+                            text: data.username,
+                            children: [
+                              const TextSpan(text: ' · '),
+                              TextSpan(text: data.location)
+                            ],
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium
+                                ?.apply(color: Colors.black54))),
+                      ],
+                    )),
+                    IconButton(
+                        onPressed: () {
+                          launchUrlString(data.githubUrl);
+                        },
+                        icon: SvgPicture.asset('assets/github-mark.svg',
+                            height: 24, width: 24)),
+                  ]),
               const Divider(indent: 0),
               Align(
                 alignment: Alignment.bottomRight,
-                child:
-                    Text(data.bio, style: Theme.of(context).textTheme.labelMedium?.apply(fontStyle: FontStyle.italic)),
+                child: Text(data.bio,
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelMedium
+                        ?.apply(fontStyle: FontStyle.italic)),
               ),
             ],
           ),
@@ -66,13 +81,18 @@ class ProfileHeader extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
                 color: Colors.white,
-                boxShadow: const [BoxShadow(color: Color(0x05000000), spreadRadius: 6, blurRadius: 6)],
+                boxShadow: const [
+                  BoxShadow(
+                      color: Color(0x05000000), spreadRadius: 6, blurRadius: 6)
+                ],
               ),
               padding: const EdgeInsets.all(4),
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(46),
-                  child:
-                      CircleAvatar(radius: 46, backgroundColor: Colors.white, child: Image.network(data.avatarUrl)))),
+                  child: CircleAvatar(
+                      radius: 46,
+                      backgroundColor: Colors.white,
+                      child: Image.network(data.avatarUrl)))),
         ),
       ]));
 }

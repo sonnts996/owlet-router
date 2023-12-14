@@ -20,10 +20,13 @@ part 'metadata_model.g.dart';
   DocumentMetaDataModel,
   MenuItemInterface
 ])
-final Serializers _serializers = (_$_serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
+final Serializers _serializers =
+    (_$_serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
 
-abstract class MetaDataModel implements MetaDataInterface, Built<MetaDataModel, MetaDataModelBuilder> {
-  factory MetaDataModel([void Function(MetaDataModelBuilder) updates]) = _$MetaDataModel;
+abstract class MetaDataModel
+    implements MetaDataInterface, Built<MetaDataModel, MetaDataModelBuilder> {
+  factory MetaDataModel([void Function(MetaDataModelBuilder) updates]) =
+      _$MetaDataModel;
 
   const MetaDataModel._();
 
@@ -44,13 +47,19 @@ abstract class MetaDataModel implements MetaDataInterface, Built<MetaDataModel, 
   static MetaDataModel fromJson(Map<String, dynamic> json) =>
       _serializers.deserializeWith(MetaDataModel.serializer, json)!;
 
-  Map<String, dynamic> toJson() => _serializers.serializeWith(MetaDataModel.serializer, this) as Map<String, dynamic>;
+  Map<String, dynamic> toJson() =>
+      _serializers.serializeWith(MetaDataModel.serializer, this)
+          as Map<String, dynamic>;
 
   static Serializer<MetaDataModel> get serializer => _$metaDataModelSerializer;
 }
 
-abstract class RepoMetaDataModel implements RepoMetaDataInterface, Built<RepoMetaDataModel, RepoMetaDataModelBuilder> {
-  factory RepoMetaDataModel([void Function(RepoMetaDataModelBuilder) updates]) = _$RepoMetaDataModel;
+abstract class RepoMetaDataModel
+    implements
+        RepoMetaDataInterface,
+        Built<RepoMetaDataModel, RepoMetaDataModelBuilder> {
+  factory RepoMetaDataModel([void Function(RepoMetaDataModelBuilder) updates]) =
+      _$RepoMetaDataModel;
 
   const RepoMetaDataModel._();
 
@@ -58,13 +67,19 @@ abstract class RepoMetaDataModel implements RepoMetaDataInterface, Built<RepoMet
       _serializers.deserializeWith(RepoMetaDataModel.serializer, json)!;
 
   Map<String, dynamic> toJson() =>
-      _serializers.serializeWith(RepoMetaDataModel.serializer, this) as Map<String, dynamic>;
+      _serializers.serializeWith(RepoMetaDataModel.serializer, this)
+          as Map<String, dynamic>;
 
-  static Serializer<RepoMetaDataModel> get serializer => _$repoMetaDataModelSerializer;
+  static Serializer<RepoMetaDataModel> get serializer =>
+      _$repoMetaDataModelSerializer;
 }
 
-abstract class DocLanguageModel implements DocLanguageInterface, Built<DocLanguageModel, DocLanguageModelBuilder> {
-  factory DocLanguageModel([void Function(DocLanguageModelBuilder) updates]) = _$DocLanguageModel;
+abstract class DocLanguageModel
+    implements
+        DocLanguageInterface,
+        Built<DocLanguageModel, DocLanguageModelBuilder> {
+  factory DocLanguageModel([void Function(DocLanguageModelBuilder) updates]) =
+      _$DocLanguageModel;
 
   const DocLanguageModel._();
 
@@ -72,12 +87,15 @@ abstract class DocLanguageModel implements DocLanguageInterface, Built<DocLangua
       _serializers.deserializeWith(DocLanguageModel.serializer, json)!;
 
   Map<String, dynamic> toJson() =>
-      _serializers.serializeWith(DocLanguageModel.serializer, this) as Map<String, dynamic>;
+      _serializers.serializeWith(DocLanguageModel.serializer, this)
+          as Map<String, dynamic>;
 
-  static Serializer<DocLanguageModel> get serializer => _$docLanguageModelSerializer;
+  static Serializer<DocLanguageModel> get serializer =>
+      _$docLanguageModelSerializer;
 }
 
-abstract class PageModel implements PageInterface, Built<PageModel, PageModelBuilder> {
+abstract class PageModel
+    implements PageInterface, Built<PageModel, PageModelBuilder> {
   factory PageModel([void Function(PageModelBuilder) updates]) = _$PageModel;
 
   const PageModel._();
@@ -97,29 +115,40 @@ abstract class PageModel implements PageInterface, Built<PageModel, PageModelBui
   @override
   BuiltList<DocumentMetaDataModel> get data;
 
-  static PageModel fromJson(Map<String, dynamic> json) => _serializers.deserializeWith(PageModel.serializer, json)!;
+  static PageModel fromJson(Map<String, dynamic> json) =>
+      _serializers.deserializeWith(PageModel.serializer, json)!;
 
-  Map<String, dynamic> toJson() => _serializers.serializeWith(PageModel.serializer, this) as Map<String, dynamic>;
+  Map<String, dynamic> toJson() =>
+      _serializers.serializeWith(PageModel.serializer, this)
+          as Map<String, dynamic>;
 
   static Serializer<PageModel> get serializer => _$pageModelSerializer;
 }
 
-abstract class MenuItemModel implements MenuItemInterface, Built<MenuItemModel, MenuItemModelBuilder> {
-  factory MenuItemModel([void Function(MenuItemModelBuilder) updates]) = _$MenuItemModel;
+abstract class MenuItemModel
+    implements MenuItemInterface, Built<MenuItemModel, MenuItemModelBuilder> {
+  factory MenuItemModel([void Function(MenuItemModelBuilder) updates]) =
+      _$MenuItemModel;
 
   const MenuItemModel._();
 
   static MenuItemModel fromJson(Map<String, dynamic> json) =>
       _serializers.deserializeWith(MenuItemModel.serializer, json)!;
 
-  Map<String, dynamic> toJson() => _serializers.serializeWith(MenuItemModel.serializer, this) as Map<String, dynamic>;
+  Map<String, dynamic> toJson() =>
+      _serializers.serializeWith(MenuItemModel.serializer, this)
+          as Map<String, dynamic>;
 
   static Serializer<MenuItemModel> get serializer => _$menuItemModelSerializer;
 }
 
 abstract class DocumentMetaDataModel
-    implements DocumentMetaDataInterface, Built<DocumentMetaDataModel, DocumentMetaDataModelBuilder> {
-  factory DocumentMetaDataModel([void Function(DocumentMetaDataModelBuilder) updates]) = _$DocumentMetaDataModel;
+    implements
+        DocumentMetaDataInterface,
+        Built<DocumentMetaDataModel, DocumentMetaDataModelBuilder> {
+  factory DocumentMetaDataModel(
+          [void Function(DocumentMetaDataModelBuilder) updates]) =
+      _$DocumentMetaDataModel;
 
   const DocumentMetaDataModel._();
 
@@ -127,7 +156,9 @@ abstract class DocumentMetaDataModel
       _serializers.deserializeWith(DocumentMetaDataModel.serializer, json)!;
 
   Map<String, dynamic> toJson() =>
-      _serializers.serializeWith(DocumentMetaDataModel.serializer, this) as Map<String, dynamic>;
+      _serializers.serializeWith(DocumentMetaDataModel.serializer, this)
+          as Map<String, dynamic>;
 
-  static Serializer<DocumentMetaDataModel> get serializer => _$documentMetaDataModelSerializer;
+  static Serializer<DocumentMetaDataModel> get serializer =>
+      _$documentMetaDataModelSerializer;
 }

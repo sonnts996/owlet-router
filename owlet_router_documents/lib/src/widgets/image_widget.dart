@@ -28,7 +28,7 @@ class ImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (uri == null) return SizedBox.shrink();
+    if (uri == null) return const SizedBox.shrink();
     if (uri!.scheme == 'http' || uri!.scheme == 'https') {
       if (getUriExtension(uri!) == 'svg') {
         return SvgPicture.network(
@@ -37,7 +37,8 @@ class ImageWidget extends StatelessWidget {
           width: width,
           alignment: alignment,
           fit: fit,
-          placeholderBuilder: (context) => Placeholder(fallbackHeight: height ?? 400, fallbackWidth: width ?? 400),
+          placeholderBuilder: (context) => Placeholder(
+              fallbackHeight: height ?? 400, fallbackWidth: width ?? 400),
         );
       } else {
         return CachedNetworkImage(
@@ -46,8 +47,10 @@ class ImageWidget extends StatelessWidget {
           width: width,
           alignment: alignment,
           fit: fit,
-          placeholder: (context, url) => Placeholder(fallbackHeight: height ?? 400, fallbackWidth: width ?? 400),
-          errorWidget: (context, url, error) => Placeholder(fallbackHeight: height ?? 400, fallbackWidth: width ?? 400),
+          placeholder: (context, url) => Placeholder(
+              fallbackHeight: height ?? 400, fallbackWidth: width ?? 400),
+          errorWidget: (context, url, error) => Placeholder(
+              fallbackHeight: height ?? 400, fallbackWidth: width ?? 400),
         );
       }
     } else {
@@ -58,7 +61,8 @@ class ImageWidget extends StatelessWidget {
           width: width,
           alignment: alignment,
           fit: fit,
-          placeholderBuilder: (context) => Placeholder(fallbackHeight: height ?? 400, fallbackWidth: width ?? 400),
+          placeholderBuilder: (context) => Placeholder(
+              fallbackHeight: height ?? 400, fallbackWidth: width ?? 400),
         );
       } else {
         return Image.asset(
@@ -67,7 +71,8 @@ class ImageWidget extends StatelessWidget {
           width: width,
           alignment: alignment,
           fit: fit,
-          errorBuilder: (context, error, _) => Placeholder(fallbackHeight: height ?? 400, fallbackWidth: width ?? 400),
+          errorBuilder: (context, error, _) => Placeholder(
+              fallbackHeight: height ?? 400, fallbackWidth: width ?? 400),
         );
       }
     }

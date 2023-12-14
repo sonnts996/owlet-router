@@ -18,7 +18,8 @@ class BodyContainer extends StatelessWidget {
           ? Align(
               alignment: Alignment.topCenter,
               child: ConstrainedBox(
-                constraints: const BoxConstraints(minWidth: 300, maxWidth: 1000),
+                constraints:
+                    const BoxConstraints(minWidth: 300, maxWidth: 1000),
                 child: child,
               ))
           : child);

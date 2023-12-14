@@ -13,10 +13,14 @@ class ErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('Author'), centerTitle: false, leading: const LeadingIcon()),
+        appBar: AppBar(
+            title: const Text('Author'),
+            centerTitle: false,
+            leading: const LeadingIcon()),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Center(child: Text(error?.toString() ?? 'Something was wrong!!!')),
+          child: Center(
+              child: Text(error?.toString() ?? 'Something was wrong!!!')),
         ),
       );
 }

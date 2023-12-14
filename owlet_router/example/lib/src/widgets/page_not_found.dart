@@ -19,7 +19,10 @@ class PageNotFound extends StatelessWidget {
           ),
           Text(
             'Page Not Found',
-            style: Theme.of(context).textTheme.displayMedium?.apply(color: Theme.of(context).disabledColor),
+            style: Theme.of(context)
+                .textTheme
+                .displayMedium
+                ?.apply(color: Theme.of(context).disabledColor),
           )
         ]),
       );

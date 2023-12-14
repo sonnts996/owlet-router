@@ -33,7 +33,8 @@ class _TabWidgetState extends State<TabWidget> {
   final ContentUseCase contentUseCase = getIt.get<ContentUseCase>();
 
   final ScrollController _scrollController = ScrollController();
-  late final DocumentScrollToFragment _scrollToFragment = DocumentScrollToFragment(_scrollController);
+  late final DocumentScrollToFragment _scrollToFragment =
+      DocumentScrollToFragment(_scrollController);
 
   PageInterface? page;
   late final RouteNotifier routeNotifier;
@@ -44,12 +45,14 @@ class _TabWidgetState extends State<TabWidget> {
     if (widget.page != null) {
       page = widget.page!;
       SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        routeNotifier = RouteBase.of<HomeTabRoute>(context).tabPage..addListener(listenRouteChange);
+        routeNotifier = RouteBase.of<HomeTabRoute>(context).tabPage
+          ..addListener(listenRouteChange);
         Future.delayed(Duration(seconds: 1), listenRouteChange);
       });
     } else {
       SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        routeNotifier = RouteBase.of<HomeTabRoute>(context).homePage..addListener(listenRouteChange);
+        routeNotifier = RouteBase.of<HomeTabRoute>(context).homePage
+          ..addListener(listenRouteChange);
         setState(() {
           page = Provider.of<PageInterface>(context, listen: false);
         });
@@ -122,15 +125,18 @@ class TabAppBar extends StatelessWidget {
             (it) => FlexibleSpaceBar(
                 centerTitle: true,
                 background: DecoratedBox(
-                    decoration: BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor),
                     child: Container(
                       decoration: BoxDecoration(
                         color: background, // image color
-                        borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
+                        borderRadius:
+                            BorderRadius.vertical(bottom: Radius.circular(24)),
                       ),
                       alignment: Alignment.bottomCenter,
                       child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 300, minHeight: 100, maxHeight: 300),
+                          constraints: const BoxConstraints(
+                              maxWidth: 300, minHeight: 100, maxHeight: 300),
                           child: ImageWidget(
                             imageUrl: it,
                             fit: BoxFit.fitWidth,

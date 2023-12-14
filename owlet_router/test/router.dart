@@ -78,7 +78,8 @@ class HomeRoute extends RouteBase {
         }
         return route;
       },
-      route: MaterialRouteBuilder('/guard', pageBuilder: (context, settings) => TestApp(content: 'RouteGuard')));
+      route: MaterialRouteBuilder('/guard',
+          pageBuilder: (context, settings) => TestApp(content: 'RouteGuard')));
 
   @override
   List<RouteBase> get children => [home, page1, page2, action, guard];

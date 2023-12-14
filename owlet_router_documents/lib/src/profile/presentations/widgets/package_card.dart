@@ -60,17 +60,20 @@ class _PackageCart extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Transform.translate(
-                offset: Offset(-4, 0),
+                offset: const Offset(-4, 0),
                 child: TextButton(
                   onPressed: onOpenPubLink,
                   child: Text(name,
-                      style:
-                          Theme.of(context).textTheme.titleSmall?.apply(color: Theme.of(context).colorScheme.primary)),
+                      style: Theme.of(context).textTheme.titleSmall?.apply(
+                          color: Theme.of(context).colorScheme.primary)),
                 ),
               ),
               const SizedBox(height: 4),
               if (versionShieldUrl != null)
-                SizedBox(height: 20, child: SvgShield(shieldUrl: versionShieldUrl!, onTab: onOpenPubLink)),
+                SizedBox(
+                    height: 20,
+                    child: SvgShield(
+                        shieldUrl: versionShieldUrl!, onTab: onOpenPubLink)),
               const SizedBox(height: 4),
               if (description != null)
                 Text(

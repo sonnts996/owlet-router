@@ -6,7 +6,8 @@ import 'dart:html';
 
 import 'package:flutter/foundation.dart';
 
-final bool mIsDesktopMode = ![TargetPlatform.android, TargetPlatform.iOS].contains(defaultTargetPlatform);
+final bool mIsDesktopMode = ![TargetPlatform.android, TargetPlatform.iOS]
+    .contains(defaultTargetPlatform);
 
 void updateUrlBar(String title, String url) {
   window.history.pushState({}, title, url);

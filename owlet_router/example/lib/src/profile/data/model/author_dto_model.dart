@@ -18,7 +18,8 @@ class AuthorDtoModel {
     required this.gitApi,
   });
 
-  factory AuthorDtoModel.fromJson(Map<String, dynamic> json) => _$AuthorDtoModelFromJson(json);
+  factory AuthorDtoModel.fromJson(Map<String, dynamic> json) =>
+      _$AuthorDtoModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$AuthorDtoModelToJson(this);
 

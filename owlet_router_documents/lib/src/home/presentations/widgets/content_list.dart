@@ -33,11 +33,14 @@ class ContentList extends StatelessWidget {
                   (e) => Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: ListTile(
-                      leading: SizedBox(width: 20, child: Icon(Icons.circle_outlined, size: 6)),
+                      leading: const SizedBox(
+                          width: 20,
+                          child: Icon(Icons.circle_outlined, size: 6)),
                       minLeadingWidth: 10,
                       title: Text(e.title),
                       onTap: () {
-                        onTab('${element.menuItem.segment}${e.fragment}', element);
+                        onTab('${element.menuItem.segment}${e.fragment}',
+                            element);
                       },
                     ),
                   ),
@@ -67,7 +70,7 @@ class DesktopDrawer extends StatelessWidget {
   Widget build(BuildContext context) => SafeArea(
         child: Container(
           width: 300,
-          padding: EdgeInsets.only(left: 8, right: 16),
+          padding: const EdgeInsets.only(left: 8, right: 16),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -86,11 +89,15 @@ class DesktopDrawer extends StatelessWidget {
                   selected: currentIndex == 2,
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(left: 8, bottom: 0, right: 16, top: 16),
-                    child: Text('Documents', style: Theme.of(context).textTheme.labelMedium)),
+                    padding: const EdgeInsets.only(
+                        left: 8, bottom: 0, right: 16, top: 16),
+                    child: Text('Documents',
+                        style: Theme.of(context).textTheme.labelMedium)),
                 const Divider(),
-                Expanded(child: ContentList(onTab: onDocumentTab, metaData: metaData)),
-                SizedBox(height: 16),
+                Expanded(
+                    child:
+                        ContentList(onTab: onDocumentTab, metaData: metaData)),
+                const SizedBox(height: 16),
               ]),
         ),
       );

@@ -15,7 +15,8 @@ enum ScreenMode {
   bool get isMobile => this == ScreenMode.mobile;
 }
 
-final ValueNotifier<ScreenMode> screenModeNotifier = ValueNotifier(ScreenMode.normal);
+final ValueNotifier<ScreenMode> screenModeNotifier =
+    ValueNotifier(ScreenMode.normal);
 
 class ResponsiveLayoutWatcher extends StatelessWidget {
   const ResponsiveLayoutWatcher({super.key, required this.child});
@@ -74,12 +75,13 @@ class ResponsiveLayout extends StatelessWidget {
   });
 
   final Widget? child;
-  final Widget Function(BuildContext context, ScreenMode mode, Widget? child) builder;
+  final Widget Function(BuildContext context, ScreenMode mode, Widget? child)
+      builder;
 
   @override
   Widget build(BuildContext context) => ValueListenableBuilder<ScreenMode>(
         valueListenable: screenModeNotifier,
-        child: child,
         builder: builder,
+        child: child,
       );
 }

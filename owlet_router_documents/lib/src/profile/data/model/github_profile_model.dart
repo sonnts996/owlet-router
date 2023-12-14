@@ -43,7 +43,8 @@ class GitHubProfileModel {
       required this.createdAt,
       required this.updatedAt});
 
-  factory GitHubProfileModel.fromJson(Map<String, dynamic> json) => _$GitHubProfileModelFromJson(json);
+  factory GitHubProfileModel.fromJson(Map<String, dynamic> json) =>
+      _$GitHubProfileModelFromJson(json);
 
   @JsonKey(name: 'login')
   final String? login;

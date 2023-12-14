@@ -18,7 +18,8 @@ import 'src/utilities/route_compare.dart';
 export 'src/route/builder/builder.dart';
 export 'src/route/nested/nested.dart' hide RouteGuardFunctionIntl;
 export 'src/route/route_base.dart';
-export 'src/services/router_services.dart' hide NavigationServiceImpl, RouteHistoryImpl;
+export 'src/services/router_services.dart'
+    hide NavigationServiceImpl, RouteHistoryImpl;
 export 'src/utilities/route_compare.dart';
 export 'src/utilities/route_settings_extension.dart';
 export 'src/utilities/utilities.dart';

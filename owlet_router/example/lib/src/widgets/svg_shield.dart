@@ -55,7 +55,8 @@ class _SvgShieldState extends State<SvgShield> {
         future: _repairSvg(),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
-            return GestureDetector(onTap: widget.onTab, child: SvgPicture.string(snapshot.data!));
+            return GestureDetector(
+                onTap: widget.onTab, child: SvgPicture.string(snapshot.data!));
           }
           return SizedBox.shrink();
         },

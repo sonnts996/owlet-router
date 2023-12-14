@@ -35,7 +35,8 @@ void generateHtml(String directory) {
       final contents = loadMarkdownContent(File(e.path));
       final htmlContents = convertMd2Html(contents);
       writeMarkdownContent(
-        File(path.join(resultDir.path, '${path.basenameWithoutExtension(e.path)}.html')),
+        File(path.join(
+            resultDir.path, '${path.basenameWithoutExtension(e.path)}.html')),
         htmlContents,
       );
     }

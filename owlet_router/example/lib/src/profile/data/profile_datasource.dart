@@ -25,12 +25,15 @@ class ProfileDataSource {
 
   Future<ProfileInterface> getAuthorDto() async {
     if (authorDto == null) {
-      final assets = await rootBundle.loadString('documents/author/index.json', cache: true);
+      final assets = await rootBundle.loadString('documents/author/index.json',
+          cache: true);
       authorDto = AuthorDtoModel.fromJson(jsonDecode(assets));
     }
     if (githubProfile == null) {
-      final response = await dio.get(replace(authorDto!.gitApi, {'username': authorDto!.username}));
-      githubProfile = GitHubProfileModel.fromJson(response.data as Map<String, dynamic>);
+      final response = await dio
+          .get(replace(authorDto!.gitApi, {'username': authorDto!.username}));
+      githubProfile =
+          GitHubProfileModel.fromJson(response.data as Map<String, dynamic>);
     }
     return ProfileModel((p0) {
       p0

@@ -37,7 +37,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey(debugLabel: 'HomeScaffold');
+  final GlobalKey<ScaffoldState> scaffoldKey =
+      GlobalKey(debugLabel: 'HomeScaffold');
 
   final HashMap<String, String> routeNamedMap = HashMap();
 
@@ -66,7 +67,8 @@ class _HomePageState extends State<HomePage> {
   void onUrlChanged() {
     final path = tabService.route.tabPage.settings?.path;
     final url = tabService.route.tabPage.settings?.name;
-    url?.let((it) => updateUrlBar(routeNamedMap[path ?? ''] ?? widget.metaData.name, it));
+    url?.let((it) =>
+        updateUrlBar(routeNamedMap[path ?? ''] ?? widget.metaData.name, it));
     setState(() {
       currentPath = tabService.route.tabPage.settings?.path;
       currentFragment = '#${tabService.route.tabPage.settings?.fragment}';
@@ -81,7 +83,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Offset breadCrumbPosition() {
-    var box = tabService.navigationKey.currentContext?.findRenderObject() as RenderBox?;
+    var box = tabService.navigationKey.currentContext?.findRenderObject()
+        as RenderBox?;
     return box?.localToGlobal(Offset.zero) ?? Offset.zero;
   }
 
@@ -126,15 +129,22 @@ class _HomePageState extends State<HomePage> {
                               SizedBox(width: 8),
                               const SizedBox(width: 10),
                               ShaderMask(
-                                shaderCallback: (bounds) => const LinearGradient(
-                                  colors: [Color(0xFF6C89EE), Color(0xFF012FC5)],
+                                shaderCallback: (bounds) =>
+                                    const LinearGradient(
+                                  colors: [
+                                    Color(0xFF6C89EE),
+                                    Color(0xFF012FC5)
+                                  ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ).createShader(bounds),
-                                child: IconWidget(iconUrl: widget.metaData.icon, size: 32),
+                                child: IconWidget(
+                                    iconUrl: widget.metaData.icon, size: 32),
                               ),
                               SizedBox(width: 8),
-                              Text(widget.metaData.name, style: Theme.of(context).textTheme.titleMedium)
+                              Text(widget.metaData.name,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium)
                             ]),
                       ),
                     SizedBox(width: 16),
@@ -151,7 +161,8 @@ class _HomePageState extends State<HomePage> {
                 : Drawer(
                     child: SafeArea(
                     child: Padding(
-                      padding: EdgeInsets.only(left: 8, right: 16, top: 16, bottom: 16),
+                      padding: EdgeInsets.only(
+                          left: 8, right: 16, top: 16, bottom: 16),
                       child: ContentList(
                         onTab: onSectionTab,
                         metaData: widget.metaData,
@@ -180,9 +191,14 @@ class _HomePageState extends State<HomePage> {
                     onTap: onNavigateTab,
                     type: BottomNavigationBarType.fixed,
                     items: const [
-                        BottomNavigationBarItem(icon: Icon(CupertinoIcons.line_horizontal_3), label: 'Menu'),
-                        BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: 'Home'),
-                        BottomNavigationBarItem(icon: Icon(CupertinoIcons.profile_circled), label: 'Author'),
+                        BottomNavigationBarItem(
+                            icon: Icon(CupertinoIcons.line_horizontal_3),
+                            label: 'Menu'),
+                        BottomNavigationBarItem(
+                            icon: Icon(CupertinoIcons.home), label: 'Home'),
+                        BottomNavigationBarItem(
+                            icon: Icon(CupertinoIcons.profile_circled),
+                            label: 'Author'),
                       ]),
           ));
 
@@ -203,7 +219,8 @@ class _HomePageState extends State<HomePage> {
   void onSectionTab(String name, PageInterface page) {
     // tabService.pushNamed(path: name);
     scaffoldKey.currentState?.closeDrawer();
-    Navigator.of(context, rootNavigator: true).pushNamed('/home/t$name', arguments: page);
+    Navigator.of(context, rootNavigator: true)
+        .pushNamed('/home/t$name', arguments: page);
     setState(() {
       routeNamedMap['/t${Uri.parse(name).path}'] = page.label.label;
     });
