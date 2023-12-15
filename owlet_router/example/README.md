@@ -1,5 +1,7 @@
 # Owlet Router Example
 
+<img src="https://github.com/sonnts996/owlet-router/blob/main/assets/owlets_on_the_tree.jpg?raw=true" alt="owlets_on_the_tree" width="300"/>
+
 [![version](https://img.shields.io/pub/v/owlet_router)](https://pub.dev/packages/owlet_router) [![like](https://img.shields.io/pub/likes/owlet_router)](https://pub.dev/packages/owlet_router) [![issues](https://img.shields.io/github/issues/sonnts996/owlet-router)](https://github.com/sonnts996/owlet-router) [![license](https://img.shields.io/github/license/sonnts996/owlet-router)](https://github.com/sonnts996/owlet-router)
 
 The [owlet_router](https://github.com/sonnts996/owlet-router/tree/refactor/owlet_router) is a route
@@ -15,7 +17,27 @@ It is designed with several purposes in mind:
   routes.
 - Offering the capability to check, prevent, or redirect routes before they are pushed.
 
-> The information on the example is for reference only and may not be suitable for the latest
-> version. See more
-> about [API documents](https://pub.dev/documentation/owlet_router/latest/) or refer to
-> the [pub package](https://pub.dev/packages/owlet_router).
+# Project structure
+
+```
+MainRoute 					 // Main NavigationService	
+	├── home ('/home') 		 // home page with a nested navigator
+	│	├── homePage ('/') 		 // nested route is '/home/'
+	│	└── tabPage ('/t/*') // nested route is '/home/t/* with * is dynamic page, load from json file
+	├── profile ('/profile')
+	└── splash ('/')
+```
+
+This example app showcases a "MainRoute" module with three pages: Home, Profile, and a Splash Page.
+The Home page leverages a nested service, commonly used for nested navigation. When you navigate to
+a route starting with "/home", the app checks if the Home page is already open. If not, it opens it.
+Otherwise, it sends a notification to the open Home page, prompting it to update its "TabPage" and
+scroll to the relevant content. This demonstrates dynamic page updates based on routing actions,
+avoiding unnecessary page creation.
+
+> [!Heads up!]
+>
+> The Owlet Router details within this example app might be a bit out-of-date. It's always a good
+> idea to refer to the latest
+> official [documentation](https://github.com/sonnts996/owlet-router/tree/main/owlet_router) for the
+> most accurate information.

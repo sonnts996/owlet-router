@@ -15,6 +15,6 @@ It is designed with several purposes in mind:
   routes.
 - Offering the capability to check, prevent, or redirect routes before they are pushed.
 
-> Detailed documentation for the owlet router is under development. See more
-> about [API documents](https://pub.dev/documentation/owlet_router/latest/) or refer to
-> the [examples](https://github.com/sonnts996/owlet-router/tree/refactor/owlet_router/example) .
+> Detailed documentation for the owlet router is under development. 
+>
+> See more about [API documents](https://pub.dev/documentation/owlet_router/latest/) or refer to the [examples](https://github.com/sonnts996/owlet-router/tree/refactor/owlet_router/example) .

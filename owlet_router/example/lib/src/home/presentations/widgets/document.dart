@@ -26,7 +26,8 @@ class DocumentScrollToFragment {
   }
 
   void scrollTo(String fragment) {
-    assert(fragment.startsWith('#'), 'Fragment must be start with "#". Example: #fragment-to-widget');
+    assert(fragment.startsWith('#'),
+        'Fragment must be start with "#". Example: #fragment-to-widget');
     final key = _keys[fragment];
     if (key != null) {
       scrollController.animateTo(widgetPositionOnViewport(key),
@@ -61,9 +62,14 @@ class Document extends StatefulWidget {
   State<Document> createState() => _DocumentState();
 }
 
-class _DocumentState extends State<Document> {
+class _DocumentState extends State<Document>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   void onClickedLink(String? value) {
-    if (value != null && (value.startsWith('http://') || value.startsWith('https://'))) {
+    if (value != null &&
+        (value.startsWith('http://') || value.startsWith('https://'))) {
       launchUrlString(value);
     } else if (value != null && value.startsWith('#')) {
       widget.documentScrollToFragment.scrollTo(value);
@@ -81,7 +87,10 @@ class _DocumentState extends State<Document> {
               shrinkWrap: true,
               style: {
                 'p > code': Style(backgroundColor: const Color(0xFFe1e1e1)),
-                'p': Style.fromTextStyle(Theme.of(context).textTheme.bodyMedium!.apply(heightDelta: 0.8)),
+                'p': Style.fromTextStyle(Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .apply(heightDelta: 0.8)),
               },
               extensions: [
                 TagExtension(
@@ -125,19 +134,24 @@ class _DocumentState extends State<Document> {
                           padding: const EdgeInsets.symmetric(horizontal: 2),
                           child: GestureDetector(
                               onTap: () => onClickedLink(href),
-                              child: (url?.startsWith('https://img.shields.io') ?? false)
-                                  ? SvgShield(shieldUrl: url!)
-                                  : ImageWidget(
-                                      imageUrl: extensionContext.attributes['src'] ?? '',
-                                      width: width,
-                                      height: height)),
+                              child:
+                                  (url?.startsWith('https://img.shields.io') ??
+                                          false)
+                                      ? SvgShield(shieldUrl: url!)
+                                      : ImageWidget(
+                                          imageUrl: extensionContext
+                                                  .attributes['src'] ??
+                                              '',
+                                          width: width,
+                                          height: height)),
                         );
                       }
                     }
                     return Text.rich(
                       WidgetSpan(
                           child: TextButton(
-                        child: Text(extensionContext.element?.text.trim() ?? ''),
+                        child:
+                            Text(extensionContext.element?.text.trim() ?? ''),
                         onPressed: () => onClickedLink(href),
                       )),
                     );
@@ -149,8 +163,13 @@ class _DocumentState extends State<Document> {
                     decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.primaryContainer,
                         border: Border(
-                            left: BorderSide(color: Theme.of(context).colorScheme.onPrimaryContainer, width: 5))),
-                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+                            left: BorderSide(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
+                                width: 5))),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
                     child: child,
                   ),
                 ),
@@ -167,11 +186,13 @@ class _DocumentState extends State<Document> {
                     builder: (extensionContext) => Container(
                           clipBehavior: Clip.antiAlias,
                           alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 16),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
                               color: const Color(0xfff8f8f8),
-                              border: Border.all(color: Theme.of(context).dividerColor)),
+                              border: Border.all(
+                                  color: Theme.of(context).dividerColor)),
                           child: HighlightView(
                             extensionContext.element?.text.trim() ?? '',
                             language: 'dart',
@@ -186,12 +207,16 @@ class _DocumentState extends State<Document> {
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 4),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
-                                    color: extensionContext.style?.backgroundColor),
-                                child: Text(extensionContext.element?.text.trim() ?? '',
-                                    style: Theme.of(context).textTheme.bodyMedium),
+                                    color: extensionContext
+                                        .style?.backgroundColor),
+                                child: Text(
+                                    extensionContext.element?.text.trim() ?? '',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
                               )),
                         )),
               ],
@@ -241,7 +266,9 @@ class AnchorWidget extends StatelessWidget {
           key: key,
           children: [
             TextButton(
-              child: Text('#', style: style(context)?.apply(color: Theme.of(context).dividerColor)),
+              child: Text('#',
+                  style: style(context)
+                      ?.apply(color: Theme.of(context).dividerColor)),
               onPressed: () {
                 onClickedLink(anchorText);
               },

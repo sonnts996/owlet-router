@@ -7,7 +7,8 @@ part of 'builder.dart';
 
 ///
 /// Construct a [PageRoute] without effects when pushing.
-class NoTransitionPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin {
+class NoTransitionPageRoute<T> extends PageRoute<T>
+    with MaterialRouteTransitionMixin {
   ///
   /// The [NoTransitionPageRoute]'s constructor.
   NoTransitionPageRoute({

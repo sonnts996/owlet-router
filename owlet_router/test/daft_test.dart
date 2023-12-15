@@ -79,7 +79,8 @@ void find(String name, TreeNode? Function() finder) {
   final start = DateTime.now();
   final node = finder();
   final end = DateTime.now();
-  '${end.microsecondsSinceEpoch - start.microsecondsSinceEpoch}: ${node?.path}'.print(tag: '$name run in microseconds');
+  '${end.microsecondsSinceEpoch - start.microsecondsSinceEpoch}: ${node?.path}'
+      .print(tag: '$name run in microseconds');
 }
 
 TreeNode? find1(TreeNode node, String value) {

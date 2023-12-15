@@ -69,7 +69,8 @@ class RouteBase extends RouteMixin {
       var findContext = context;
       // ignore: literal_only_boolean_expressions
       do {
-        final navigator = findContext.findAncestorStateOfType<OwletNavigatorState>();
+        final navigator =
+            findContext.findAncestorStateOfType<OwletNavigatorState>();
         final result = navigator?.service.route.findType<R>();
         if (result != null) {
           return result;
@@ -98,8 +99,10 @@ class RouteBase extends RouteMixin {
     bool useRoot = false,
     bool deepSearch = false,
   }) {
-    final result = maybeOf<R>(context, useRoot: useRoot, deepSearch: deepSearch);
-    assert(result != null, 'No $R found, maybe it has not been injected in the Navigator');
+    final result =
+        maybeOf<R>(context, useRoot: useRoot, deepSearch: deepSearch);
+    assert(result != null,
+        'No $R found, maybe it has not been injected in the Navigator');
     return result!;
   }
 

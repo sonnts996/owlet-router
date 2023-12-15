@@ -10,7 +10,8 @@ part of 'builder.dart';
 /// Construct a route with the [CupertinoPageRoute].
 /// The [RouteBuilder] class also defines the parameter type ([A]) and the result type ([T]) of the route.
 /// However, in certain scenarios, the parameter verification mechanism may fail to function properly.
-class CupertinoRouteBuilder<A extends Object?, T extends Object?> extends RouteBuilder<A, T>
+class CupertinoRouteBuilder<A extends Object?, T extends Object?>
+    extends RouteBuilder<A, T>
     with PageRouteMixin, ConvertToNoTransitionBuilderMixin<A, T> {
   ///
   /// Create the [CupertinoRouteBuilder] with [CupertinoPageRoute] options.

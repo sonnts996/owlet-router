@@ -37,7 +37,8 @@ class HomeTabRoute extends RouteBase {
         },
         route: NoTransitionRouteBuilder(
           '/t',
-          pageBuilder: (context, settings) => TabWidget(page: settings.arguments.castTo<PageInterface?>()),
+          pageBuilder: (context, settings) =>
+              TabWidget(page: settings.arguments.castTo<PageInterface?>()),
         )),
   );
 

@@ -17,8 +17,10 @@ class OwletInformationParser extends RouteInformationParser<RouteMixin> {
   final NavigationService service;
 
   @override
-  Future<RouteMixin> parseRouteInformation(RouteInformation routeInformation) async =>
-      service.findRoute(routeInformation.uri.path) ?? RouteBase(routeInformation.uri.path);
+  Future<RouteMixin> parseRouteInformation(
+          RouteInformation routeInformation) async =>
+      service.findRoute(routeInformation.uri.path) ??
+      RouteBase(routeInformation.uri.path);
 
   @override
   RouteInformation? restoreRouteInformation(RouteMixin configuration) =>

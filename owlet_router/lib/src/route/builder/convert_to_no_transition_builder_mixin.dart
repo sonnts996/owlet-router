@@ -8,12 +8,14 @@ part of 'builder.dart';
 
 ///
 /// Convert a [RouteBuilder] into a [NoTransitionPageRoute]
-mixin ConvertToNoTransitionBuilderMixin<A extends Object?, T extends Object?> on RouteBuilder<A, T>, PageRouteMixin {
+mixin ConvertToNoTransitionBuilderMixin<A extends Object?, T extends Object?>
+    on RouteBuilder<A, T>, PageRouteMixin {
   ///
   /// Convert a [RouteBuilder] into a [NoTransitionPageRoute]
   NoTransitionPageRoute<T>? noAnimationBuilder([A? args]) => pageBuilder?.let(
         (it) => NoTransitionPageRoute<T>(
-          builder: (context) => it(context, RouteSettings(name: path, arguments: args)),
+          builder: (context) =>
+              it(context, RouteSettings(name: path, arguments: args)),
           allowSnapshotting: allowSnapshotting,
           maintainState: maintainState,
           fullscreenDialog: fullscreenDialog,

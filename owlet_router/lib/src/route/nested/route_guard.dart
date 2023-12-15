@@ -33,7 +33,8 @@ part of 'nested.dart';
 /// - [Navigator.pushReplacementNamed],
 /// - [Navigator.pushAndRemoveUntil],
 /// - [Navigator.pushNamedAndRemoveUntil]
-class RouteGuard<A extends Object?, T extends Object?> extends GuardProxyRoute<RouteBuilderMixin<A, T>> {
+class RouteGuard<A extends Object?, T extends Object?>
+    extends GuardProxyRoute<RouteBuilderMixin<A, T>> {
   /// The [RouteGuard]'s constructor
   RouteGuard({
     required super.route,
@@ -43,20 +44,22 @@ class RouteGuard<A extends Object?, T extends Object?> extends GuardProxyRoute<R
   ///
   /// This route will be automatically skipped if it already exists in the navigator.
   /// Override [onRouteExists] to handle this scenario or perform custom actions.
-  static AwareExistsRoute<A, T> awareExists<A extends Object?, T extends Object?>({
+  static AwareExistsRoute<A, T>
+      awareExists<A extends Object?, T extends Object?>({
     required RouteBuilderMixin<A, T> route,
     RouteGuardFunction? onRouteExists,
   }) =>
-      AwareExistsRoute<A, T>(
-        route: route,
-        onRouteExists: onRouteExists,
-      );
+          AwareExistsRoute<A, T>(
+            route: route,
+            onRouteExists: onRouteExists,
+          );
 }
 
 ///
 /// This route will be automatically skipped if it already exists in the navigator.
 /// Override [onRouteExists] to handle this scenario or perform custom actions.
-class AwareExistsRoute<A extends Object?, T extends Object?> extends RouteGuard<A, T> with RouteNotifier {
+class AwareExistsRoute<A extends Object?, T extends Object?>
+    extends RouteGuard<A, T> with RouteNotifier {
   /// The [AwareExistsRoute]'s constructor
   AwareExistsRoute({
     required super.route,

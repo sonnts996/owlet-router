@@ -5,7 +5,6 @@
 import 'dart:io';
 
 import 'package:markdown/markdown.dart' as md;
-import 'package:path/path.dart' as path;
 
 String convertMd2Html(String contents) {
   return md.markdownToHtml(contents);
@@ -23,22 +22,4 @@ void writeMarkdownContent(File file, String contents) {
   }
   file.writeAsStringSync(contents);
   print('Write contents to ${file.path}');
-}
-
-void generateHtml(String directory) {
-  final originDir = Directory(path.join(directory, 'docs'));
-  assert(originDir.existsSync(), '');
-  final resultDir = Directory(path.join(directory, 'docs_html'));
-  final listFile = originDir.listSync(recursive: true);
-  for (var e in listFile) {
-    if (path.extension(e.path) == '.md') {
-      final contents = loadMarkdownContent(File(e.path));
-      final htmlContents = convertMd2Html(contents);
-      writeMarkdownContent(
-        File(path.join(
-            resultDir.path, '${path.basenameWithoutExtension(e.path)}.html')),
-        htmlContents,
-      );
-    }
-  }
 }

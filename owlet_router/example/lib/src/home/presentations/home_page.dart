@@ -38,19 +38,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey(debugLabel: 'HomeScaffold');
+  final GlobalKey<ScaffoldState> scaffoldKey =
+      GlobalKey(debugLabel: 'HomeScaffold');
 
   final HashMap<String, String> routeNamedMap = HashMap();
+  final ValueNotifier<String?> currentPath = ValueNotifier('/');
 
   NavigationService<HomeTabRoute> get tabService => widget.service;
-  String? currentPath;
-  String? currentFragment;
 
   @override
   void initState() {
     super.initState();
     routeNamedMap['/'] = 'Home';
-    currentPath = '/';
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       tabService.route.tabPage.addListener(onUrlChanged);
       widget.service.history.addListener(onHistoryChanged);
@@ -67,22 +66,18 @@ class _HomePageState extends State<HomePage> {
   void onUrlChanged() {
     final path = tabService.route.tabPage.settings?.path;
     final url = tabService.route.tabPage.settings?.name;
-    url?.let((it) => updateUrlBar(routeNamedMap[path ?? ''] ?? widget.metaData.name, it));
-    setState(() {
-      currentPath = tabService.route.tabPage.settings?.path;
-      currentFragment = '#${tabService.route.tabPage.settings?.fragment}';
-    });
+    url?.let((it) =>
+        updateUrlBar(routeNamedMap[path ?? ''] ?? widget.metaData.name, it));
+    currentPath.value = tabService.route.tabPage.settings?.name;
   }
 
   void onHistoryChanged() {
-    setState(() {
-      currentPath = widget.service.history.current.settings.path;
-      currentFragment = '#${widget.service.history.current.settings.fragment}';
-    });
+    currentPath.value = widget.service.history.current.settings.name;
   }
 
   Offset breadCrumbPosition() {
-    final box = tabService.navigationKey.currentContext?.findRenderObject() as RenderBox?;
+    final box = tabService.navigationKey.currentContext?.findRenderObject()
+        as RenderBox?;
     return box?.localToGlobal(Offset.zero) ?? Offset.zero;
   }
 
@@ -125,15 +120,22 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(width: 8),
                               const SizedBox(width: 10),
                               ShaderMask(
-                                shaderCallback: (bounds) => const LinearGradient(
-                                  colors: [Color(0xFF6C89EE), Color(0xFF012FC5)],
+                                shaderCallback: (bounds) =>
+                                    const LinearGradient(
+                                  colors: [
+                                    Color(0xFF6C89EE),
+                                    Color(0xFF012FC5)
+                                  ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ).createShader(bounds),
-                                child: IconWidget(iconUrl: widget.metaData.icon, size: 32),
+                                child: IconWidget(
+                                    iconUrl: widget.metaData.icon, size: 32),
                               ),
                               const SizedBox(width: 8),
-                              Text(widget.metaData.name, style: Theme.of(context).textTheme.titleMedium)
+                              Text(widget.metaData.name,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium)
                             ]),
                       ),
                     const SizedBox(width: 16),
@@ -150,25 +152,37 @@ class _HomePageState extends State<HomePage> {
                 : Drawer(
                     child: SafeArea(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 16, top: 16, bottom: 16),
-                      child: ContentList(
-                        onTab: onSectionTab,
-                        metaData: widget.metaData,
-                        currentPath: currentPath,
-                        currentFragment: currentFragment,
+                      padding: const EdgeInsets.only(
+                          left: 8, right: 16, top: 16, bottom: 16),
+                      child: ValueListenableBuilder<String?>(
+                        valueListenable: currentPath,
+                        builder: (context, value, child) {
+                          final uri = value?.let(Uri.tryParse);
+                          return ContentList(
+                            onTab: onSectionTab,
+                            metaData: widget.metaData,
+                            currentPath: uri?.path,
+                            currentFragment: '#${uri?.fragment}',
+                          );
+                        },
                       ),
                     ),
                   )),
             body: mode.isNormal
                 ? BodyContainer(
                     child: Row(children: [
-                    DesktopDrawer(
-                      onDocumentTab: onSectionTab,
-                      onNavigateTab: onNavigateTab,
-                      metaData: widget.metaData,
-                      currentPath: currentPath,
-                      currentFragment: currentFragment,
-                    ),
+                    ValueListenableBuilder<String?>(
+                        valueListenable: currentPath,
+                        builder: (context, value, child) {
+                          final uri = value?.let(Uri.tryParse);
+                          return DesktopDrawer(
+                            onDocumentTab: onSectionTab,
+                            onNavigateTab: onNavigateTab,
+                            metaData: widget.metaData,
+                            currentPath: uri?.path,
+                            currentFragment: '#${uri?.fragment}',
+                          );
+                        }),
                     Expanded(child: child!),
                   ]))
                 : child!,
@@ -179,9 +193,14 @@ class _HomePageState extends State<HomePage> {
                     onTap: onNavigateTab,
                     type: BottomNavigationBarType.fixed,
                     items: const [
-                        BottomNavigationBarItem(icon: Icon(CupertinoIcons.line_horizontal_3), label: 'Menu'),
-                        BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: 'Home'),
-                        BottomNavigationBarItem(icon: Icon(CupertinoIcons.profile_circled), label: 'Author'),
+                        BottomNavigationBarItem(
+                            icon: Icon(CupertinoIcons.line_horizontal_3),
+                            label: 'Menu'),
+                        BottomNavigationBarItem(
+                            icon: Icon(CupertinoIcons.home), label: 'Home'),
+                        BottomNavigationBarItem(
+                            icon: Icon(CupertinoIcons.profile_circled),
+                            label: 'Author'),
                       ]),
           ));
 
@@ -199,7 +218,8 @@ class _HomePageState extends State<HomePage> {
   void onSectionTab(String name, PageInterface page) {
     // tabService.pushNamed(path: name);
     scaffoldKey.currentState?.closeDrawer();
-    Navigator.of(context, rootNavigator: true).pushNamed('/home/t$name', arguments: page);
+    Navigator.of(context, rootNavigator: true)
+        .pushNamed('/home/t$name', arguments: page);
     setState(() {
       routeNamedMap['/t${Uri.parse(name).path}'] = page.label.label;
     });

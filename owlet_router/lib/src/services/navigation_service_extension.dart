@@ -17,7 +17,8 @@ extension NavigationServiceExtension on NavigationService {
   ///
   /// Return the [service.navigationKey.currentContext] if it has been injected into the Navigator
   BuildContext get context => navigationKey.currentContext.let((it) {
-        assert(it != null, "Context not found, maybe this route's service was not injected in Navigator");
+        assert(it != null,
+            "Context not found, maybe this route's service was not injected in Navigator");
         return it!;
       });
 
@@ -37,7 +38,8 @@ extension NavigationServiceExtension on NavigationService {
     Object? args,
     RouteBuilder<Object, T>? route,
   }) =>
-      Navigator.of(context).pushReplacementNamed<T, T0>(path, arguments: args, result: result);
+      Navigator.of(context)
+          .pushReplacementNamed<T, T0>(path, arguments: args, result: result);
 
   ///
   /// Map to [Navigator.pushNamedAndRemoveUntil] using the [NavigationService]'s context and a result type of [T].
@@ -46,7 +48,8 @@ extension NavigationServiceExtension on NavigationService {
     String path, {
     Object? args,
   }) =>
-      Navigator.of(context).pushNamedAndRemoveUntil<T>(path, predicate, arguments: args);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil<T>(path, predicate, arguments: args);
 
   ///
   /// Map to [Navigator.popAndPushNamed] using the [NavigationService]'s context and a result type of [T].
@@ -55,7 +58,8 @@ extension NavigationServiceExtension on NavigationService {
     Object? args,
     T0? result,
   }) =>
-      Navigator.of(context).popAndPushNamed<T, T0>(path, arguments: args, result: result);
+      Navigator.of(context)
+          .popAndPushNamed<T, T0>(path, arguments: args, result: result);
 
   ///
   /// Map to [Navigator.restorablePushNamed] using the [NavigationService]'s context and a result type of [T].
@@ -73,7 +77,8 @@ extension NavigationServiceExtension on NavigationService {
     T0? result,
     Object? args,
   }) =>
-      Navigator.of(context).restorablePushReplacementNamed<T, T0>(path, arguments: args, result: result);
+      Navigator.of(context).restorablePushReplacementNamed<T, T0>(path,
+          arguments: args, result: result);
 
   ///
   /// Map to [Navigator.restorablePushNamedAndRemoveUntil] using the [NavigationService]'s context and a result type of [T].
@@ -82,7 +87,9 @@ extension NavigationServiceExtension on NavigationService {
     String path, {
     Object? args,
   }) =>
-      Navigator.of(context).restorablePushNamedAndRemoveUntil<T>(path, predicate, arguments: args);
+      Navigator.of(context).restorablePushNamedAndRemoveUntil<T>(
+          path, predicate,
+          arguments: args);
 
   ///
   /// Map to [Navigator.restorablePopAndPushNamed] using the [NavigationService]'s context and a result type of [T].
@@ -91,7 +98,8 @@ extension NavigationServiceExtension on NavigationService {
     Object? args,
     T0? result,
   }) =>
-      Navigator.of(context).restorablePopAndPushNamed<T, T0>(path, arguments: args, result: result);
+      Navigator.of(context).restorablePopAndPushNamed<T, T0>(path,
+          arguments: args, result: result);
 
   ///
   /// Map to [Navigator.pop] using the [NavigationService]'s context and a result type of [T].
@@ -99,7 +107,8 @@ extension NavigationServiceExtension on NavigationService {
 
   ///
   /// Map to [Navigator.popUntil] using the [NavigationService]'s context.
-  void popUntil(RoutePredicate predicate) => Navigator.of(context).popUntil(predicate);
+  void popUntil(RoutePredicate predicate) =>
+      Navigator.of(context).popUntil(predicate);
 
   ///
   /// Map to [Navigator.canPop] using the [NavigationService]'s context.
@@ -107,5 +116,6 @@ extension NavigationServiceExtension on NavigationService {
 
   ///
   /// Map to [Navigator.maybePop] using the [NavigationService]'s context and a result type of [T].
-  Future<bool> maybePop<T extends Object?>([T? result]) async => Navigator.of(context).maybePop(result);
+  Future<bool> maybePop<T extends Object?>([T? result]) async =>
+      Navigator.of(context).maybePop(result);
 }

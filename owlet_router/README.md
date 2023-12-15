@@ -1,6 +1,6 @@
 # Owlet Router
 
-<img src="https://github.com/sonnts996/owlet-router/blob/main/example/assets/owlets_on_the_tree.jpg?raw=true" alt="owlets_on_the_tree" width="300"/>
+<img src="https://github.com/sonnts996/owlet-router/blob/main/assets/owlets_on_the_tree.jpg?raw=true" alt="owlets_on_the_tree" width="300"/>
 
 [![version](https://img.shields.io/pub/v/owlet_router)](https://pub.dev/packages/owlet_router) [![like](https://img.shields.io/pub/likes/owlet_router)](https://pub.dev/packages/owlet_router) [![issues](https://img.shields.io/github/issues/sonnts996/owlet-router)](https://github.com/sonnts996/owlet-router) [![license](https://img.shields.io/github/license/sonnts996/owlet-router)](https://github.com/sonnts996/owlet-router)
 
@@ -41,7 +41,7 @@ Add this line to your dependencies:
 
 ```yaml
 dependencies:
-  rowlet_router: '0.0.1'
+  rowlet_router: '0.0.2'
 ```
 
 - import the package:

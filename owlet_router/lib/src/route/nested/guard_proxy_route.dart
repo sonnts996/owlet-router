@@ -34,14 +34,16 @@ class RedirectRoute<T extends Object?> extends Route<T> {
 
 ///
 /// The pre-push function's return value determines the route pushing behavior.
-typedef RouteGuardFunction = FutureOr<Route?> Function(BuildContext context, RouteBuilderMixin it, Route route);
+typedef RouteGuardFunction = FutureOr<Route?> Function(
+    BuildContext context, RouteBuilderMixin it, Route route);
 
 ///
 /// The pre-push function's return value determines the route pushing behavior.
 /// The [RouteGuardFunctionIntl] is called in the navigator and nested route guard,
 /// caused by can not to determine the route that contains the routeGuard (use for parameter **RouteBuilderMixin it**) outside its context.
 @internal
-typedef RouteGuardFunctionIntl = FutureOr<Route?> Function(BuildContext context, Route<Object?> route);
+typedef RouteGuardFunctionIntl = FutureOr<Route?> Function(
+    BuildContext context, Route<Object?> route);
 
 ///
 /// Within the [OwletNavigator], when a route is pushed, the [RouteGuardSettings.routeGuard] function is invoked if the route has settings as [RouteGuardSettings] type.
@@ -63,7 +65,8 @@ class RouteGuardSettings extends RouteSettings {
 /// Implement the build function of the route guard in a way that combines all the guard methods in case of a nested route.
 /// The execution order should follow a top-down approach, starting from the outermost route and progressing inwards.
 /// The result of each outer guard method should be passed as a parameter to the next inner guard method.
-abstract class GuardProxyRoute<R extends RouteBuilderMixin> extends ProxyRoute<R> {
+abstract class GuardProxyRoute<R extends RouteBuilderMixin>
+    extends ProxyRoute<R> {
   ///
   /// The [GuardProxyRoute]'s constructor
   GuardProxyRoute({required super.route, this.routeGuard});
@@ -104,7 +107,8 @@ abstract class GuardProxyRoute<R extends RouteBuilderMixin> extends ProxyRoute<R
       RouteGuardSettings(
         arguments: settings.arguments,
         name: settings.name,
-        routeGuard: (context, route) async => runGuard(context, route, parentGuard),
+        routeGuard: (context, route) async =>
+            runGuard(context, route, parentGuard),
       ),
     );
   }
