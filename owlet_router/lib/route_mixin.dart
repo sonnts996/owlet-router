@@ -35,8 +35,11 @@ abstract class RouteMixin {
   ///
   /// Construct the path, including query parameters and fragments.
   /// If the [encode] flag is set to true, the arguments will be encoded using the URL encoder.
-  String argsPath(Map<String, Object?> args,
-      {bool encode = false, String? fragment});
+  String argsPath(
+    Map<String, Object?> args, {
+    bool encode = false,
+    String? fragment,
+  });
 
   @override
   String toString() => '$runtimeType($path)';
@@ -76,18 +79,16 @@ abstract class RouteMixin {
   /// Return the service that manages this route.
   NavigationService get service {
     final result = parent?.let((it) => it.service) ?? _rootService;
-    assert(result != null,
-        "No found service in this route, maybe it wasn't initialized properly");
+    assert(
+      result != null,
+      "No found service in this route, maybe it wasn't initialized properly",
+    );
     return result!;
   }
 
   ///
   /// Return false if this route has no associated service or has not been injected into any Navigator (i.e., navigationKey.currentContext is null)
-  bool get hasContext =>
-      (parent?.let((it) => it.service) ?? _rootService)
-          ?.navigationKey
-          .currentContext !=
-      null;
+  bool get hasContext => (parent?.let((it) => it.service) ?? _rootService)?.navigationKey.currentContext != null;
 
   ///
   /// Identify the route that corresponds to the object type. The worst-case time complexity of this operation is O(n).

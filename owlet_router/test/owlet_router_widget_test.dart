@@ -40,7 +40,7 @@ void main() {
         'Splash',
       );
 
-      await mainRoute.home.page1.pushNamed();
+      mainRoute.home.page1.pushNamed();
       verifyNever(
         mockObserver.didPush(
           mainRoute.home.page1.build(
@@ -104,7 +104,7 @@ void main() {
         reason: 'Check the route guard is running',
       );
 
-      await mainRoute.home.guard.pushNamed(args: 'cancelled');
+      mainRoute.home.guard.pushNamed(args: 'cancelled');
       verifyNever(
         mockObserver.didPush(
           mainRoute.home.guard.build(
@@ -124,7 +124,7 @@ void main() {
         reason: 'The route is cancelled by route guard',
       );
 
-      await mainRoute.home.guard.pushNamed();
+      mainRoute.home.guard.pushNamed();
       verifyNever(
         mockObserver.didPush(
           mainRoute.home.guard.build(
@@ -144,7 +144,7 @@ void main() {
         reason: 'The route is allowed by route guard',
       );
 
-      await mainRoute.home.guard.pushNamed(args: 'redirect_named');
+      mainRoute.home.guard.pushNamed(args: 'redirect_named');
       verifyNever(
         mockObserver.didPush(
           mainRoute.home.guard.build(
@@ -164,7 +164,7 @@ void main() {
         reason: 'The route is redirected by route guard',
       );
 
-      await mainRoute.home.guard.pushNamed(args: 'redirect_itself');
+      mainRoute.home.guard.pushNamed(args: 'redirect_itself');
       verifyNever(
         mockObserver.didPush(
           mainRoute.home.guard.build(
@@ -184,7 +184,7 @@ void main() {
         reason: 'The route is redirected by route guard',
       );
 
-      await mainRoute.home.guard.pushNamed(args: 'redirect_route');
+      mainRoute.home.guard.pushNamed(args: 'redirect_route');
       verifyNever(
         mockObserver.didPush(
           mainRoute.home.guard.build(

@@ -8,8 +8,7 @@ part of 'builder.dart';
 
 ///
 /// The callback function for the push method receives the context of the push operation and the corresponding route.
-typedef RouteCallback<R> = FutureOr<R?> Function(
-    BuildContext context, Route<R?> route);
+typedef RouteCallback<R> = FutureOr<R?> Function(BuildContext context, Route<R?> route);
 
 ///
 /// The [OwletNavigator] utilizes the [NamedFunctionRouteSettings] class to identify named function routes.
@@ -38,8 +37,7 @@ class NamedFunctionRouteSettings<T extends Object?> extends RouteSettings {
 /// - [Navigator.pushNamed]
 ///
 /// **WARNING:** Using [Navigator.popAndPushNamed] may cause an error.
-class NamedFunctionRouteBuilder<A extends Object?, T extends Object?>
-    extends RouteBuilder<A, T> {
+class NamedFunctionRouteBuilder<A extends Object?, T extends Object?> extends RouteBuilder<A, T> {
   /// The [NamedFunctionRouteBuilder]'s constructor
   NamedFunctionRouteBuilder(super.segment, {required this.callback});
 

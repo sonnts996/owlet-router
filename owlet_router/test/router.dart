@@ -78,9 +78,10 @@ class HomeRoute extends RouteBase {
       }
       return route;
     },
-    route: MaterialRouteBuilder('/guard',
-        pageBuilder: (context, settings) =>
-            const TestApp(content: 'RouteGuard')),
+    route: MaterialRouteBuilder(
+      '/guard',
+      pageBuilder: (context, settings) => const TestApp(content: 'RouteGuard'),
+    ),
   );
 
   @override
