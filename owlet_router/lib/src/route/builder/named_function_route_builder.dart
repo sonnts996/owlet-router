@@ -8,7 +8,7 @@ part of 'builder.dart';
 
 ///
 /// The callback function for the push method receives the context of the push operation and the corresponding route.
-typedef RouteCallback<R> = FutureOr<R?> Function(BuildContext context, Route<R?> route);
+typedef RouteCallback<R> = FutureOr<R?> Function(BuildContext context, Route route);
 
 ///
 /// The [OwletNavigator] utilizes the [NamedFunctionRouteSettings] class to identify named function routes.

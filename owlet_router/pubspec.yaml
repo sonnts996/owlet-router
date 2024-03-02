@@ -1,6 +1,6 @@
 name: owlet_router
 description: A router manager utilizes the route builder to construct the router.
-version: 0.0.2
+version: 0.0.2+1
 repository: https://github.com/sonnts996/owlet-router
 
 environment:
@@ -8,19 +8,18 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  collection: ^1.17.2
   flutter:
     sdk: flutter
-  meta: ^1.9.0
-  objectx: ^1.0.1
+  collection: '>=1.17.0 <1.20.0'
+  meta: '>=1.9.0 <2.0.0'
+  objectx: '>=1.0.3 <2.0.0'
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  owlet_lints: ^4.0.0
-  mockito: ^5.4.2
-  built_value_generator: ^8.6.3
-  build_runner: ^2.4.6
+  owlet_lints: ^4.0.0+1
+  mockito: ^5.4.4
+  build_runner: ^2.4.7
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -30,26 +30,25 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  owlet_router:
+    path: ../
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  owlet_router:
-    path: ../
-  collection: ^1.17.2
+  cupertino_icons: ^1.0.6
+  collection: ^1.18.0
   flutter_svg: ^2.0.9
-  objectx: ^1.0.1
+  objectx: ^1.0.3
   google_fonts: ^6.1.0
-  dio: ^5.3.4
-  url_launcher: ^6.2.1
-  built_value: ^8.8.0
+  dio: ^5.4.0
+  url_launcher: ^6.2.2
+  built_value: ^8.8.1
   built_collection: ^5.1.1
   fluid_kit: ^3.0.0
   json_annotation: ^4.8.1
-  http: ^1.1.0
-  xml: ^6.3.0
-  cached_network_image: ^3.3.0
+  http: ^1.1.2
+  xml: ^6.5.0
+  cached_network_image: ^3.3.1
   path: ^1.8.3
   flutter_highlighter: ^0.1.1
   get_it: ^7.6.4
@@ -68,9 +67,9 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  build_runner: ^2.4.6
-  built_value_generator: ^8.8.0
-  owlet_lints: ^4.0.0
+  build_runner: ^2.4.7
+  built_value_generator: ^8.8.1
+  owlet_lints: ^4.0.0+1
   json_serializable: ^6.7.1
   injectable_generator: ^2.4.1
 
